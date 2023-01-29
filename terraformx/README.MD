@@ -1,6 +1,9 @@
 # Run following command to compile .py code into .exe
 
-pyinstaller --onefile main.py
+pyinstaller --onefile terraformx.py -p $(pwd)
+
+pathex=["/Users/jeromelieow/Documents/GitHub/terraform_manager/terraformx"]
+pyinstaller terraformx.spec
 
 ## Add terraformx commands via alias
 
