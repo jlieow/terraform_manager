@@ -1,7 +1,12 @@
+# Run following command to compile .py code into .exe
+
+pyinstaller --onefile main.py
+
 ## Add terraformx commands via alias
 
 vi ~/.zshrc
 
-alias terraformx="python3 /Users/jeromelieow/Documents/GitHub/aws-north-south-inspection-with-aws-network-firewall/terraform_manager/main.py"
+alias terraformx="python3 /Users/jeromelieow/Documents/GitHub/terraform_manager/terraformx/main.py"
 
-alias terraform_manager="python3 /Users/jeromelieow/Documents/GitHub/terraform_manager/main.py"
+export PATH=$PATH:/Users/jeromelieow/Documents/GitHub/terraform_manager/terraformx/dist/terraformx
+alias terraformx="/Users/jeromelieow/Documents/GitHub/terraform_manager/terraformx/dist/terraformx"
