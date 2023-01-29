@@ -1,0 +1,44 @@
+ignore: True
+active_stages: 2-3, 5
+active_stage_names: stage_8, stage_10
+stages:
+  - name: "stage_1"
+    targets:
+      - module:
+          - mi-1
+  - name: "stage_2"
+    targets:
+      - module:
+          - mi-2
+  - name: "stage_3"
+    targets:
+      - module:
+          - mi-3
+  - name: "stage_4"
+    targets:
+      - module:
+          - mi-4
+  - name: "stage_5"
+    targets:
+      - module:
+          - mi-5
+  - name: "stage_6"
+    targets:
+      - module:
+          - mi-6
+  - name: "stage_7"
+    targets:
+      - module:
+          - mi-7
+  - name: "stage_8"
+    targets:
+      - module:
+          - mi-8
+  - name: "stage_9"
+    targets:
+      - module:
+          - mi-9
+  - name: "stage_10"
+    targets:
+      - module:
+          - mi-10

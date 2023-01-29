@@ -1,0 +1,8 @@
+ignore: True
+active_stages:
+stages:
+  - name: "stage"
+    auto_approve: True
+    targets:
+      - module:
+          - mi-1
