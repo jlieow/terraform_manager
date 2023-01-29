@@ -1,2 +1,9 @@
 /tests/__pycache__/
 /utils/__pycache__/
+/terraformx/__pycache__/
+/terraformx/build/
+/terraformx/dist/
+/dist/
+/build/
+terraformx.spec
+main.spec
