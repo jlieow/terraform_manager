@@ -1,7 +1,7 @@
 Roadmap:
 
 1. GitHub/GitLab integration 
-2. Chaos Testing features
+2. Chaos Testing features 
 3. ChatOps
 4. To save the Terraform plans before executing blueprints
 5. To decouple the application code from this Terraform manager, and instead include a Dockerfile-like config file in the application code.

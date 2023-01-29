@@ -26,31 +26,33 @@ TOOLS_OPTIONS = "\nWhich tool would you like to use: "
 
 # ----- CONSTANTS ----- #
 
-print(os.getcwd())
+def main():
+    while True:
 
-while True:
+        term = input_options(TOOLS_PREFACE, LIST_TOOLS, TOOLS_OPTIONS, True) 
 
-    term = input_options(TOOLS_PREFACE, LIST_TOOLS, TOOLS_OPTIONS, True) 
+        print()
 
-    print()
+        match term:
+            case 1: # Import AWS profiles
+                print("Importing AWS Profiles...")
+                import_aws_profiles()
+            case 2:
+                terraform()
+            case 3:
+                terraform_check_for_drift()
+            case 4:
+                terraform_multi_build()
+            case 5:
+                terraform_blueprints()
+            case 6:
+                terraform_destroy_from_history()
+            case _:
+                print("default")
+        
+        print()
 
-    match term:
-        case 1: # Import AWS profiles
-            print("Importing AWS Profiles...")
-            import_aws_profiles()
-        case 2:
-            terraform()
-        case 3:
-            terraform_check_for_drift()
-        case 4:
-            terraform_multi_build()
-        case 5:
-            terraform_blueprints()
-        case 6:
-            terraform_destroy_from_history()
-        case _:
-            print("default")
-    
-    print()
 
+if __name__ == "__main__":
+    main()
 
