@@ -4,6 +4,9 @@ import os
 def get_parent_dir(directory):
     return os.path.dirname(directory)
 
+def get_dir_of_terraform_manager_from_sys_executable(directory):
+    return os.path.dirname(os.path.dirname(os.path.dirname(directory)))
+
 def input_options(preface, options, input_question, return_input=False, use_prev_as_default=False, choice=None, allow_special_break=False, special_break = ""):
     print(preface)
     for i in range(len(options)):
