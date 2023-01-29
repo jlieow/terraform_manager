@@ -1,0 +1,17 @@
+ignore: True
+active_stages:
+chaos_test: False
+stages:
+  - name: "test"
+    targets:
+      - module:
+          - mi-1
+          - mi-2
+      - resource:
+          - ri-1.extra
+          - ri-2.extra
+          - ri-1.try
+  - name:
+    targets:
+      - module:
+          - mi-24

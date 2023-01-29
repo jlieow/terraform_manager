@@ -1,0 +1,32 @@
+ignore: True
+active_stages:
+chaos_test: False
+stages:
+  - name: "Stage Destroy Disabled"
+    description: "Because this uses a data source, it stops all tasks even on apply as a data source is evaluated immediately."
+    auto_approve: False
+    destroy_disabled: True
+    delay_before_execution: 15
+    delay_after_execution: 23
+    repeat: 100
+    targets:
+      - module:
+          - ecs_task
+  - name: "Stage Destroy Not Disabled"
+    auto_approve: False
+    destroy_disabled: False
+    delay_before_execution: 0
+    delay_after_execution: 0
+    repeat: 0
+    targets:
+      - module:
+          - data
+          - data_spoke
+          - nacl
+  - name: "Stage Missing Chaos Test Default Keys"
+    auto_approve: False
+    targets:
+      - module:
+          - data
+          - data_spoke
+          - nacl

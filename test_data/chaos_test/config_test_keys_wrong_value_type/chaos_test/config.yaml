@@ -1,0 +1,14 @@
+ignore: True
+active_stages:
+chaos_test: False
+stages:
+  - name: "Stage Wrong Value Type for delay_before_execution, delay_after_execution and repeat"
+    description: "Because this uses a data source, it stops all tasks even on apply as a data source is evaluated immediately."
+    auto_approve: False
+    destroy_disabled: True
+    delay_before_execution: "fifteen"
+    delay_after_execution: "twenty three"
+    repeat: "one hundred"
+    targets:
+      - module:
+          - ecs_task

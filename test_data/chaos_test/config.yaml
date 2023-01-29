@@ -1,0 +1,21 @@
+ignore: True
+active_stages:
+chaos_test: False
+stages:
+  - name: "Stop all ECS Cluster/Service Tasks"
+    description: "Because this uses a data source, it stops all tasks even on apply as a data source is evaluated immediately."
+    auto_approve: False
+    destroy_disabled: True
+    delay_before_execution:
+    delay_after_execution:
+    repeat:
+    targets:
+      - module:
+          - ecs_task
+  - name: "Destroy networking in ap-southeast-1b"
+    auto_approve: False
+    targets:
+      - module:
+          - data
+          - data_spoke
+          - nacl
