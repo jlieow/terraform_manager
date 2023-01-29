@@ -2,10 +2,12 @@
 
 pyinstaller --onefile terraformx.py -p $(pwd)
 
-update path at /etc/paths
+update path with:
 vi ~/.zprofile
 
 PATH="/Library/Frameworks/Python.framework/Versions/3.11/bin:/Users/jeromelieow/Documents/GitHub/terraform_manager/terraformx/dist/terraformx:${PATH}"
+
+pyinstaller --onedir terraformx.py -p $(pwd)
 
 ## Add terraformx commands via alias
 

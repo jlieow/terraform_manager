@@ -12,9 +12,14 @@ HISTORY_CSV_PATH = "/data/history/terraform_history.csv"
 # ----- CONSTANTS ----- #
 
 def add_history(cwd, stage_name="", unit_testing=False, unit_testing_path=""):
+    
+    base_path = get_dir_of_terraform_manager_from_sys_executable_onefile(sys.executable)
 
-    base_path = get_dir_of_terraform_manager_from_sys_executable(sys.executable)
-    path = base_path + HISTORY_CSV_PATH
+    if os.path.exists(base_path + HISTORY_CSV_PATH):
+        path = base_path + HISTORY_CSV_PATH
+    else:
+        base_path = get_dir_of_terraform_manager_from_sys_executable_onedir(sys.executable)
+        path = base_path + HISTORY_CSV_PATH
 
     if unit_testing is True:
         path = unit_testing_path
