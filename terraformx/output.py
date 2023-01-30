@@ -1,4 +1,6 @@
 import os
+
+from terraformx_common import *
 from utils import *
 
 def output(args):
@@ -6,16 +8,8 @@ def output(args):
 
     dir = args.dir
 
-    # Determine which directory to use
-    # Use current directory
-    # Use specified directory from sub path
-    # Use specified directory with full path
-    if len(dir) == 0:
-        cwd = os.getcwd()
-    else:
-        cwd = dir
-        if not os.path.exists(cwd):
-            cwd = os.getcwd + dir
+    cwd = get_cwd(dir)
+    if len(cwd) == 0:
         if not os.path.exists(cwd):
             print_error("[ERROR] Unable to locate directory.")
             return 

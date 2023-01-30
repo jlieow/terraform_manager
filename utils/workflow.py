@@ -607,7 +607,7 @@ def check_stages_errors(stages_errors):
 
     return error
 
-def stage_workflow_terraform_apply(cwd):
+def stage_workflow_terraform_apply(cwd, override_workflow=False):
     stages, stages_errors = get_stages(cwd)
 
     active_stages, err, err_message = get_active_stages_from_workflow(cwd)
@@ -624,6 +624,9 @@ def stage_workflow_terraform_apply(cwd):
         stage_auto_approve = stage["stage_auto_approve"]
         stage_targets = stage["stage_targets"]
 
+        if override_workflow:
+            stage_auto_approve = override_workflow
+
         print("\nApplying Stage \"%s\"" % stage_name)
         
         if stage_auto_approve:
@@ -637,7 +640,7 @@ def stage_workflow_terraform_apply(cwd):
         # Prepare terraform command
         workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve)
 
-def stage_workflow_terraform_destroy(cwd):
+def stage_workflow_terraform_destroy(cwd, override_workflow=False):
     stages, stages_errors = get_stages(cwd)
 
     active_stages, err, err_message = get_active_stages_from_workflow(cwd)
@@ -655,6 +658,9 @@ def stage_workflow_terraform_destroy(cwd):
         stage_name = stage["stage_name"]
         stage_auto_approve = stage["stage_auto_approve"]
         stage_targets = stage["stage_targets"]
+
+        if override_workflow:
+            stage_auto_approve = override_workflow
 
         print("\nDestroying Stage \"%s\"" % stage_name)
         

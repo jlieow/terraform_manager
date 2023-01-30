@@ -1,4 +1,6 @@
 import os
+
+from terraformx_common import *
 from utils import *
 
 def destroy(args):
@@ -9,18 +11,11 @@ def destroy(args):
 
     dir = args.dir
     auto_approve = args.auto_approve
+    override_workflow = args.override_workflow
     refresh_only = args.refresh_only
 
-    # Determine which directory to use
-    # Use current directory
-    # Use specified directory from sub path
-    # Use specified directory with full path
-    if len(dir) == 0:
-        cwd = os.getcwd()
-    else:
-        cwd = dir
-        if not os.path.exists(cwd):
-            cwd = os.getcwd + dir
+    cwd = get_cwd(dir)
+    if len(cwd) == 0:
         if not os.path.exists(cwd):
             print_error("[ERROR] Unable to locate directory.")
             return 
@@ -31,8 +26,17 @@ def destroy(args):
 
     if workflow_file_exists:
 
-        if auto_approve:
-            print_warning("-auto-approve must be configured through workflow config.yaml when it is present.")
-        stage_workflow_terraform_destroy(cwd)
+        if not auto_approve:
+            stage_workflow_terraform_destroy(cwd)
+
+        if auto_approve and not override_workflow:
+            print_warning("\n[WARNING] -auto-approve should be configured through workflow config.yaml when it is present.")
+            print_warning("You may also include -override-workflow to override workflow stages auto_approve keys and auto approve every stage.")
+            stage_workflow_terraform_destroy(cwd)
+
+        if auto_approve and override_workflow:
+            print_warning("\n[WARNING] All stages will be auto approved as -auto-approve and -override-workflow flags are present in the terraformx command.")
+            stage_workflow_terraform_destroy(cwd, override_workflow)
+            
     else:
         terraform_destroy(cwd, AUTO_APPROVE=auto_approve)
