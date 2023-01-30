@@ -9,7 +9,6 @@ def apply(args):
     # print(args.refresh_only)
 
     dir = args.dir
-    var_file = args.var_file
     auto_approve = args.auto_approve
     refresh_only = args.refresh_only
 
@@ -26,13 +25,6 @@ def apply(args):
         if not os.path.exists(cwd):
             print_error("[ERROR] Unable to locate directory.")
             return 
-    
-    if len(var_file) != 0:
-        if not os.path.exists(var_file):
-            var_file = os.getcwd + var_file
-        if not os.path.exists(var_file):
-            print_error("[ERROR] Unable to locate directory.")
-            return 
 
     tfvars_settings(cwd) 
 
@@ -41,7 +33,7 @@ def apply(args):
         if auto_approve:
             print_warning("-auto-approve must be configured through workflow config.yaml when it is present.")
 
-        stage_workflow_terraform_apply(cwd, VAR_FILE=var_file)
+        stage_workflow_terraform_apply(cwd)
     else:
-        terraform_apply(cwd, AUTO_APPROVE=auto_approve, VAR_FILE=var_file)
+        terraform_apply(cwd, AUTO_APPROVE=auto_approve)
 

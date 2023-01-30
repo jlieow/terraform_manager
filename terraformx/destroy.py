@@ -4,12 +4,10 @@ from utils import *
 def destroy(args):
     print("terraformx destroy")
     print(args)
-    print(args.var_file)
     print(args.auto_approve)
     print(args.refresh_only)
 
     dir = args.dir
-    var_file = args.var_file
     auto_approve = args.auto_approve
     refresh_only = args.refresh_only
 
@@ -35,7 +33,6 @@ def destroy(args):
 
         if auto_approve:
             print_warning("-auto-approve must be configured through workflow config.yaml when it is present.")
-            
-        stage_workflow_terraform_destroy(cwd, VAR_FILE=var_file)
+        stage_workflow_terraform_destroy(cwd)
     else:
-        terraform_destroy(cwd, AUTO_APPROVE=auto_approve, VAR_FILE=var_file)
+        terraform_destroy(cwd, AUTO_APPROVE=auto_approve)
