@@ -93,14 +93,14 @@ stages:
 
 config.yaml legend:
 key
-| key | description | type | Example allowed values |
-| --- | --- | --- | --- |
-| ignore | True tells the Terraform Manager or Terraformx CLI to ignore the entire workflow file | bool | True, False |
-| active_stages | Specifies which stage should be applied or destroyed and ignores the rest using an int | int | 1, 3-4|
-| active_stage_names | Specifies which stage should be applied or destroyed and ignores the rest using the name of the stage | int | stage 1, stage 2 |
-| stages | Specifies the stages | arr | [] |
-| stages.name | Name of the stage | str | "stage 1" |
-| stages.auto_approve | Evaluated to see if the stage would should be auto approved without user input | bool | True, False |
-| stages.targets | Specifies which modules or resources should be built in this stage | dict | module, resource |
-| stages.targets.module | Specifies the name of the modules which should be built in this stage | arr | "name_of_module" |
-| stages.targets.resources | Specifies the name of the resources which should be built in this stage | arr | "type_of_resource.name_of_resource" |
+| key | description | type | Example allowed values | Default value when omitted | Behaviour if omitted |
+| --- | --- | --- | --- | --- |
+| ignore | True tells the Terraform Manager or Terraformx CLI to ignore the entire workflow file | bool | True, False | False | config.yaml is not ignored |
+| active_stages | Specifies which stage should be applied or destroyed and ignores the rest using an int | int | 1, 3-4 | None | No stage is ignored |
+| active_stage_names | Specifies which stage should be applied or destroyed and ignores the rest using the name of the stage | int | stage 1, stage 2 | None | No stage is ignored |
+| stages | Specifies the stages | arr | [] | None | Operation would fail |
+| stages.name | Name of the stage | str | "stage 1" | None | Stage would not have a name but will continue to run |
+| stages.auto_approve | Evaluated to see if the stage would should be auto approved without user input | bool | True, False | False | Stage will not be auto approved and require user input |
+| stages.targets | Specifies which modules or resources should be built in this stage | dict | module, resource | None | Operation would fail |
+| stages.targets.module | Specifies the name of the modules which should be built in this stage | arr | "name_of_module" | None | No modules will be targeted |
+| stages.targets.resources | Specifies the name of the resources which should be built in this stage | arr | "type_of_resource.name_of_resource" | None | No resources will be targeted |
