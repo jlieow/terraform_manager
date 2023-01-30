@@ -527,18 +527,25 @@ def get_stages(cwd):
 
     return stages, stages_errors
 
-def workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=False):
+def workflow_terraform_apply(cwd, stage_targets, stage_name, VAR_FILE="", AUTO_APPROVE=False):
     tfvars_settings(cwd)
     
     add_history(cwd, stage_name)
     
     target_process = ["-target=" + sub for sub in stage_targets]
 
+    if len(VAR_FILE) > 0:
+        apply_auto_approve_process = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE, '-auto-approve']
+        apply_process = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE]
+    else:
+        apply_auto_approve_process = APPLY_AUTO_APPROVE_PROCESS
+        apply_process = APPLY_PROCESS
+
     if AUTO_APPROVE:
-        workflow_apply_auto_approve_target_process = APPLY_AUTO_APPROVE_PROCESS + target_process
+        workflow_apply_auto_approve_target_process = apply_auto_approve_process + target_process
         process = subprocess.Popen(workflow_apply_auto_approve_target_process, cwd=cwd).wait()
     else:
-        workflow_apply_target_process = APPLY_PROCESS + target_process
+        workflow_apply_target_process = apply_process + target_process
         process = subprocess.Popen(workflow_apply_target_process, cwd=cwd).wait()
 
     if process == 1:
@@ -549,19 +556,26 @@ def workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=False)
     # print("\nPerforming -apply-refresh to sync statefile and match the current provisioned state")
     # subprocess.Popen(workflow_apply_auto_approve_refresh_target_process, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
 
-    terraform_apply_auto_approve_refresh(cwd)
+    terraform_apply_auto_approve_refresh(cwd, VAR_FILE)
 
-def workflow_terraform_destroy(cwd, stage_targets, stage_name, AUTO_APPROVE=False):
+def workflow_terraform_destroy(cwd, stage_targets, stage_name, VAR_FILE="", AUTO_APPROVE=False):
 
     tfvars_settings(cwd)
 
     target_process = ["-target=" + sub for sub in stage_targets]
 
+    if len(VAR_FILE) > 0:
+        destroy_auto_approve_process = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE, '-auto-approve']
+        destroy_process = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE]
+    else:
+        destroy_auto_approve_process = DESTROY_AUTO_APPROVE_PROCESS
+        destroy_process = DESTROY_PROCESS
+
     if AUTO_APPROVE:
-        workflow_destroy_auto_approve_target_process = DESTROY_AUTO_APPROVE_PROCESS + target_process
+        workflow_destroy_auto_approve_target_process = destroy_auto_approve_process + target_process
         process = subprocess.Popen(workflow_destroy_auto_approve_target_process, cwd=cwd).wait()
     else:
-        workflow_destroy_target_process = DESTROY_PROCESS + target_process
+        workflow_destroy_target_process = destroy_process + target_process
         process = subprocess.Popen(workflow_destroy_target_process, cwd=cwd).wait()
 
     if process == 1:
@@ -607,7 +621,7 @@ def check_stages_errors(stages_errors):
 
     return error
 
-def stage_workflow_terraform_apply(cwd):
+def stage_workflow_terraform_apply(cwd, var_file=""):
     stages, stages_errors = get_stages(cwd)
 
     active_stages, err, err_message = get_active_stages_from_workflow(cwd)
@@ -635,9 +649,9 @@ def stage_workflow_terraform_apply(cwd):
             print("%s. %s" % (index+1, stage_targets[index]))
 
         # Prepare terraform command
-        workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve)
+        workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve, VAR_FILE=var_file)
 
-def stage_workflow_terraform_destroy(cwd):
+def stage_workflow_terraform_destroy(cwd, var_file=""):
     stages, stages_errors = get_stages(cwd)
 
     active_stages, err, err_message = get_active_stages_from_workflow(cwd)
@@ -667,7 +681,7 @@ def stage_workflow_terraform_destroy(cwd):
             print("%s. %s" % (index+1, stage_targets[index]))
         
         # Prepare terraform command
-        workflow_terraform_destroy(cwd, stage_targets, stage_name, stage_auto_approve)
+        workflow_terraform_destroy(cwd, stage_targets, stage_name, stage_auto_approve, VAR_FILE=var_file)
 
 def stage_workflow_terraform_apply_refresh(cwd):
     stages, stages_errors = get_stages(cwd)

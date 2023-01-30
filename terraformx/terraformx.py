@@ -49,7 +49,8 @@ def main():
 
     for parser in all_parsers:
         # arguments
-        parser.add_argument("-var-file", type = str, help = "Location of variable definitions file.")
+        parser.add_argument("-dir", type = str, default="", help = "Location of terraform root.")
+        parser.add_argument("-var-file", type = str, default="", help = "Location of variable definitions file.")
         parser.add_argument("-auto-approve", action="store_true", help = "Auto approve command.")
         parser.add_argument("-refresh-only", action="store_true", help = "Review how terraform would update your state file.")
     

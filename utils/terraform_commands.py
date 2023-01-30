@@ -9,17 +9,17 @@ from .history import *
 
 TERRAFORM_PATH = 'terraform'
 BACKEND_CONFIG_FILE = 'backend.tfvars'
-VAR_FILE = 'config/settings.tfvars'
+VAR_FILE_LOCATION = 'config/settings.tfvars'
 
 INIT_PROCESS = [TERRAFORM_PATH, 'init', '-backend-config=%s' % BACKEND_CONFIG_FILE]
 OUTPUT_PROCESS = [TERRAFORM_PATH, 'output']
-APPLY_PROCESS = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE]
-APPLY_AUTO_APPROVE_PROCESS = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE, '-auto-approve']
-DESTROY_PROCESS = [TERRAFORM_PATH, 'destroy', '-var-file=%s' % VAR_FILE]
-DESTROY_AUTO_APPROVE_PROCESS = [TERRAFORM_PATH, 'destroy', '-var-file=%s' % VAR_FILE, '-auto-approve']
-APPLY_REFRESH_PROCESS = [TERRAFORM_PATH, 'apply', '-refresh-only', '-var-file=%s' % VAR_FILE]
-APPLY_REFRESH_AUTO_APPROVE_PROCESS = [TERRAFORM_PATH, 'apply', '-refresh-only', '-var-file=%s' % VAR_FILE, '-auto-approve']
-PLAN_REFRESH_PROCESS = [TERRAFORM_PATH, 'plan', '-refresh-only', '-var-file=%s' % VAR_FILE]
+APPLY_PROCESS = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE_LOCATION]
+APPLY_AUTO_APPROVE_PROCESS = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE_LOCATION, '-auto-approve']
+DESTROY_PROCESS = [TERRAFORM_PATH, 'destroy', '-var-file=%s' % VAR_FILE_LOCATION]
+DESTROY_AUTO_APPROVE_PROCESS = [TERRAFORM_PATH, 'destroy', '-var-file=%s' % VAR_FILE_LOCATION, '-auto-approve']
+APPLY_REFRESH_PROCESS = [TERRAFORM_PATH, 'apply', '-refresh-only', '-var-file=%s' % VAR_FILE_LOCATION]
+APPLY_REFRESH_AUTO_APPROVE_PROCESS = [TERRAFORM_PATH, 'apply', '-refresh-only', '-var-file=%s' % VAR_FILE_LOCATION, '-auto-approve']
+PLAN_REFRESH_PROCESS = [TERRAFORM_PATH, 'plan', '-refresh-only', '-var-file=%s' % VAR_FILE_LOCATION]
 
 TERRAFORM_COMMAND_PREFACE = "The following terraform commands can be invoked:\n"
 TERRAFORM_COMMAND_OPTIONS = "\nWhich command would you like to invoke: "
@@ -44,7 +44,7 @@ def tfvars_settings(cwd):
     # print(cwd)
 
     # filenames = [cwd + "/backend.tfvars", cwd + "/config.tfvars"]
-    with open(cwd + "/" + VAR_FILE, 'w') as outfile:
+    with open(cwd + "/" + VAR_FILE_LOCATION, 'w') as outfile:
         for fname in filenames:
             with open(fname) as infile:
                 for line in infile:
@@ -57,31 +57,45 @@ def tfvars_settings(cwd):
 def terraform_init(cwd, set_stdin=None, set_stdout=None, set_stderr=None):
     subprocess.Popen(INIT_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
 
-def terraform_apply(cwd, AUTO_APPROVE=False, set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_apply(cwd, AUTO_APPROVE=False, VAR_FILE="", set_stdin=None, set_stdout=None, set_stderr=None):
 
     tfvars_settings(cwd)
 
     add_history(cwd)
-    
-    if AUTO_APPROVE:
-        process = subprocess.Popen(APPLY_AUTO_APPROVE_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+
+    if len(VAR_FILE) > 0:
+        apply_auto_approve_process = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE, '-auto-approve']
+        apply_process = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE]
     else:
-        process = subprocess.Popen(APPLY_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+        apply_auto_approve_process = APPLY_AUTO_APPROVE_PROCESS
+        apply_process = APPLY_PROCESS
+
+    if AUTO_APPROVE:
+        process = subprocess.Popen(apply_auto_approve_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+    else:
+        process = subprocess.Popen(apply_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
 
     if process == 1:
         # If the process experiences an error, skip the remaining commands
         return 1
 
-    terraform_apply_auto_approve_refresh(cwd)
+    terraform_apply_auto_approve_refresh(cwd, VAR_FILE)
 
-def terraform_destroy(cwd, AUTO_APPROVE=False, set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_destroy(cwd, AUTO_APPROVE=False, VAR_FILE="", set_stdin=None, set_stdout=None, set_stderr=None):
 
     tfvars_settings(cwd)
 
-    if AUTO_APPROVE:
-        process = subprocess.Popen(DESTROY_AUTO_APPROVE_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+    if len(VAR_FILE) > 0:
+        destroy_auto_approve_process = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE, '-auto-approve']
+        destroy_process = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE]
     else:
-        process = subprocess.Popen(DESTROY_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+        destroy_auto_approve_process = DESTROY_AUTO_APPROVE_PROCESS
+        destroy_process = DESTROY_PROCESS
+
+    if AUTO_APPROVE:
+        process = subprocess.Popen(destroy_auto_approve_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+    else:
+        process = subprocess.Popen(destroy_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
 
     if process == 1:
         # If the process experiences an error, skip the remaining commands
@@ -93,34 +107,45 @@ def terraformOutput(cwd, set_stdin=None, set_stdout=None, set_stderr=None):
     tfvars_settings(cwd)
     subprocess.Popen(OUTPUT_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
 
-def terraform_apply_refresh(cwd, AUTO_APPROVE=False):
+def terraform_apply_refresh(cwd, VAR_FILE="", AUTO_APPROVE=False):
     tfvars_settings(cwd)
-    if AUTO_APPROVE:
-        process = subprocess.Popen(APPLY_REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
+
+    if len(VAR_FILE) > 0:
+        apply_refresh_auto_approve_process = [TERRAFORM_PATH, 'apply', '-refresh-only', '-var-file=%s' % VAR_FILE, '-auto-approve']
+        apply_refresh_process = [TERRAFORM_PATH, 'apply', '-refresh-only', '-var-file=%s' % VAR_FILE]
     else:
-        process = subprocess.Popen(APPLY_REFRESH_PROCESS, cwd=cwd).wait()
+        apply_refresh_auto_approve_process = APPLY_REFRESH_AUTO_APPROVE_PROCESS
+        apply_refresh_process = APPLY_REFRESH_PROCESS
+
+    if AUTO_APPROVE:
+        process = subprocess.Popen(apply_refresh_auto_approve_process, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
+    else:
+        process = subprocess.Popen(apply_refresh_process, cwd=cwd).wait()
 
     if process == 1:
         # If the process experiences an error, skip the remaining commands
         return 1
 
-def terraform_plan_refresh(cwd):
+def terraform_plan_refresh(cwd, VAR_FILE=""):
     tfvars_settings(cwd)
-    return subprocess.Popen(PLAN_REFRESH_PROCESS, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
 
-def terraform_apply_auto_approve_refresh(cwd):
+    if len(VAR_FILE) > 0:
+        plan_refresh_process = [TERRAFORM_PATH, 'plan', '-refresh-only', '-var-file=%s' % VAR_FILE]
+    else:
+        plan_refresh_process = PLAN_REFRESH_PROCESS
+
+    return subprocess.Popen(plan_refresh_process, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+
+def terraform_apply_auto_approve_refresh(cwd, VAR_FILE=""):
     tfvars_settings(cwd)
+
+    if len(VAR_FILE) > 0:
+        apply_refresh_auto_approve_process = [TERRAFORM_PATH, 'apply', '-refresh-only', '-var-file=%s' % VAR_FILE, '-auto-approve']
+    else:
+        apply_refresh_auto_approve_process = APPLY_REFRESH_AUTO_APPROVE_PROCESS
     
     print("\nPerforming -apply-refresh to sync statefile and match the current provisioned state")
-    subprocess.Popen(APPLY_REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
-
-    # if input("\nEnter Y if you would you like to invoke \"terraform apply -refresh-only\" to the drifted Terraform Roots' state to match the current provisioned state: ").upper() == "Y":
-    #     for index in range(len(drifted_terraform_roots)):
-    #         cwd = drifted_terraform_roots[index]
-
-    #         print("Invoking -refresh-only on %s" % os.path.basename(cwd))
-    #         terraform_apply_refresh(cwd)
-            # subprocess.Popen(APPLY_REFRESH_PROCESS, cwd=cwd).wait()
+    subprocess.Popen(apply_refresh_auto_approve_process, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
 
 def locate_terraform_root_directories(root_directory):
     
