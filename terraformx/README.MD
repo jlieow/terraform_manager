@@ -1,19 +1,58 @@
-# Run following command to compile .py code into .exe
+## To run terraformx commands via main.py
 
+In directory terraform_manager:
+
+To set temporary path and alias:
+
+alias terraformx="python3 $PWD/terraformx/terraformx.py"
+
+export PYTHONPATH="${PYTHONPATH}:$PWD/terraformx"
+
+echo '\n# The next line updates alias for terraformx
+alias terraformx="python3 '$PWD'/terraformx/main.py"' >> ~/.zshrc
+
+## To install Terraformx as a UNIX exe with pyinstaller --onefile perform the following commands
+
+In directory terraformx run the following commands:
 pyinstaller --onefile terraformx.py -p $(pwd)
 
-update path with:
-vi ~/.zprofile
+To set temporary path and alias:
 
-PATH="/Library/Frameworks/Python.framework/Versions/3.11/bin:/Users/jeromelieow/Documents/GitHub/terraform_manager/terraformx/dist/terraformx:${PATH}"
+export PATH=$PATH:$(pwd)/dist/terraformx
+alias terraformx=$(pwd)"/dist/terraformx"
 
+To set permanent path and alias:
+
+echo '\n# Setting PATH for terraformx
+PATH="${PATH}:'$PWD'/dist/terraformx"
+export PATH' >> ~/.zprofile
+
+echo '\n# The next line updates alias for terraformx
+alias terraformx="'$PWD'/dist/terraformx"' >> ~/.zshrc
+
+Note: If you experience zsh permission denied error, execute this command in the terraformx directory
+Give user exec permissions
+chmod +x $(pwd)/dist/terraformx
+
+## To install Terraformx as a UNIX exe with pyinstaller --onedir perform the following commands
+
+In directory terraformx run the pyinstaller command:
 pyinstaller --onedir terraformx.py -p $(pwd)
 
-## Add terraformx commands via alias
+To set temporary path and alias:
 
-vi ~/.zshrc
+export PATH=$PATH:$(pwd)/dist/terraformx/terraformx
+alias terraformx=$(pwd)"/dist/terraformx/terraformx"
 
-alias terraformx="python3 /Users/jeromelieow/Documents/GitHub/terraform_manager/terraformx/main.py"
+To set permanent path and alias:
 
-export PATH=$PATH:/Users/jeromelieow/Documents/GitHub/terraform_manager/terraformx/dist/terraformx
-alias terraformx="/Users/jeromelieow/Documents/GitHub/terraform_manager/terraformx/dist/terraformx"
+echo '\n# Setting PATH for terraformx
+PATH="${PATH}:'$PWD'/dist/terraformx/terraformx"
+export PATH' >> ~/.zprofile
+
+echo '\n# The next line updates alias for terraformx
+alias terraformx="'$PWD'/dist/terraformx/terraformx"' >> ~/.zshrc
+
+Note: If you experience zsh permission denied error, execute this command in the terraformx directory
+Give user exec permissions
+chmod +x $(pwd)/dist/terraformx
