@@ -94,7 +94,7 @@ stages:
 config.yaml legend:
 key
 | key | description | type | Example allowed values | Default value when omitted | Behaviour if omitted |
-| --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- |
 | ignore | True tells the Terraform Manager or Terraformx CLI to ignore the entire workflow file | bool | True, False | False | config.yaml is not ignored |
 | active_stages | Specifies which stage should be applied or destroyed and ignores the rest using an int | int | 1, 3-4 | None | No stage is ignored |
 | active_stage_names | Specifies which stage should be applied or destroyed and ignores the rest using the name of the stage | int | stage 1, stage 2 | None | No stage is ignored |
