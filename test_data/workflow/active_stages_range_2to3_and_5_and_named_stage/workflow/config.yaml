@@ -1,6 +1,6 @@
 ignore: True
 active_stages: 2-3, 5
-active_stage_names: stage_8, stage_10
+active_stage_names: stage 8, stage 10
 stages:
   - name: "stage_1"
     targets:
@@ -30,7 +30,7 @@ stages:
     targets:
       - module:
           - mi-7
-  - name: "stage_8"
+  - name: "stage 8"
     targets:
       - module:
           - mi-8
@@ -38,7 +38,7 @@ stages:
     targets:
       - module:
           - mi-9
-  - name: "stage_10"
+  - name: stage 10
     targets:
       - module:
           - mi-10
