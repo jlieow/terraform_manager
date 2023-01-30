@@ -92,7 +92,6 @@ stages:
 ```
 
 config.yaml legend:
-key
 | key | description | type | Example allowed values | Default value when omitted | Behaviour if omitted |
 | --- | --- | --- | --- | --- | --- |
 | ignore | True tells the Terraform Manager or Terraformx CLI to ignore the entire workflow file | bool | True, False | False | config.yaml is not ignored |
