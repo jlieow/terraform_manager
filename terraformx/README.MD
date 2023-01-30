@@ -3,7 +3,7 @@
 In directory terraform_manager:
 
 To set temporary path and alias:
-export PYTHONPATH="${PYTHONPATH}:/Users/jeromelieow/Documents/GitHub/terraform_manager"
+export PYTHONPATH="${PYTHONPATH}:$PWD"
 alias terraformx="python3 $PWD/terraformx/terraformx.py"
 
 ## To install Terraformx as a UNIX exe with pyinstaller --onefile perform the following commands
