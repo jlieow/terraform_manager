@@ -1,15 +1,10 @@
-## To run terraformx commands via main.py
+## To run terraformx commands via terraformx.py
 
 In directory terraform_manager:
 
 To set temporary path and alias:
-
+export PYTHONPATH="${PYTHONPATH}:/Users/jeromelieow/Documents/GitHub/terraform_manager"
 alias terraformx="python3 $PWD/terraformx/terraformx.py"
-
-export PYTHONPATH="${PYTHONPATH}:$PWD/terraformx"
-
-echo '\n# The next line updates alias for terraformx
-alias terraformx="python3 '$PWD'/terraformx/main.py"' >> ~/.zshrc
 
 ## To install Terraformx as a UNIX exe with pyinstaller --onefile perform the following commands
 
