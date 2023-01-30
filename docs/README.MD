@@ -69,7 +69,7 @@ Workflows is a method to perform terraform apply on targeted modules/resources b
 
 By simply creating a directory called workflow on the root dir of a Terraform root and placing a config.yaml file in your terraform root, Terraform Manager and Terraformx CLI will detect the yaml file and invoke terraform commands on targets modules and resources.
 
-### A typical terraform root directory layout with workflow
+#### A typical terraform root directory layout with workflow
 
     .
     ├── config            # Terraform Manager and Terraformx CLI locates all your tfvars files in the root directory and combines them here.
@@ -83,7 +83,7 @@ By simply creating a directory called workflow on the root dir of a Terraform ro
     ├── config.tfvars     # Variables to be used by Terraform when provisioning your resources. This will be picked up by Terraform Manager and Terraformx CLI and placed into /config
     └── README.md
 
-This is a sample workflow config.yaml:
+#### Sample workflow config.yaml
 
 ```
 ignore: True
