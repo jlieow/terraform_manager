@@ -67,6 +67,22 @@ Each time a terraform root is built, it is saved to a history .csv file. When re
 
 Workflows is a method to perform terraform apply on targeted modules/resources by storing them as steps in a yaml file.
 
+By simply creating a directory called workflow on the root dir of a Terraform root and placing a config.yaml file in your terraform root, Terraform Manager and Terraformx CLI will detect the yaml file and invoke terraform commands on targets modules and resources.
+
+### A typical terraform root directory layout with workflow
+
+    .
+    ├── config            # Terraform Manager and Terraformx CLI locates all your tfvars files in the root directory and combines them here.
+    ├── modules           # Location of Terraform modules.
+    ├── workflow          # Location of config.yaml.
+    ├── backend.tf        # Tells Terraform where to store the Terraform state file.
+    ├── main.tf           # Terraform main.tf.
+    ├── output.tf         # Outputs values after provisioning resources.
+    ├── variables.tf
+    ├── backend.tfvars    # Variables to be used by backend.tf. This will be picked up by Terraform Manager and Terraformx CLI and placed into /config
+    ├── config.tfvars     # Variables to be used by Terraform when provisioning your resources. This will be picked up by Terraform Manager and Terraformx CLI and placed into /config
+    └── README.md
+
 This is a sample workflow config.yaml:
 
 ```
