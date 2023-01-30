@@ -32,9 +32,10 @@ pyinstaller --onefile main.py
 
 vi ~/.zshrc
 
-alias terraform_manager="python3 /Users/jeromelieow/Documents/GitHub/aws-north-south-inspection-with-aws-network-firewall/terraform_manager/main.py"
-
 alias terraform_manager="python3 /Users/jeromelieow/Documents/GitHub/terraform_manager/main.py"
+
+export PATH=$PATH:/Users/jeromelieow/Documents/GitHub/terraform_manager/dist/main
+alias terraform_manager2="/Users/jeromelieow/Documents/GitHub/terraform_manager/dist/main"
 
 ## Features of Terraform Manager
 

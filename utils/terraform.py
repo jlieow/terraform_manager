@@ -69,11 +69,11 @@ def terraform():
 
         # print("\ndoes_workflow_file_exist: %s"does_workflow_file_existist(cwd))
         
-        workflowFileExists = does_workflow_file_exist(cwd)
-        if workflowFileExists:
+        workflow_file_exists = does_workflow_file_exist(cwd)
+        if workflow_file_exists:
             terraform_workflow(cwd)
 
-        while not workflowFileExists:
+        while not workflow_file_exists:
             # Question 2
             COMMAND_NUMBER = input_options(TERRAFORM_COMMAND_PREFACE, LIST_TERRAFORM_COMMAND, TERRAFORM_COMMAND_OPTIONS_DEFAULT, use_prev_as_default=True, choice=COMMAND_NUMBER, allow_special_break=True, special_break="<")
 

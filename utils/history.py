@@ -1,17 +1,22 @@
+import os
 import csv
+import sys
 
 from .common import *
 from .print_options import *
 
 # ----- CONSTANTS ----- #
 
-HISTORY_CSV_PATH = "./data/history/terraform_history.csv"
+HISTORY_CSV_PATH = "/data/history/terraform_history.csv"
 
 # ----- CONSTANTS ----- #
 
 def add_history(cwd, stage_name="", unit_testing=False, unit_testing_path=""):
+    
+    path = get_dir_of_terraform_manager_from_sys_executable_onefile(sys.executable) + HISTORY_CSV_PATH
 
-    path = HISTORY_CSV_PATH
+    if not os.path.exists(path):
+        path = get_dir_of_terraform_manager_from_sys_executable_onedir(sys.executable) + HISTORY_CSV_PATH
 
     if unit_testing is True:
         path = unit_testing_path
@@ -25,8 +30,12 @@ def add_history(cwd, stage_name="", unit_testing=False, unit_testing_path=""):
         f.close()
 
 def delete_latest_row_from_history(cwd, stage_name="", unit_testing=False, unit_testing_path=""):
-    
-    path = HISTORY_CSV_PATH
+
+    path = get_dir_of_terraform_manager_from_sys_executable_onefile(sys.executable) + HISTORY_CSV_PATH
+
+    if not os.path.exists(path):
+        path = get_dir_of_terraform_manager_from_sys_executable_onedir(sys.executable) + HISTORY_CSV_PATH
+
 
     if unit_testing is True:
         path = unit_testing_path
