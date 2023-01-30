@@ -72,15 +72,17 @@ By simply creating a directory called workflow on the root dir of a Terraform ro
 #### A typical terraform root directory layout with workflow
 
     .
-    ├── config            # Terraform Manager and Terraformx CLI locates all your tfvars files in the root directory and combines them here.
-    ├── modules           # Location of Terraform modules.
-    ├── workflow          # Location of config.yaml.
-    ├── backend.tf        # Tells Terraform where to store the Terraform state file.
-    ├── main.tf           # Terraform main.tf.
-    ├── output.tf         # Outputs values after provisioning resources.
+    ├── config                # Terraform Manager and Terraformx CLI locates all your tfvars files in the root directory and combines them into a settings.tfvars file here.
+    │   └── settings.tfvars   # Values in backend.tfvars and config.tfvars will be stored here
+    ├── modules               # Location of Terraform modules.
+    ├── workflow
+    │   └── config.yaml       # Terraform Manager and Terraformx CLI will detect the yaml file and invoke terraform commands on targeted modules and resources.
+    ├── backend.tf            # Tells Terraform where to store the Terraform state file.
+    ├── main.tf               # Terraform main.tf.
+    ├── output.tf             # Outputs values after provisioning resources.
     ├── variables.tf
-    ├── backend.tfvars    # Variables to be used by backend.tf. This will be picked up by Terraform Manager and Terraformx CLI and placed into /config
-    ├── config.tfvars     # Variables to be used by Terraform when provisioning your resources. This will be picked up by Terraform Manager and Terraformx CLI and placed into /config
+    ├── backend.tfvars        # Variables to be used by backend.tf. This will be picked up by Terraform Manager and Terraformx CLI and placed into /config
+    ├── config.tfvars         # Variables to be used by Terraform when provisioning your resources. This will be picked up by Terraform Manager and Terraformx CLI and placed into /config
     └── README.md
 
 #### Sample workflow config.yaml
