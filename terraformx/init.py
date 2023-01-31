@@ -4,7 +4,6 @@ from .terraformx_common import *
 from utils import *
 
 def init(args):
-    print("terraformx init")
 
     dir = args.dir
 

@@ -33,3 +33,8 @@ ec2,stage 1
 /Users/jeromelieow/Documents/GitHub/aws_hub/samples/hub_with_no_workloads,
 /Users/jeromelieow/Documents/GitHub/aws_hub/samples/hub_with_no_workloads,
 /Users/jeromelieow/Documents/GitHub/aws_hub/samples/hub_with_no_workloads,
+spoke_swiftevent,Container Repo
+spoke_swiftevent,Fargate with networking
+hub_with_ec2_spoke,
+hub_with_ec2_spoke,
+hub_with_ec2_spoke,
