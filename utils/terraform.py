@@ -18,19 +18,19 @@ BREAKER = False
 
 # ----- CONSTANTS ----- #
 
-def tfvars_settings(cwd):
-    filenames = glob.glob(cwd + "/*.tfvars")
+# def tfvars_settings(cwd):
+#     filenames = glob.glob(cwd + "/*.tfvars")
 
-    # filenames = [cwd + "/backend.tfvars", cwd + "/config.tfvars"]
-    with open(cwd + "/config/settings.tfvars", 'w') as outfile:
-        for fname in filenames:
-            with open(fname) as infile:
-                for line in infile:
-                    outfile.write(line)
-                #Add a newline so that variables are separated
-                outfile.write("\n")
-                # Remove newline at the end of the file
-                infile.read().rstrip('\n')     
+#     # filenames = [cwd + "/backend.tfvars", cwd + "/config.tfvars"]
+#     with open(cwd + "/config/settings.tfvars", 'w') as outfile:
+#         for fname in filenames:
+#             with open(fname) as infile:
+#                 for line in infile:
+#                     outfile.write(line)
+#                 #Add a newline so that variables are separated
+#                 outfile.write("\n")
+#                 # Remove newline at the end of the file
+#                 infile.read().rstrip('\n')     
 
 def terraform():
 
