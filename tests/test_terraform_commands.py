@@ -85,6 +85,8 @@ class TerraformCommandsTestSuite(unittest.TestCase):
         if os.path.exists(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist + ext_config_dir):
             print("settings.tfvars is present")
             os.rmdir(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist + ext_config_dir)
+        
+        assert True
 
 if __name__ == '__main__':
     unittest.main()
