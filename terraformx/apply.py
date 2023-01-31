@@ -4,7 +4,6 @@ from .terraformx_common import *
 from utils import *
 
 def apply(args):
-    # print("terraformx apply")
 
     dir = args.dir
     auto_approve = args.auto_approve

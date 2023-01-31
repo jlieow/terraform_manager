@@ -4,10 +4,6 @@ from .terraformx_common import *
 from utils import *
 
 def destroy(args):
-    print("terraformx destroy")
-    print(args)
-    print(args.auto_approve)
-    print(args.refresh_only)
 
     dir = args.dir
     auto_approve = args.auto_approve
