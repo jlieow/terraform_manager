@@ -9,7 +9,21 @@ python -m pipreqs.pipreqs .
 
 # Run following command to compile .py code into .exe
 
-pyinstaller --onefile main.py
+In terraform_manager dir install the exe using PyInstaller and set the PATH and alias.
+Following are examples:
+
+1. pyinstaller --onefile main.py
+   export PATH=$PATH:$(pwd)/dist/terraformx
+   alias terraformx=$(pwd)"/dist/terraformx"
+
+2. pyinstaller --onedir main.py
+   export PATH=$PATH:$(pwd)/dist/terraformx/terraformx
+   alias terraformx=$(pwd)"/dist/terraformx/terraformx"
+
+Otherwise you may use the following shell scripts to install and update PATH and alias:
+
+1. one-dir-terraform-manager-install.sh
+2. one-file-terraform-manager-install.sh
 
 # Run tests with the following methods
 
