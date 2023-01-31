@@ -41,9 +41,9 @@ LIST_TERRAFORM_COMMAND=[
 def tfvars_settings(cwd):
     filenames = glob.glob(cwd + "/*.tfvars")   
 
-    # print(cwd)
+    if not os.path.exists(cwd + "/config"):
+        os.mkdir(cwd + "/config")
 
-    # filenames = [cwd + "/backend.tfvars", cwd + "/config.tfvars"]
     with open(cwd + "/" + VAR_FILE, 'w') as outfile:
         for fname in filenames:
             with open(fname) as infile:
