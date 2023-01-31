@@ -1,3 +1,10 @@
+# About
+
+Terraformx builds on top of Terraform CLI to provide a few additional features:
+
+1. Workflows for targeted applies and destroys.
+2. Destroy based on history
+
 ## To run terraformx commands via terraformx.py
 
 In directory terraform_manager:

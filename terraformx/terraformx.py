@@ -1,4 +1,5 @@
 # importing required modules
+import sys
 import argparse
 
 from init import *
@@ -47,7 +48,7 @@ def main():
     terraformx_destroy.add_argument("-auto-approve", action="store_true", help = "Auto approve command.")
     terraformx_destroy.add_argument("-override-workflow", action="store_true", help = "Overrides workflow stages auto_approve keys and auto approves every stage.")
     terraformx_destroy.add_argument("-refresh-only", action="store_true", help = "Review how terraform would update your state file.")
-
+    terraformx_destroy.add_argument("-destroy-history", action="store_true", help = "Destroys all in terraform_history.csv.")
 
     terraformx_output = subparsers.add_parser("output")
     terraformx_output.set_defaults(function=output)

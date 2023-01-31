@@ -13,6 +13,7 @@ def destroy(args):
     auto_approve = args.auto_approve
     override_workflow = args.override_workflow
     refresh_only = args.refresh_only
+    destroy_history = args.destroy_history
 
     cwd = get_cwd(dir)
     if len(cwd) == 0:
@@ -23,6 +24,10 @@ def destroy(args):
     workflow_file_exists = does_workflow_file_exist(cwd)
 
     tfvars_settings(cwd) 
+
+    if destroy_history:
+        print("destroy_history")
+        return
 
     if workflow_file_exists:
 
