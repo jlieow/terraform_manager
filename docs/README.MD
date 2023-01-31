@@ -13,10 +13,12 @@ In terraform_manager dir install the exe using PyInstaller and set the PATH and 
 Following are examples:
 
 1. pyinstaller --onefile main.py
+
    export PATH=$PATH:$(pwd)/dist/terraformx
    alias terraformx=$(pwd)"/dist/terraformx"
 
 2. pyinstaller --onedir main.py
+
    export PATH=$PATH:$(pwd)/dist/terraformx/terraformx
    alias terraformx=$(pwd)"/dist/terraformx/terraformx"
 
