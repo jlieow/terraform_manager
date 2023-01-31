@@ -12,6 +12,10 @@ BLUEPRINTS_CSV_PATH = "./data/blueprints/"
 
 def addBlueprint(blueprint_name, cwd, stage_name=""):
     path = BLUEPRINTS_CSV_PATH + blueprint_name + ".csv"
+
+    if not os.path.exists(BLUEPRINTS_CSV_PATH):
+        os.mkdir(BLUEPRINTS_CSV_PATH)
+
     #Save results to CSV    
     with open(path, 'a', newline='') as f:  
         # using csv.writer method from CSV package
