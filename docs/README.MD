@@ -19,7 +19,7 @@ export PATH=$PATH:$(pwd)/dist/terraformx
 alias terraformx=$(pwd)"/dist/terraformx"
 ```
 
-1. Using PyInstaller --onedir
+2. Using PyInstaller --onedir
 
 ```
 pyinstaller --onedir main.py
