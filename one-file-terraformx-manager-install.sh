@@ -8,8 +8,13 @@ set_path_alias() {
 }
 
 (
-    pyinstaller --onefile main.py -p $(pwd) -y 2> /dev/null &&
+    pyinstaller --onefile main.py -y 2> /dev/null &&
     set_path_alias
 ) || (
     set_path_alias
 )
+
+echo "
+Install complete...
+Please use command terraform_manager to instantiate the program.
+"

@@ -10,20 +10,24 @@ set_path_alias() {
 set_path_alias_terraform_manager1() {
     export PATH=$PATH:$(pwd)/dist/main/main
     alias terraform_manager1=$(pwd)"/dist/main/main" 
-    # echo $(terraform_manager1)
+    echo $(terraform_manager1)
 }
 
-set_path_alias_terraform_manager1() {
+set_path_alias_terraform_manager2() {
     export PATH=$PATH:$(pwd)/dist/main/main
     alias terraform_manager2=$(pwd)"/dist/main/main" 
-    # echo $(terraform_manager2)
+    echo $(terraform_manager2)
 }
 
 (
-    pyinstaller --onedir main.py -p $(pwd) -y 2> /dev/null &&
+    pyinstaller --onedir main.py -y 2> /dev/null &&
     set_path_alias
 ) || (
 
     set_path_alias
 )  
-echo "Install complete"
+
+echo "
+Install complete...
+Please use command terraform_manager to instantiate the program.
+"

@@ -26,4 +26,8 @@ set_path_alias_terraformx_sample2() {
 
     set_path_alias
 )  
-echo "Install complete"
+
+echo "
+Install complete...
+Please use command terraformx to instantiate the program.
+"

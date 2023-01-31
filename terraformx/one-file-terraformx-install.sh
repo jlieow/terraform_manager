@@ -13,3 +13,8 @@ set_path_alias() {
 ) || (
     set_path_alias
 )
+
+echo "
+Install complete...
+Please use command terraformx to instantiate the program.
+"
