@@ -15,7 +15,7 @@ class Parser_constants:
     BLUEPRINTS = "blueprints"
     HISTORY = "history"
 class Args_constants:
-    DIR = "-dir"
+    CHDIR = "-chdir"
     VAR_FILE = "-var-file"
     AUTO_APPROVE = "-auto-approve"
     OVERRIDE_WORKFLOW = "-override-workflow"
@@ -61,12 +61,12 @@ def main():
 
     terraformx_init = subparsers.add_parser(Parser_constants.INIT)
     terraformx_init.set_defaults(function=init)
-    terraformx_init.add_argument(Args_constants.DIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+    terraformx_init.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
     terraformx_init.add_argument(Args_constants.VAR_FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TFVARS_FILE)
 
     terraformx_apply = subparsers.add_parser(Parser_constants.APPLY)
     terraformx_apply.set_defaults(function=apply)
-    terraformx_apply.add_argument(Args_constants.DIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+    terraformx_apply.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
     terraformx_apply.add_argument(Args_constants.VAR_FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TFVARS_FILE)
     terraformx_apply.add_argument(Args_constants.AUTO_APPROVE, action=Action_constants.STORE_TRUE, help = Help_constants.AUTO_APPROVE_COMMAND)
     terraformx_apply.add_argument(Args_constants.OVERRIDE_WORKFLOW, action=Action_constants.STORE_TRUE, help = Help_constants.OVERRIDE_WORKFLOW)
@@ -74,7 +74,7 @@ def main():
 
     terraformx_destroy = subparsers.add_parser(Parser_constants.DESTROY)
     terraformx_destroy.set_defaults(function=destroy)
-    terraformx_destroy.add_argument(Args_constants.DIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+    terraformx_destroy.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
     terraformx_destroy.add_argument(Args_constants.VAR_FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TFVARS_FILE)
     terraformx_destroy.add_argument(Args_constants.AUTO_APPROVE, action=Action_constants.STORE_TRUE, help = Help_constants.AUTO_APPROVE_COMMAND)
     terraformx_destroy.add_argument(Args_constants.OVERRIDE_WORKFLOW, action=Action_constants.STORE_TRUE, help = Help_constants.OVERRIDE_WORKFLOW)
@@ -83,7 +83,7 @@ def main():
 
     terraformx_output = subparsers.add_parser(Parser_constants.OUTPUT)
     terraformx_output.set_defaults(function=output)
-    terraformx_output.add_argument(Args_constants.DIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+    terraformx_output.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
     
     # parse the arguments and call the right function
     args = top_level_parser.parse_args()
