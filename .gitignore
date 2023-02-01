@@ -7,3 +7,11 @@
 /build/
 terraformx.spec
 main.spec
+/data/aws_credentials/*
+/data/blueprints/*
+/data/history/*
+
+# Do not ignore these files...
+!/data/aws_credentials/.gitkeep
+!/data/blueprints/.gitkeep
+!/data/history/.gitkeep
