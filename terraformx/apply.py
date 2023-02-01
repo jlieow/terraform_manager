@@ -6,9 +6,11 @@ from utils import *
 def apply(args):
 
     dir = args.dir
+    var_file = args.var_file
     auto_approve = args.auto_approve
     override_workflow = args.override_workflow
     refresh_only = args.refresh_only
+    
 
     cwd = get_cwd(dir)
     if len(cwd) == 0:
@@ -19,6 +21,9 @@ def apply(args):
     tfvars_settings(cwd) 
 
     if does_workflow_file_exist(cwd):
+
+        if len(var_file) > 0:
+            print_warning("\n[WARNING] -var-file flag will be ignored as a workflow file is detected. The -var-file referenced is located in config/settings.tfvars.")
 
         if not auto_approve:
             stage_workflow_terraform_apply(cwd)
@@ -33,5 +38,5 @@ def apply(args):
             stage_workflow_terraform_apply(cwd, override_workflow)
 
     else:
-        terraform_apply(cwd, AUTO_APPROVE=auto_approve)
+        terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=auto_approve)
 

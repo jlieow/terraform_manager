@@ -535,10 +535,10 @@ def workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=False)
     target_process = ["-target=" + sub for sub in stage_targets]
 
     if AUTO_APPROVE:
-        workflow_apply_auto_approve_target_process = APPLY_AUTO_APPROVE_PROCESS + target_process
+        workflow_apply_auto_approve_target_process = Terraform_commands_constants.APPLY_AUTO_APPROVE_PROCESS + target_process
         process = subprocess.Popen(workflow_apply_auto_approve_target_process, cwd=cwd).wait()
     else:
-        workflow_apply_target_process = APPLY_PROCESS + target_process
+        workflow_apply_target_process = Terraform_commands_constants.APPLY_PROCESS + target_process
         process = subprocess.Popen(workflow_apply_target_process, cwd=cwd).wait()
 
     if process == 1:
@@ -558,10 +558,10 @@ def workflow_terraform_destroy(cwd, stage_targets, stage_name, AUTO_APPROVE=Fals
     target_process = ["-target=" + sub for sub in stage_targets]
 
     if AUTO_APPROVE:
-        workflow_destroy_auto_approve_target_process = DESTROY_AUTO_APPROVE_PROCESS + target_process
+        workflow_destroy_auto_approve_target_process = Terraform_commands_constants.DESTROY_AUTO_APPROVE_PROCESS + target_process
         process = subprocess.Popen(workflow_destroy_auto_approve_target_process, cwd=cwd).wait()
     else:
-        workflow_destroy_target_process = DESTROY_PROCESS + target_process
+        workflow_destroy_target_process = Terraform_commands_constants.DESTROY_PROCESS + target_process
         process = subprocess.Popen(workflow_destroy_target_process, cwd=cwd).wait()
 
     if process == 1:
@@ -574,10 +574,10 @@ def workflow_terraform_apply_refresh(cwd, stage_targets, AUTO_APPROVE=False):
     tfvars_settings(cwd)
     
     if AUTO_APPROVE:
-        workflow_apply_auto_approve_target_process = APPLY_REFRESH_AUTO_APPROVE_PROCESS + ["-target=" + sub for sub in stage_targets]
+        workflow_apply_auto_approve_target_process = Terraform_commands_constants.APPLY_REFRESH_AUTO_APPROVE_PROCESS + ["-target=" + sub for sub in stage_targets]
         process = subprocess.Popen(workflow_apply_auto_approve_target_process, cwd=cwd).wait()
     else:
-        workflow_apply_target_process = APPLY_REFRESH_PROCESS + ["-target=" + sub for sub in stage_targets]
+        workflow_apply_target_process = Terraform_commands_constants.APPLY_REFRESH_PROCESS + ["-target=" + sub for sub in stage_targets]
         process = subprocess.Popen(workflow_apply_target_process, cwd=cwd).wait()
 
     if process == 1:
@@ -589,7 +589,7 @@ def workflow_terraform_apply_refresh(cwd, stage_targets, AUTO_APPROVE=False):
 def workflow_terraform_plan_refresh(cwd, stage_targets):
     tfvars_settings(cwd)
     
-    workflow_apply_auto_approve_target_process = PLAN_REFRESH_PROCESS + ["-target=" + sub for sub in stage_targets]
+    workflow_apply_auto_approve_target_process = Terraform_commands_constants.PLAN_REFRESH_PROCESS + ["-target=" + sub for sub in stage_targets]
     return subprocess.Popen(workflow_apply_auto_approve_target_process, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
 
 def check_stages_errors(stages_errors):

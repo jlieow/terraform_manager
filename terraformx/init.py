@@ -16,4 +16,4 @@ def init(args):
 
     tfvars_settings(cwd) 
 
-    terraform_init(cwd, VAR_FILE=var_file)
+    terraform_init(cwd, CUSTOM_VAR_FILE=var_file)

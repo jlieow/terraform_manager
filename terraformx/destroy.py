@@ -6,6 +6,7 @@ from utils import *
 def destroy(args):
 
     dir = args.dir
+    var_file = args.var_file
     auto_approve = args.auto_approve
     override_workflow = args.override_workflow
     refresh_only = args.refresh_only
@@ -17,15 +18,16 @@ def destroy(args):
             print_error("[ERROR] Unable to locate directory.")
             return 
 
-    workflow_file_exists = does_workflow_file_exist(cwd)
-
     tfvars_settings(cwd) 
 
     if destroy_history:
         print("destroy_history")
         return
 
-    if workflow_file_exists:
+    if does_workflow_file_exist(cwd):
+
+        if len(var_file) > 0:
+            print_warning("\n[WARNING] -var-file flag will be ignored as a workflow file is detected. The -var-file referenced is located in config/settings.tfvars.")
 
         if not auto_approve:
             stage_workflow_terraform_destroy(cwd)
@@ -40,4 +42,4 @@ def destroy(args):
             stage_workflow_terraform_destroy(cwd, override_workflow)
             
     else:
-        terraform_destroy(cwd, AUTO_APPROVE=auto_approve)
+        terraform_destroy(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=auto_approve)

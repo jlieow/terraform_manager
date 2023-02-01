@@ -7,31 +7,40 @@ from .history import *
 
 # ----- CONSTANTS ----- #
 
-TERRAFORM_PATH = 'terraform'
-BACKEND_CONFIG_FILE = 'backend.tfvars'
-VAR_FILE = 'config/settings.tfvars'
+class Terraform_commands_constants:
+    TERRAFORM_PARSER = 'terraform'
+    BACKEND_CONFIG_FILE = 'backend.tfvars'
+    TERRAFORMX_VAR_FILE = 'config/settings.tfvars'
 
-INIT_PROCESS = [TERRAFORM_PATH, 'init', '-backend-config=%s' % BACKEND_CONFIG_FILE]
-OUTPUT_PROCESS = [TERRAFORM_PATH, 'output']
-APPLY_PROCESS = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE]
-APPLY_AUTO_APPROVE_PROCESS = [TERRAFORM_PATH, 'apply', '-var-file=%s' % VAR_FILE, '-auto-approve']
-DESTROY_PROCESS = [TERRAFORM_PATH, 'destroy', '-var-file=%s' % VAR_FILE]
-DESTROY_AUTO_APPROVE_PROCESS = [TERRAFORM_PATH, 'destroy', '-var-file=%s' % VAR_FILE, '-auto-approve']
-APPLY_REFRESH_PROCESS = [TERRAFORM_PATH, 'apply', '-refresh-only', '-var-file=%s' % VAR_FILE]
-APPLY_REFRESH_AUTO_APPROVE_PROCESS = [TERRAFORM_PATH, 'apply', '-refresh-only', '-var-file=%s' % VAR_FILE, '-auto-approve']
-PLAN_REFRESH_PROCESS = [TERRAFORM_PATH, 'plan', '-refresh-only', '-var-file=%s' % VAR_FILE]
+    INIT = 'init'
+    APPLY = 'apply'
+    DESTROY = 'destroy'
+    PLAN = 'plan'
+    AUTO_APPROVE = '-auto-approve'
+    REFRESH_ONLY = '-refresh-only'
 
-TERRAFORM_COMMAND_PREFACE = "The following terraform commands can be invoked:\n"
-TERRAFORM_COMMAND_OPTIONS = "\nWhich command would you like to invoke: "
-LIST_TERRAFORM_COMMAND=[
-    "terraform init",
-    "terraform apply",
-    "terraform destroy",
-    "terraform destroy and apply -auto-approve",
-    "terraform output",
-    "terraform apply -refresh-only",
-    "terraform plan -refresh-only",
-]
+
+    INIT_PROCESS = [TERRAFORM_PARSER, INIT, '-backend-config=%s' % BACKEND_CONFIG_FILE]
+    OUTPUT_PROCESS = [TERRAFORM_PARSER, 'output']
+    APPLY_PROCESS = [TERRAFORM_PARSER, APPLY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
+    APPLY_AUTO_APPROVE_PROCESS = [TERRAFORM_PARSER, APPLY, '-var-file=%s' % TERRAFORMX_VAR_FILE, AUTO_APPROVE]
+    DESTROY_PROCESS = [TERRAFORM_PARSER, DESTROY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
+    DESTROY_AUTO_APPROVE_PROCESS = [TERRAFORM_PARSER, DESTROY, '-var-file=%s' % TERRAFORMX_VAR_FILE, AUTO_APPROVE]
+    APPLY_REFRESH_PROCESS = [TERRAFORM_PARSER, APPLY, REFRESH_ONLY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
+    APPLY_REFRESH_AUTO_APPROVE_PROCESS = [TERRAFORM_PARSER, APPLY, REFRESH_ONLY, '-var-file=%s' % TERRAFORMX_VAR_FILE, AUTO_APPROVE]
+    PLAN_REFRESH_PROCESS = [TERRAFORM_PARSER, PLAN, REFRESH_ONLY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
+
+    TERRAFORM_COMMAND_PREFACE = "The following terraform commands can be invoked:\n"
+    TERRAFORM_COMMAND_OPTIONS = "\nWhich command would you like to invoke: "
+    LIST_TERRAFORM_COMMAND=[
+        "terraform init",
+        "terraform apply",
+        "terraform destroy",
+        "terraform destroy and apply -auto-approve",
+        "terraform output",
+        "terraform apply -refresh-only",
+        "terraform plan -refresh-only",
+    ]
 
 # ----- CONSTANTS ----- #
 
@@ -44,7 +53,7 @@ def tfvars_settings(cwd):
     if not os.path.exists(cwd + "/config"):
         os.mkdir(cwd + "/config")
 
-    with open(cwd + "/" + VAR_FILE, 'w') as outfile:
+    with open(cwd + "/" + Terraform_commands_constants.TERRAFORMX_VAR_FILE, 'w') as outfile:
         for fname in filenames:
             with open(fname) as infile:
                 for line in infile:
@@ -54,24 +63,30 @@ def tfvars_settings(cwd):
                 # Remove newline at the end of the file
                 infile.read().rstrip('\n')  
 
-def terraform_init(cwd, VAR_FILE="", set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_init(cwd, CUSTOM_VAR_FILE="", set_stdin=None, set_stdout=None, set_stderr=None):
 
-    init_process = INIT_PROCESS
-    if len(VAR_FILE) > 0:   
-        init_process = [TERRAFORM_PATH, 'init', '-backend-config=%s' % VAR_FILE]
+    init_process = Terraform_commands_constants.INIT_PROCESS
+    if len(CUSTOM_VAR_FILE) > 0:   
+        init_process = [Terraform_commands_constants.TERRAFORM_PARSER, 'init', '-backend-config=%s' % CUSTOM_VAR_FILE]
 
     subprocess.Popen(init_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
 
-def terraform_apply(cwd, AUTO_APPROVE=False, set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, set_stdin=None, set_stdout=None, set_stderr=None):
 
     tfvars_settings(cwd)
 
     add_history(cwd)
+
+    apply_auto_approve_process = Terraform_commands_constants.APPLY_AUTO_APPROVE_PROCESS
+    apply_process = Terraform_commands_constants.APPLY_PROCESS
+    if len(CUSTOM_VAR_FILE) > 0:   
+        apply_auto_approve_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.APPLY, '-var-file=%s' % CUSTOM_VAR_FILE, AUTO_APPROVE]
+        apply_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.APPLY, '-var-file=%s' % CUSTOM_VAR_FILE]
     
     if AUTO_APPROVE:
-        process = subprocess.Popen(APPLY_AUTO_APPROVE_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+        process = subprocess.Popen(apply_auto_approve_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
     else:
-        process = subprocess.Popen(APPLY_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+        process = subprocess.Popen(apply_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
 
     if process == 1:
         # If the process experiences an error, skip the remaining commands
@@ -79,14 +94,20 @@ def terraform_apply(cwd, AUTO_APPROVE=False, set_stdin=None, set_stdout=None, se
 
     terraform_apply_auto_approve_refresh(cwd)
 
-def terraform_destroy(cwd, AUTO_APPROVE=False, set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, set_stdin=None, set_stdout=None, set_stderr=None):
 
     tfvars_settings(cwd)
 
+    destroy_auto_approve_process = Terraform_commands_constants.DESTROY_AUTO_APPROVE_PROCESS
+    destroy_process = Terraform_commands_constants.DESTROY_PROCESS
+    if len(CUSTOM_VAR_FILE) > 0:   
+        destroy_auto_approve_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.DESTROY, '-var-file=%s' % CUSTOM_VAR_FILE, AUTO_APPROVE]
+        destroy_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.DESTROY, '-var-file=%s' % CUSTOM_VAR_FILE]
+
     if AUTO_APPROVE:
-        process = subprocess.Popen(DESTROY_AUTO_APPROVE_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+        process = subprocess.Popen(destroy_auto_approve_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
     else:
-        process = subprocess.Popen(DESTROY_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+        process = subprocess.Popen(destroy_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
 
     if process == 1:
         # If the process experiences an error, skip the remaining commands
@@ -96,14 +117,14 @@ def terraform_destroy(cwd, AUTO_APPROVE=False, set_stdin=None, set_stdout=None, 
 
 def terraformOutput(cwd, set_stdin=None, set_stdout=None, set_stderr=None):
     tfvars_settings(cwd)
-    subprocess.Popen(OUTPUT_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+    subprocess.Popen(Terraform_commands_constants.OUTPUT_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
 
 def terraform_apply_refresh(cwd, AUTO_APPROVE=False):
     tfvars_settings(cwd)
     if AUTO_APPROVE:
-        process = subprocess.Popen(APPLY_REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
+        process = subprocess.Popen(Terraform_commands_constants.APPLY_REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
     else:
-        process = subprocess.Popen(APPLY_REFRESH_PROCESS, cwd=cwd).wait()
+        process = subprocess.Popen(Terraform_commands_constants.APPLY_REFRESH_PROCESS, cwd=cwd).wait()
 
     if process == 1:
         # If the process experiences an error, skip the remaining commands
@@ -111,13 +132,13 @@ def terraform_apply_refresh(cwd, AUTO_APPROVE=False):
 
 def terraform_plan_refresh(cwd):
     tfvars_settings(cwd)
-    return subprocess.Popen(PLAN_REFRESH_PROCESS, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    return subprocess.Popen(Terraform_commands_constants.PLAN_REFRESH_PROCESS, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
 
 def terraform_apply_auto_approve_refresh(cwd):
     tfvars_settings(cwd)
     
     print("\nPerforming -apply-refresh to sync statefile and match the current provisioned state")
-    subprocess.Popen(APPLY_REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
+    subprocess.Popen(Terraform_commands_constants.APPLY_REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
 
     # if input("\nEnter Y if you would you like to invoke \"terraform apply -refresh-only\" to the drifted Terraform Roots' state to match the current provisioned state: ").upper() == "Y":
     #     for index in range(len(drifted_terraform_roots)):
