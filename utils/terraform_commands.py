@@ -54,8 +54,13 @@ def tfvars_settings(cwd):
                 # Remove newline at the end of the file
                 infile.read().rstrip('\n')  
 
-def terraform_init(cwd, set_stdin=None, set_stdout=None, set_stderr=None):
-    subprocess.Popen(INIT_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+def terraform_init(cwd, VAR_FILE="", set_stdin=None, set_stdout=None, set_stderr=None):
+
+    init_process = INIT_PROCESS
+    if len(VAR_FILE) > 0:   
+        init_process = [TERRAFORM_PATH, 'init', '-backend-config=%s' % VAR_FILE]
+
+    subprocess.Popen(init_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
 
 def terraform_apply(cwd, AUTO_APPROVE=False, set_stdin=None, set_stdout=None, set_stderr=None):
 

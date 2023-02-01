@@ -32,6 +32,7 @@ def main():
     terraformx_init = subparsers.add_parser("init")
     terraformx_init.set_defaults(function=init)
     terraformx_init.add_argument("-dir", type = str, default="", help = "Location of terraform root.")
+    terraformx_apply.add_argument("-var-file", type = str, default="", help = "Location of variable definitions file.")
 
     terraformx_apply = subparsers.add_parser("apply")
     terraformx_apply.set_defaults(function=apply)

@@ -6,6 +6,7 @@ from utils import *
 def init(args):
 
     dir = args.dir
+    var_file = args.var_file
 
     cwd = get_cwd(dir)
     if len(cwd) == 0:
@@ -15,4 +16,4 @@ def init(args):
 
     tfvars_settings(cwd) 
 
-    terraform_init(cwd)
+    terraform_init(cwd, VAR_FILE=var_file)
