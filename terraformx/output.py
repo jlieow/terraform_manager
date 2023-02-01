@@ -1,6 +1,6 @@
 import os
 
-from .terraformx_common import *
+from terraformx.terraformx_common import *
 from utils import *
 
 def output(args):
