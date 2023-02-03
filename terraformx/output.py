@@ -5,9 +5,9 @@ from utils import *
 
 def output(args):
 
-    dir = args.dir
+    chdir = args.chdir
 
-    cwd = get_cwd(dir)
+    cwd = get_cwd(chdir)
     if len(cwd) == 0:
         if not os.path.exists(cwd):
             print_error("[ERROR] Unable to locate directory.")

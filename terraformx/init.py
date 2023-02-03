@@ -5,10 +5,10 @@ from utils import *
 
 def init(args):
 
-    dir = args.dir
+    chdir = args.chdir
     var_file = args.var_file
 
-    cwd = get_cwd(dir)
+    cwd = get_cwd(chdir)
     if len(cwd) == 0:
         if not os.path.exists(cwd):
             print_error("[ERROR] Unable to locate directory.")

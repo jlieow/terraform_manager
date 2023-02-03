@@ -15,12 +15,13 @@ class Parser_constants:
     BLUEPRINTS = "blueprints"
     HISTORY = "history"
 class Args_constants:
-    DIR = "-dir"
+    CHDIR = "-chdir"
     VAR_FILE = "-var-file"
     AUTO_APPROVE = "-auto-approve"
     OVERRIDE_WORKFLOW = "-override-workflow"
     REFRESH_ONLY = "-refresh-only"
     DESTROY_HISTORY = "-destroy-history"
+    REBUILD = "-rebuild"
 
 class Action_constants:
     STORE_TRUE = "store_true"
@@ -34,6 +35,7 @@ class Help_constants:
     AUTO_APPROVE_COMMAND = "Auto approve command without requiring user input."
     OVERRIDE_WORKFLOW = "Overrides workflow stages auto_approve keys and auto approves every stage."
     TERRAOFORM_STATE_FILE_REVIEW = "Review how terraform would update your state file."
+    REBUILD = "Rebuild terraform by destroying and applying the script."
     DESTORY_ALL_IN_HISTORY = "Destroys all in terraform_history.csv."
 
 
@@ -61,20 +63,21 @@ def main():
 
     terraformx_init = subparsers.add_parser(Parser_constants.INIT)
     terraformx_init.set_defaults(function=init)
-    terraformx_init.add_argument(Args_constants.DIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+    terraformx_init.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
     terraformx_init.add_argument(Args_constants.VAR_FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TFVARS_FILE)
 
     terraformx_apply = subparsers.add_parser(Parser_constants.APPLY)
     terraformx_apply.set_defaults(function=apply)
-    terraformx_apply.add_argument(Args_constants.DIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+    terraformx_apply.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
     terraformx_apply.add_argument(Args_constants.VAR_FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TFVARS_FILE)
     terraformx_apply.add_argument(Args_constants.AUTO_APPROVE, action=Action_constants.STORE_TRUE, help = Help_constants.AUTO_APPROVE_COMMAND)
     terraformx_apply.add_argument(Args_constants.OVERRIDE_WORKFLOW, action=Action_constants.STORE_TRUE, help = Help_constants.OVERRIDE_WORKFLOW)
     terraformx_apply.add_argument(Args_constants.REFRESH_ONLY, action=Action_constants.STORE_TRUE, help = Help_constants.TERRAOFORM_STATE_FILE_REVIEW)
+    terraformx_apply.add_argument(Args_constants.REBUILD, action=Action_constants.STORE_TRUE, help = Help_constants.TERRAOFORM_STATE_FILE_REVIEW)
 
     terraformx_destroy = subparsers.add_parser(Parser_constants.DESTROY)
     terraformx_destroy.set_defaults(function=destroy)
-    terraformx_destroy.add_argument(Args_constants.DIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+    terraformx_destroy.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
     terraformx_destroy.add_argument(Args_constants.VAR_FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TFVARS_FILE)
     terraformx_destroy.add_argument(Args_constants.AUTO_APPROVE, action=Action_constants.STORE_TRUE, help = Help_constants.AUTO_APPROVE_COMMAND)
     terraformx_destroy.add_argument(Args_constants.OVERRIDE_WORKFLOW, action=Action_constants.STORE_TRUE, help = Help_constants.OVERRIDE_WORKFLOW)
@@ -83,7 +86,7 @@ def main():
 
     terraformx_output = subparsers.add_parser(Parser_constants.OUTPUT)
     terraformx_output.set_defaults(function=output)
-    terraformx_output.add_argument(Args_constants.DIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+    terraformx_output.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
     
     # parse the arguments and call the right function
     args = top_level_parser.parse_args()
