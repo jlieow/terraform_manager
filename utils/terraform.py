@@ -52,7 +52,7 @@ def terraform():
     BREAKER = False
 
     # Get list of terraform roots
-    # list_terraform_root_dir = locate_terraform_root_directories(get_parent_dir(os.getcwd()))
+    # list_terraform_root_dir = locate_terraform_root_directories(os.path.dirname(os.getcwd()))
     list_terraform_root_dir = locate_terraform_root_directories(os.getcwd())
 
     if len(list_terraform_root_dir) == 0:
@@ -161,27 +161,32 @@ def terraform_workflow(cwd):
                 stage_workflow_terraform_apply_refresh(cwd)
 
 def terraform_destroy_from_history():
-    histories = get_rows_as_list(HISTORY_CSV_PATH)
 
-    if len(histories) == 0:
-        print_warning("There is no record of anything being provisioned based on your history.")
-        return
+    history_path = get_dir_of_terraform_manager_from_sys_executable() + HISTORY_CSV_PATH
 
-    # ----- WARNING ----- #
-    print_high_alert("\n!!! THIS IS A DESTRUCTIVE ACTION !!!\
-    \nContinuing will invoke \"terraform destroy --auto-approve\" on the folders in the following order:\n"
-    )
+    histories = get_rows_as_list(history_path)
 
-    for i in range(len(histories)):
-        reverseIndex = len(histories) - i - 1
+    list_history(histories)
 
-        cwd = histories[reverseIndex][0]
-        stage_name = histories[reverseIndex][1]
+    # if len(histories) == 0:
+    #     print_warning("\nThere is no record of anything being provisioned based on your history. The program will now exit.")
+    #     return
 
-        if len(stage_name) == 0:  
-            print("%d. %s" % (i+1, os.path.basename(cwd)))
-        else:
-            print("%d. %s - Stage \"%s\"" % (i+1, os.path.basename(cwd), stage_name))
+    # # ----- WARNING ----- #
+    # print_high_alert("\n!!! THIS IS A DESTRUCTIVE ACTION !!!\
+    # \nContinuing will invoke \"terraform destroy --auto-approve\" on the folders in the following order:\n"
+    # )
+
+    # for i in range(len(histories)):
+    #     reverseIndex = len(histories) - i - 1
+
+    #     cwd = histories[reverseIndex][0]
+    #     stage_name = histories[reverseIndex][1]
+
+    #     if len(stage_name) == 0:  
+    #         print("%d. %s" % (i+1, os.path.basename(cwd)))
+    #     else:
+    #         print("%d. %s - Stage \"%s\"" % (i+1, os.path.basename(cwd), stage_name))
 
     # ----- WARNING ----- #
 
@@ -208,7 +213,7 @@ def terraform_destroy_from_history():
 # def terraform_drift():
     
 #     # Get list of terraform roots
-#     list_terraform_root_dir = locate_terraform_root_directories(get_parent_dir(os.getcwd()))
+#     list_terraform_root_dir = locate_terraform_root_directories(os.path.dirname(os.getcwd()))
 
 #     while True:
 #         # Question 1
@@ -249,7 +254,7 @@ def terraform_check_for_drift():
         print("Checking for drift - In Progress...\n")
         
         # Get list of terraform roots
-        list_terraform_root_dir = locate_terraform_root_directories(get_parent_dir(os.getcwd()))
+        list_terraform_root_dir = locate_terraform_root_directories(os.path.dirname(os.getcwd()))
 
         drifted_terraform_roots = []
 
@@ -323,7 +328,7 @@ def terraform_multi_build():
     # TODO add function to build the config/settings.tfvars file
 
     # Get list of terraform roots
-    list_terraform_root_dir = locate_terraform_root_directories(get_parent_dir(os.getcwd()))
+    list_terraform_root_dir = locate_terraform_root_directories(os.path.dirname(os.getcwd()))
     multiBuild = []
 
     terraform_roots = [os.path.basename(directory) for directory in list_terraform_root_dir]

@@ -7,6 +7,8 @@ from parser_apply import *
 from parser_destroy import *
 from parser_output import *
 from parser_blueprints import *
+from parser_history import *
+from parser_list import *
 
 class Parser_constants:
     INIT = "init"
@@ -15,6 +17,7 @@ class Parser_constants:
     OUTPUT = "output"
     BLUEPRINTS = "blueprints"
     HISTORY = "history"
+    LIST = "list"
 class Args_constants:
     CHDIR = "-chdir"
     VAR_FILE = "-var-file"
@@ -25,6 +28,10 @@ class Args_constants:
     REBUILD = "-rebuild"
     CREATE = "-create"
     FILE = "-file"
+    BLUEPRINT = "-blueprint"
+    LIST = "-list"
+    DESTROY = "-destroy"
+    HISTORY = "-history"
 
 class Action_constants:
     STORE_TRUE = "store_true"
@@ -38,9 +45,12 @@ class Help_constants:
     LOCATION_OF_BLUEPRINT_FILE = "Location of blueprint file. Full and relative paths are allowed."
     AUTO_APPROVE_COMMAND = "Auto approve command without requiring user input."
     OVERRIDE_WORKFLOW = "Overrides workflow stages auto_approve keys and auto approves every stage."
-    TERRAOFORM_STATE_FILE_REVIEW = "Review how terraform would update your state file."
+    TERRAFORM_STATE_FILE_REVIEW = "Review how terraform would update your state file."
     REBUILD = "Rebuild terraform by destroying and applying the script."
     DESTORY_ALL_IN_HISTORY = "Destroys all in terraform_history.csv."
+    CREATE_BLUEPRINT = "Create a blueprint."
+    LIST_BLUEPRINT = "List Blueprint."
+    LIST_HISTORY = "List History."
 
 
 top_level_help_message = "Usage: terraformx [global options] <subcommand> [args]\n\
@@ -76,8 +86,10 @@ def main():
     terraformx_apply.add_argument(Args_constants.VAR_FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TFVARS_FILE)
     terraformx_apply.add_argument(Args_constants.AUTO_APPROVE, action=Action_constants.STORE_TRUE, help = Help_constants.AUTO_APPROVE_COMMAND)
     terraformx_apply.add_argument(Args_constants.OVERRIDE_WORKFLOW, action=Action_constants.STORE_TRUE, help = Help_constants.OVERRIDE_WORKFLOW)
-    terraformx_apply.add_argument(Args_constants.REFRESH_ONLY, action=Action_constants.STORE_TRUE, help = Help_constants.TERRAOFORM_STATE_FILE_REVIEW)
-    terraformx_apply.add_argument(Args_constants.REBUILD, action=Action_constants.STORE_TRUE, help = Help_constants.TERRAOFORM_STATE_FILE_REVIEW)
+    terraformx_apply.add_argument(Args_constants.REFRESH_ONLY, action=Action_constants.STORE_TRUE, help = Help_constants.TERRAFORM_STATE_FILE_REVIEW)
+    terraformx_apply.add_argument(Args_constants.REBUILD, action=Action_constants.STORE_TRUE, help = Help_constants.TERRAFORM_STATE_FILE_REVIEW)
+    terraformx_apply.add_argument(Args_constants.BLUEPRINT, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_BLUEPRINT_FILE)
+    terraformx_apply.add_argument(Args_constants.CREATE, action=Action_constants.STORE_TRUE, help = Help_constants.CREATE_BLUEPRINT)
 
     terraformx_destroy = subparsers.add_parser(Parser_constants.DESTROY)
     terraformx_destroy.set_defaults(function=destroy)
@@ -85,7 +97,7 @@ def main():
     terraformx_destroy.add_argument(Args_constants.VAR_FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TFVARS_FILE)
     terraformx_destroy.add_argument(Args_constants.AUTO_APPROVE, action=Action_constants.STORE_TRUE, help = Help_constants.AUTO_APPROVE_COMMAND)
     terraformx_destroy.add_argument(Args_constants.OVERRIDE_WORKFLOW, action=Action_constants.STORE_TRUE, help = Help_constants.OVERRIDE_WORKFLOW)
-    terraformx_destroy.add_argument(Args_constants.REFRESH_ONLY, action=Action_constants.STORE_TRUE, help = Help_constants.TERRAOFORM_STATE_FILE_REVIEW)
+    terraformx_destroy.add_argument(Args_constants.REFRESH_ONLY, action=Action_constants.STORE_TRUE, help = Help_constants.TERRAFORM_STATE_FILE_REVIEW)
     terraformx_destroy.add_argument(Args_constants.DESTROY_HISTORY, action=Action_constants.STORE_TRUE, help = Help_constants.DESTORY_ALL_IN_HISTORY)
 
     terraformx_output = subparsers.add_parser(Parser_constants.OUTPUT)
@@ -96,7 +108,19 @@ def main():
     terraformx_blueprints.set_defaults(function=blueprints)
     terraformx_blueprints.add_argument(Args_constants.FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_BLUEPRINT_FILE, required=True)
     terraformx_blueprints.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
-    terraformx_blueprints.add_argument(Args_constants.CREATE, action=Action_constants.STORE_TRUE, help = Help_constants.DESTORY_ALL_IN_HISTORY)
+    terraformx_blueprints.add_argument(Args_constants.CREATE, action=Action_constants.STORE_TRUE, help = Help_constants.CREATE_BLUEPRINT)
+    terraformx_blueprints.add_argument(Args_constants.LIST, action=Action_constants.STORE_TRUE, help = Help_constants.LIST_BLUEPRINT)
+
+    terraformx_history = subparsers.add_parser(Parser_constants.HISTORY)
+    terraformx_history.set_defaults(function=history)
+    terraformx_history.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+    terraformx_history.add_argument(Args_constants.DESTROY, action=Action_constants.STORE_TRUE, help = Help_constants.DESTORY_ALL_IN_HISTORY)
+    terraformx_history.add_argument(Args_constants.LIST, action=Action_constants.STORE_TRUE, help = Help_constants.LIST_HISTORY)
+
+    terraformx_list = subparsers.add_parser(Parser_constants.LIST)
+    terraformx_list.set_defaults(function=list)
+    terraformx_list.add_argument(Args_constants.BLUEPRINT, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_BLUEPRINT_FILE)
+    terraformx_list.add_argument(Args_constants.HISTORY, action=Action_constants.STORE_TRUE, help = Help_constants.LIST_HISTORY)
     
     # parse the arguments and call the right function
     args = top_level_parser.parse_args()

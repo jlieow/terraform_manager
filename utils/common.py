@@ -1,8 +1,18 @@
 import csv
 import os 
+import sys
 
-def get_parent_dir(directory):
-    return os.path.dirname(directory)
+def get_dir_of_terraform_manager_from_sys_executable():
+    terraform_manager_path = get_dir_of_terraform_manager_from_sys_executable_onefile(sys.executable)
+
+    if not os.path.exists(terraform_manager_path):
+        terraform_manager_path = get_dir_of_terraform_manager_from_sys_executable_onedir(sys.executable)
+    
+    while not os.path.basename(terraform_manager_path) == "terraform_manager":
+        terraform_manager_path = os.path.dirname(terraform_manager_path)
+
+    return terraform_manager_path
+
 
 def get_dir_of_terraform_manager_from_sys_executable_onefile(directory):
     return os.path.dirname(os.path.dirname(os.path.dirname(directory)))

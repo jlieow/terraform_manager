@@ -41,62 +41,70 @@ def create_blueprint(blueprint_path):
             print("Blueprint \"%s.csv\" has been saved!" % file_name)
             return
 
+def apply_blueprint(blueprint_path):
+    print("\nVerifying blueprint...")
+    if not is_this_a_verified_blueprint(blueprint_path):
+        return
+    print("Blueprint verified!")
 
+    blueprint = get_rows_as_list(blueprint_path)
+                    
+    print("\nContinuing will invoke \"terraform apply --auto-approve\" on the folders in the following order:\n"
+    )
+    
+    for i in range(len(blueprint)):
+        cwd = blueprint[i][0]
+        stage_name = blueprint[i][1]
+        if len(stage_name) == 0:
+            print("%d. %s" % (i+1, os.path.basename(cwd)))
+        else:
+            print("%d. %s - Stage \"%s\"" % (i+1, os.path.basename(blueprint[i][0]), stage_name))
+    
+    if input("\nPlease enter \"Y\" to continue: ").upper() == "Y":
+        for dir_and_stage in blueprint:
+            # print("dir_and_stage")
+            # print(dir_and_stage)
+
+            cwd = dir_and_stage[0] 
+            stage_name = dir_and_stage[1] 
+
+            terraform_init(cwd)
+
+            if len(stage_name) == 0:
+                print("\nPerforming \"terraform apply --auto-approve\" on %s" % os.path.basename(cwd))
+                process = terraform_apply(cwd, AUTO_APPROVE=True)
+            else:
+                print("\nPerforming \"terraform apply --auto-approve\" on %s - Stage \"%s\"" % (os.path.basename(cwd), stage_name))
+
+                stage = get_stage(cwd, stage_name)
+                stage_targets = stage["stage_targets"]
+                stage_name = stage["stage_name"]
+
+                process = workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=True)
+            
+            if process == 1:
+                # If the process experiences an error, break
+                break
 
 def blueprints(args):
 
     create = args.create
     file = args.file.replace("/", "" )
+    list = args.list
 
     blueprint_path = get_full_path_else_return_empty_str(file, ".csv")
     if not os.path.exists(blueprint_path):
         print_error("\n[ERROR] Unable to locate blueprint file.")
         return 
+    
+    if list:
+        rows = get_rows_as_list(blueprint_path)
+        list_blueprint(rows)
+        return
 
     if create:
         create_blueprint(blueprint_path)
+        return
     else:
-
-        print("\nVerifying blueprint...")
-        if not is_this_a_verified_blueprint(blueprint_path):
-            return
-        print("Blueprint verified!")
-
-        blueprint = get_rows_as_list(blueprint_path)
-                        
-        print("\nContinuing will invoke \"terraform apply --auto-approve\" on the folders in the following order:\n"
-        )
-        
-        for i in range(len(blueprint)):
-            cwd = blueprint[i][0]
-            stage_name = blueprint[i][1]
-            if len(stage_name) == 0:
-                print("%d. %s" % (i+1, os.path.basename(cwd)))
-            else:
-                print("%d. %s - Stage \"%s\"" % (i+1, os.path.basename(blueprint[i][0]), stage_name))
-        
-        if input("\nPlease enter \"Y\" to continue: ").upper() == "Y":
-            for dir_and_stage in blueprint:
-                # print("dir_and_stage")
-                # print(dir_and_stage)
-
-                cwd = dir_and_stage[0] 
-                stage_name = dir_and_stage[1] 
-
-                terraform_init(cwd)
-
-                if len(stage_name) == 0:
-                    print("\nPerforming \"terraform apply --auto-approve\" on %s" % os.path.basename(cwd))
-                    process = terraform_apply(cwd, AUTO_APPROVE=True)
-                else:
-                    print("\nPerforming \"terraform apply --auto-approve\" on %s - Stage \"%s\"" % (os.path.basename(cwd), stage_name))
-
-                    stage = get_stage(cwd, stage_name)
-                    stage_targets = stage["stage_targets"]
-                    stage_name = stage["stage_name"]
-
-                    process = workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=True)
-                
-                if process == 1:
-                    # If the process experiences an error, break
-                    break
+        apply_blueprint(blueprint_path)
+        return
