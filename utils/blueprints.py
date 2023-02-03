@@ -10,11 +10,12 @@ BLUEPRINTS_CSV_PATH = "./data/blueprints/"
 
 # ----- CONSTANTS ----- #
 
-def addBlueprint(blueprint_name, cwd, stage_name=""):
-    path = BLUEPRINTS_CSV_PATH + blueprint_name + ".csv"
+def addBlueprint(blueprint_path, cwd, stage_name=""):
+    # path = BLUEPRINTS_CSV_PATH + blueprint_name + ".csv"
+    path = blueprint_path
 
-    if not os.path.exists(BLUEPRINTS_CSV_PATH):
-        os.mkdir(BLUEPRINTS_CSV_PATH)
+    # if not os.path.exists(BLUEPRINTS_CSV_PATH):
+    #     os.mkdir(BLUEPRINTS_CSV_PATH)
 
     #Save results to CSV    
     with open(path, 'a', newline='') as f:  
@@ -23,7 +24,7 @@ def addBlueprint(blueprint_name, cwd, stage_name=""):
         
         write.writerow([cwd, stage_name])
         f.close()
-
+        
 def terraformCreateBlueprint():
 
     TERRAFORM_ROOTS_PREFACE = "The following directories are terraform roots:\n"
@@ -104,7 +105,7 @@ def terraformCreateBlueprint():
         cwd = dir_and_stage[0] 
         stage_name = dir_and_stage[1] 
         
-        addBlueprint(blueprint_name, cwd, stage_name)
+        addBlueprint(BLUEPRINTS_CSV_PATH + blueprint_name + ".csv", cwd, stage_name)
     
     print("Blueprint \"%s.csv\" has been saved!" % blueprint_name)
 
