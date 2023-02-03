@@ -8,6 +8,7 @@ from parser_destroy import *
 from parser_output import *
 from parser_blueprints import *
 from parser_history import *
+from parser_list import *
 
 class Parser_constants:
     INIT = "init"
@@ -30,6 +31,7 @@ class Args_constants:
     BLUEPRINT = "-blueprint"
     LIST = "-list"
     DESTROY = "-destroy"
+    HISTORY = "-history"
 
 class Action_constants:
     STORE_TRUE = "store_true"
@@ -47,7 +49,8 @@ class Help_constants:
     REBUILD = "Rebuild terraform by destroying and applying the script."
     DESTORY_ALL_IN_HISTORY = "Destroys all in terraform_history.csv."
     CREATE_BLUEPRINT = "Create a blueprint."
-    LIST_BLUEPRINT = "List blueprint."
+    LIST_BLUEPRINT = "List Blueprint."
+    LIST_HISTORY = "List History."
 
 
 top_level_help_message = "Usage: terraformx [global options] <subcommand> [args]\n\
@@ -112,7 +115,12 @@ def main():
     terraformx_history.set_defaults(function=history)
     terraformx_history.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
     terraformx_history.add_argument(Args_constants.DESTROY, action=Action_constants.STORE_TRUE, help = Help_constants.DESTORY_ALL_IN_HISTORY)
-    terraformx_history.add_argument(Args_constants.LIST, action=Action_constants.STORE_TRUE, help = Help_constants.LIST_BLUEPRINT)
+    terraformx_history.add_argument(Args_constants.LIST, action=Action_constants.STORE_TRUE, help = Help_constants.LIST_HISTORY)
+
+    terraformx_list = subparsers.add_parser(Parser_constants.LIST)
+    terraformx_list.set_defaults(function=list)
+    terraformx_list.add_argument(Args_constants.BLUEPRINT, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_BLUEPRINT_FILE)
+    terraformx_list.add_argument(Args_constants.HISTORY, action=Action_constants.STORE_TRUE, help = Help_constants.LIST_HISTORY)
     
     # parse the arguments and call the right function
     args = top_level_parser.parse_args()
