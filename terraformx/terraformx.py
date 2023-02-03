@@ -2,10 +2,11 @@
 import sys
 import argparse
 
-from init import *
-from apply import *
-from destroy import *
-from output import *
+from parser_init import *
+from parser_apply import *
+from parser_destroy import *
+from parser_output import *
+from parser_blueprints import *
 
 class Parser_constants:
     INIT = "init"
@@ -22,6 +23,8 @@ class Args_constants:
     REFRESH_ONLY = "-refresh-only"
     DESTROY_HISTORY = "-destroy-history"
     REBUILD = "-rebuild"
+    CREATE = "-create"
+    FILE_NAME = "-file-name"
 
 class Action_constants:
     STORE_TRUE = "store_true"
@@ -87,6 +90,12 @@ def main():
     terraformx_output = subparsers.add_parser(Parser_constants.OUTPUT)
     terraformx_output.set_defaults(function=output)
     terraformx_output.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+
+    terraformx_blueprints = subparsers.add_parser(Parser_constants.BLUEPRINTS)
+    terraformx_blueprints.set_defaults(function=blueprints)
+    terraformx_blueprints.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+    terraformx_blueprints.add_argument(Args_constants.CREATE, action=Action_constants.STORE_TRUE, help = Help_constants.DESTORY_ALL_IN_HISTORY)
+    terraformx_blueprints.add_argument(Args_constants.FILE_NAME, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TFVARS_FILE)
     
     # parse the arguments and call the right function
     args = top_level_parser.parse_args()

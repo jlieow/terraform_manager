@@ -10,11 +10,13 @@ BLUEPRINTS_CSV_PATH = "./data/blueprints/"
 
 # ----- CONSTANTS ----- #
 
-def addBlueprint(blueprint_name, cwd, stage_name=""):
-    path = BLUEPRINTS_CSV_PATH + blueprint_name + ".csv"
+def add_blueprint(blueprint_path, cwd, stage_name="", mkdir=False):
+    # path = BLUEPRINTS_CSV_PATH + blueprint_name + ".csv"
+    path = blueprint_path
 
-    if not os.path.exists(BLUEPRINTS_CSV_PATH):
-        os.mkdir(BLUEPRINTS_CSV_PATH)
+    if mkdir:
+        if not os.path.exists(BLUEPRINTS_CSV_PATH):
+            os.mkdir(BLUEPRINTS_CSV_PATH)
 
     #Save results to CSV    
     with open(path, 'a', newline='') as f:  
@@ -24,7 +26,85 @@ def addBlueprint(blueprint_name, cwd, stage_name=""):
         write.writerow([cwd, stage_name])
         f.close()
 
-def terraformCreateBlueprint():
+def add_blueprint_rows(blueprint_path, rows, mkdir=False):
+    # path = BLUEPRINTS_CSV_PATH + blueprint_name + ".csv"
+    path = blueprint_path
+
+    if mkdir:
+        if not os.path.exists(BLUEPRINTS_CSV_PATH):
+            os.mkdir(BLUEPRINTS_CSV_PATH)
+
+    #Save results to CSV    
+    with open(path, 'w', newline='') as f:  
+        # using csv.writer method from CSV package
+        write = csv.writer(f)
+        
+        write.writerows(rows)
+        f.close()
+
+def is_this_a_verified_blueprint(blueprint_path):
+    rows = get_rows_as_list(blueprint_path)
+    need_to_update_blueprint = False
+
+    list_of_terraform_roots = []
+    for row in rows:
+        list_of_terraform_roots.append(row[0])
+
+    # Each row contains of the full terraform root path and stage name
+    # Check if the full terraform root path is valid
+    # If not, request user to input the correct full terraform path
+    # Replace affected row in the blueprint with the correct path
+    for index in range(len(list_of_terraform_roots)):
+        terraform_root = list_of_terraform_roots[index]
+
+        if not os.path.exists(terraform_root + "/backend.tf"):
+            need_to_update_blueprint = True
+            
+            new_terraform_root = terraform_root
+
+            while not os.path.exists(new_terraform_root + "/backend.tf"): 
+                new_terraform_root = input("\nUnable to locate Terraform root \"%s\" in the blueprint file.\nPlease key in the full Terraform root path to update the blueprint file: " % terraform_root)
+
+            rows[index][0] = new_terraform_root
+    
+    if need_to_update_blueprint:
+        add_blueprint_rows(blueprint_path, rows)
+        return False
+    
+    return True
+
+def add_blueprint_row(terraform_root_dir):
+
+    TERRAFORM_BLUEPRINT_STAGES_PREFACE = "The following stages are found in:\n"
+    TERRAFORM_BLUEPRINT_STAGES_OPTIONS = "\nWhich stage would you like to save to blueprint: "
+
+    blueprint = []
+
+    if does_workflow_file_exist(terraform_root_dir):
+        stages, _ = get_stages(terraform_root_dir)
+
+        stage_names = []
+        for stage in stages:
+            stage_names.append(stage["stage_name"])
+
+        stage_names.append("< SELECT ALL >")
+        STAGE_NUMBER = input_options(TERRAFORM_BLUEPRINT_STAGES_PREFACE, stage_names, TERRAFORM_BLUEPRINT_STAGES_OPTIONS)
+
+        # print(STAGE_NUMBER)
+
+        if STAGE_NUMBER == len(stage_names) - 1:
+            stage_names.pop()
+            # print(stage_names)
+            for stage_name in stage_names:
+                blueprint.append([terraform_root_dir, stage_name])
+        else: 
+            blueprint.append([terraform_root_dir, stage_names[STAGE_NUMBER]])
+    else:
+        blueprint.append([terraform_root_dir, stage_name])
+
+    return blueprint
+
+def terraform_create_blueprint():
 
     TERRAFORM_ROOTS_PREFACE = "The following directories are terraform roots:\n"
     TERRAFORM_ROOTS_ADD_BLUEPRINT_OPTIONS = "\nWhich directory would you like to add to the blueprint: "
@@ -104,7 +184,7 @@ def terraformCreateBlueprint():
         cwd = dir_and_stage[0] 
         stage_name = dir_and_stage[1] 
         
-        addBlueprint(blueprint_name, cwd, stage_name)
+        add_blueprint(BLUEPRINTS_CSV_PATH + blueprint_name + ".csv", cwd, stage_name, True)
     
     print("Blueprint \"%s.csv\" has been saved!" % blueprint_name)
 
@@ -133,7 +213,7 @@ def terraformCreateBlueprint():
             OPEN_BLUEPRINTS = False
 
             if input("No blueprints were found. Enter Y to create one? ").upper() == "Y":
-                terraformCreateBlueprint()
+                terraform_create_blueprint()
             else:
                 break
     
@@ -144,7 +224,7 @@ def terraformCreateBlueprint():
 
             match BLUEPRINT_SELECTION_NUMBER:
                 case 0:
-                    terraformCreateBlueprint()
+                    terraform_create_blueprint()
                 case 1:
                     BLUEPRINT_NUMBER = input_options(TERRAFORM_BLUEPRINTS_PREFACE, [os.path.basename(directory) for directory in blueprints], TERRAFORM_ROOTS_BLUEPRINTS_OPTIONS, allow_special_break=True, special_break="<")
                     if BLUEPRINT_NUMBER == "<":

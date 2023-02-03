@@ -437,7 +437,7 @@ def terraform_blueprints():
             OPEN_BLUEPRINTS = False
 
             if input("No blueprints were found. Enter Y to create one? ").upper() == "Y":
-                terraformCreateBlueprint()
+                terraform_create_blueprint()
             else:
                 break
     
@@ -448,7 +448,7 @@ def terraform_blueprints():
 
             match BLUEPRINT_SELECTION_NUMBER:
                 case 0:
-                    terraformCreateBlueprint()
+                    terraform_create_blueprint()
                 case 1:
                     BLUEPRINT_NUMBER = input_options(TERRAFORM_BLUEPRINTS_PREFACE, [os.path.basename(directory) for directory in blueprints], TERRAFORM_ROOTS_BLUEPRINTS_OPTIONS, allow_special_break=True, special_break="<")
                     if BLUEPRINT_NUMBER == "<":
