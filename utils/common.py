@@ -55,5 +55,3 @@ def get_rows_as_list(path):
             rows.append(row)
     
     return rows
-
-# print(get_rows_as_list("/Users/jeromelieow/Documents/GitHub/aws-north-south-inspection-with-aws-network-firewall/pyexe_mac/history/terraform_history.csv"))

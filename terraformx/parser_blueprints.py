@@ -3,14 +3,15 @@ import os
 from terraformx.terraformx_common import *
 from utils import *
 
-def create_blueprint(cwd, file_name):
+def create_blueprint(blueprint_path):
 
     TERRAFORM_BLUEPRINT_STAGES_PREFACE = "The following stages are found:\n"
     TERRAFORM_BLUEPRINT_STAGES_OPTIONS = "\nWhich stage would you like to save to blueprint: "
 
     blueprint = []
+    file_name = os.path.basename(blueprint_path)
 
-    if os.path.exists(cwd + "/" + file_name + ".csv"):
+    if os.path.exists(blueprint_path):
         if input("\n %s.csv currently exists. Please enter \"Y\" to confirm you would like to continue and overwrite this file." % file_name).upper() != "Y":
             return
 
@@ -18,43 +19,25 @@ def create_blueprint(cwd, file_name):
 
         terraform_root = input("\nPlease provide the path to the Terraform root: ")
         terraform_root_dir = get_full_path_else_return_empty_str(terraform_root)
-        stage_name = ""
 
         if not os.path.exists(terraform_root_dir):
             print_error("\n[ERROR] Unable to locate Terraform root.")
         
-        if does_workflow_file_exist(terraform_root_dir):
-            stages, _ = get_stages(terraform_root_dir)
-
-            stage_names = []
-            for stage in stages:
-                stage_names.append(stage["stage_name"])
-
-            stage_names.append("< SELECT ALL >")
-            STAGE_NUMBER = input_options(TERRAFORM_BLUEPRINT_STAGES_PREFACE, stage_names, TERRAFORM_BLUEPRINT_STAGES_OPTIONS)
-
-            # print(STAGE_NUMBER)
-
-            if STAGE_NUMBER == len(stage_names) - 1:
-                stage_names.pop()
-                # print(stage_names)
-                for stage_name in stage_names:
-                    blueprint.append([terraform_root_dir, stage_name])
-            else: 
-                blueprint.append([terraform_root_dir, stage_names[STAGE_NUMBER]])
-        else:
-            blueprint.append([terraform_root_dir, stage_name])
+        blueprint += add_blueprint_row(terraform_root_dir)
 
         if input("\nPlease enter \"Y\" to continue or any key to save the blueprint: ").upper() != "Y":
-            os.remove(os.getcwd() + "/" + file_name + ".csv")
-            
-            if len(blueprint) > 0:
-                for dir_and_stage in blueprint:
-                    cwd = dir_and_stage[0] 
-                    stage_name = dir_and_stage[1] 
-                    
-                    addBlueprint(os.getcwd() + "/" + file_name + ".csv", cwd, stage_name)
+            if os.path.exists(blueprint_path):
+                os.remove(blueprint_path)
 
+            if len(blueprint) > 0:
+                add_blueprint_rows(blueprint_path, blueprint)
+
+                # for dir_and_stage in blueprint:
+                #     cwd = dir_and_stage[0] 
+                #     stage_name = dir_and_stage[1] 
+                    
+                #     add_blueprint(blueprint_path, cwd, stage_name)
+     
             print("Blueprint \"%s.csv\" has been saved!" % file_name)
             return
 
@@ -64,7 +47,7 @@ def blueprints(args):
 
     chdir = args.chdir
     create = args.create
-    file_name = args.file_name
+    file_name = args.file_name.replace("/", "" )
 
     cwd = get_cwd(chdir)
     if len(cwd) == 0:
@@ -72,10 +55,18 @@ def blueprints(args):
             print_error("[ERROR] Unable to locate directory.")
             return 
 
+    blueprint_path = cwd + "/" + file_name + ".csv"
+
     if create:
-        create_blueprint(cwd, file_name)
+        create_blueprint(blueprint_path)
     else:
-        blueprint = get_rows_as_list(cwd)
+
+        print("\nVerifying blueprint...")
+        if not is_this_a_verified_blueprint(blueprint_path):
+            return
+        print("Blueprint verified!")
+
+        blueprint = get_rows_as_list(blueprint_path)
                         
         print("\nContinuing will invoke \"terraform apply --auto-approve\" on the folders in the following order:\n"
         )
