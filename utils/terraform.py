@@ -54,6 +54,11 @@ def terraform():
     # Get list of terraform roots
     # list_terraform_root_dir = locate_terraform_root_directories(get_parent_dir(os.getcwd()))
     list_terraform_root_dir = locate_terraform_root_directories(os.getcwd())
+
+    if len(list_terraform_root_dir) == 0:
+        print_warning("There are no Terraform roots detected.")
+        return
+
     while True:
         # Question 1
         DIR_NUMBER = input_options(TERRAFORM_ROOTS_PREFACE, [os.path.basename(directory) for directory in list_terraform_root_dir], TERRAFORM_ROOTS_OPTIONS,  allow_special_break=True, special_break="<")
