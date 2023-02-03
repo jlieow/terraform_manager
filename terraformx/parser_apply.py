@@ -1,6 +1,7 @@
 import os
 
 from terraformx.terraformx_common import *
+from terraformx.parser_blueprints import *
 from utils import *
 
 def apply_rebuild_true(cwd, var_file):
@@ -55,7 +56,22 @@ def apply_rebuild_false(cwd, var_file, auto_approve, override_workflow):
         terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=auto_approve)
         return
 
+def blueprints(blueprint_file, create):
 
+    blueprint_path = get_full_path_else_return_empty_str(blueprint_file, ".csv")
+
+    if not os.path.exists(blueprint_path):
+        if input("\nBlueprint file not found. Enter \"Y\" to create a blueprint: ").upper() == "Y":
+            blueprint_path = os.getcwd() + "/" + blueprint_file + ".csv"
+            create_blueprint(blueprint_path)
+        return
+    
+    if create:
+        create_blueprint(blueprint_path)
+        return
+    else:
+        apply_blueprint(blueprint_path)
+        return
 
 def apply(args):
 
@@ -65,6 +81,8 @@ def apply(args):
     override_workflow = args.override_workflow
     refresh_only = args.refresh_only
     rebuild = args.rebuild
+    blueprint = args.blueprint
+    create = args.create
     
 
     cwd = get_cwd(chdir)
@@ -74,6 +92,10 @@ def apply(args):
             return 
 
     tfvars_settings(cwd) 
+
+    if len(blueprint) > 0:
+        blueprints(blueprint, create)
+        return
 
     if rebuild:
         apply_rebuild_true(cwd, var_file)

@@ -104,6 +104,16 @@ def add_blueprint_row(terraform_root_dir):
 
     return blueprint
 
+def list_blueprint(blueprint):
+    print("\nThe current blueprint is: \n")
+    for index in range(len(blueprint)):
+        cwd = blueprint[index][0]
+        stage_name = blueprint[index][1]
+        if len(stage_name) == 0:
+            print("%d. %s" % (index+1, os.path.basename(cwd)))
+        else:
+            print("%d. %s - Stage \"%s\"" % (index+1, os.path.basename(cwd), stage_name))
+
 def terraform_create_blueprint():
 
     TERRAFORM_ROOTS_PREFACE = "The following directories are terraform roots:\n"
@@ -169,14 +179,7 @@ def terraform_create_blueprint():
             break
         
         if len(blueprint) > 0:
-            print("The current blueprint is:")
-            for index in range(len(blueprint)):
-                cwd = blueprint[index][0]
-                stage_name = blueprint[index][1]
-                if len(stage_name) == 0:
-                    print("%d. %s" % (index+1, os.path.basename(cwd)))
-                else:
-                    print("%d. %s - Stage \"%s\"" % (index+1, os.path.basename(cwd), stage_name))
+            list_blueprint(blueprint)
         
         print()
 
