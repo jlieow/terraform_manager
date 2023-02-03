@@ -21,6 +21,7 @@ class Args_constants:
     OVERRIDE_WORKFLOW = "-override-workflow"
     REFRESH_ONLY = "-refresh-only"
     DESTROY_HISTORY = "-destroy-history"
+    REBUILD = "-rebuild"
 
 class Action_constants:
     STORE_TRUE = "store_true"
@@ -34,6 +35,7 @@ class Help_constants:
     AUTO_APPROVE_COMMAND = "Auto approve command without requiring user input."
     OVERRIDE_WORKFLOW = "Overrides workflow stages auto_approve keys and auto approves every stage."
     TERRAOFORM_STATE_FILE_REVIEW = "Review how terraform would update your state file."
+    REBUILD = "Rebuild terraform by destroying and applying the script."
     DESTORY_ALL_IN_HISTORY = "Destroys all in terraform_history.csv."
 
 
@@ -71,6 +73,7 @@ def main():
     terraformx_apply.add_argument(Args_constants.AUTO_APPROVE, action=Action_constants.STORE_TRUE, help = Help_constants.AUTO_APPROVE_COMMAND)
     terraformx_apply.add_argument(Args_constants.OVERRIDE_WORKFLOW, action=Action_constants.STORE_TRUE, help = Help_constants.OVERRIDE_WORKFLOW)
     terraformx_apply.add_argument(Args_constants.REFRESH_ONLY, action=Action_constants.STORE_TRUE, help = Help_constants.TERRAOFORM_STATE_FILE_REVIEW)
+    terraformx_apply.add_argument(Args_constants.REBUILD, action=Action_constants.STORE_TRUE, help = Help_constants.TERRAOFORM_STATE_FILE_REVIEW)
 
     terraformx_destroy = subparsers.add_parser(Parser_constants.DESTROY)
     terraformx_destroy.set_defaults(function=destroy)
