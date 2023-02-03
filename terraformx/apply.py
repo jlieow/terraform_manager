@@ -12,8 +12,8 @@ def apply_rebuild_true(cwd, var_file):
         if len(var_file) > 0:
                 print_warning("\n[WARNING] -var-file flag will be ignored as a workflow file is detected. The -var-file referenced is located in config/settings.tfvars.")
                 
-        terraform_destroy(cwd)
-        terraform_apply(cwd, AUTO_APPROVE=True)
+        stage_workflow_terraform_destroy(cwd, override_workflow=True)
+        stage_workflow_terraform_apply(cwd, override_workflo=True)
         return
     else:
         terraform_destroy(cwd, CUSTOM_VAR_FILE=var_file)
