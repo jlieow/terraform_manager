@@ -150,7 +150,7 @@ def terraform_apply_auto_approve_refresh(cwd):
 
 def locate_terraform_root_directories(root_directory):
     
-    # root_directory = get_parent_dir(os.getcwd())
+    # root_directory = os.path.dirname(os.getcwd())
     list_terraform_root_dir = []
 
     # Get list of files and directories present in root directory
@@ -162,7 +162,7 @@ def locate_terraform_root_directories(root_directory):
 
         does_backend_tf_exist = glob.glob(path)
         if len(does_backend_tf_exist) != 0:
-            list_terraform_root_dir.append(get_parent_dir(does_backend_tf_exist[0]))
+            list_terraform_root_dir.append(os.path.dirname(does_backend_tf_exist[0]))
 
     list_terraform_root_dir.sort()
 

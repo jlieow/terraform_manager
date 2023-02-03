@@ -21,7 +21,7 @@ def destroy(args):
     tfvars_settings(cwd) 
 
     if destroy_history:
-        print("destroy_history")
+        terraform_destroy_from_history()
         return
 
     if does_workflow_file_exist(cwd):

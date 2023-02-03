@@ -125,7 +125,7 @@ def terraform_create_blueprint():
     blueprint_name = input("\nPlease provide the name of the blueprint: ")
 
     # Get list of terraform roots
-    list_terraform_root_dir = locate_terraform_root_directories(get_parent_dir(os.getcwd()))
+    list_terraform_root_dir = locate_terraform_root_directories(os.path.dirname(os.getcwd()))
     blueprint = []
 
     terraform_roots = [os.path.basename(directory) for directory in list_terraform_root_dir]
