@@ -5,18 +5,29 @@ from utils import *
 
 def apply_rebuild_true(cwd, var_file):
 
-    print_warning("\n[WARNING] terraformx will rebuild the resources by first destroying and then applying the Terraform script.")
+    warning_message_describing_terraformx_rebuild = "\n[WARNING] terraformx will rebuild the resources by first destroying and then applying the Terraform script."
+
+    warning_message_initiating_destroy = "\n Terrafrom destroying..."
+    warning_message_initiating_apply = "\n Terrafrom applying..."
+
+    print_warning(warning_message_describing_terraformx_rebuild)
 
     if does_workflow_file_exist(cwd):
 
         if len(var_file) > 0:
                 print_warning("\n[WARNING] -var-file flag will be ignored as a workflow file is detected. The -var-file referenced is located in config/settings.tfvars.")
-                
+        
+        print_warning(warning_message_initiating_destroy)
         stage_workflow_terraform_destroy(cwd, override_workflow=True)
-        stage_workflow_terraform_apply(cwd, override_workflo=True)
+
+        print_warning(warning_message_initiating_apply)
+        stage_workflow_terraform_apply(cwd, override_workflow=True)
         return
     else:
+        print_warning(warning_message_initiating_destroy)
         terraform_destroy(cwd, CUSTOM_VAR_FILE=var_file)
+
+        print_warning(warning_message_initiating_apply)
         terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=True)
         return
 
