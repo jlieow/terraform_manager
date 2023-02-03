@@ -21,19 +21,22 @@ def get_cwd(dir):
 
         return cwd
 
-def get_full_path_else_return_empty_str(dir):
+def get_full_path_else_return_empty_str(path, optional_ext=""):
 
     # Check if it is a full path
     # Check if it is a relative directory with a starting "/"
     # Check if it is a relative directory without a starting "/"
     
-    working_dir = dir
-    if not os.path.exists(working_dir):
-        working_dir = os.getcwd() + dir
-    if not os.path.exists(working_dir):
-        working_dir = os.getcwd() + "/" + dir
-    if not os.path.exists(working_dir):
-
+    working_path = path
+    if not os.path.exists(working_path):
+        working_path = os.getcwd() + path
+    if not os.path.exists(working_path):
+        working_path = os.getcwd() + "/" + path
+    if not os.path.exists(working_path):
+        working_path = os.getcwd() + path + optional_ext
+    if not os.path.exists(working_path):
+        working_path = os.getcwd() + "/" + path + optional_ext
+    if not os.path.exists(working_path):
         return ""
 
-    return os.path.abspath(working_dir)
+    return os.path.abspath(working_path)

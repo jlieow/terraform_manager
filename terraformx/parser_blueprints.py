@@ -45,17 +45,13 @@ def create_blueprint(blueprint_path):
 
 def blueprints(args):
 
-    chdir = args.chdir
     create = args.create
-    file_name = args.file_name.replace("/", "" )
+    file = args.file.replace("/", "" )
 
-    cwd = get_cwd(chdir)
-    if len(cwd) == 0:
-        if not os.path.exists(cwd):
-            print_error("[ERROR] Unable to locate directory.")
-            return 
-
-    blueprint_path = cwd + "/" + file_name + ".csv"
+    blueprint_path = get_full_path_else_return_empty_str(file, ".csv")
+    if not os.path.exists(blueprint_path):
+        print_error("\n[ERROR] Unable to locate blueprint file.")
+        return 
 
     if create:
         create_blueprint(blueprint_path)
