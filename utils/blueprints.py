@@ -6,7 +6,8 @@ from .workflow import *
 
 # ----- CONSTANTS ----- #
 
-BLUEPRINTS_CSV_PATH = "./data/blueprints/"
+class Blueprints_constants:
+    BLUEPRINTS_CSV_PATH = "./data/blueprints/"
 
 # ----- CONSTANTS ----- #
 
@@ -15,8 +16,8 @@ def add_blueprint(blueprint_path, cwd, stage_name="", mkdir=False):
     path = blueprint_path
 
     if mkdir:
-        if not os.path.exists(BLUEPRINTS_CSV_PATH):
-            os.mkdir(BLUEPRINTS_CSV_PATH)
+        if not os.path.exists(Blueprints_constants.BLUEPRINTS_CSV_PATH):
+            os.mkdir(Blueprints_constants.BLUEPRINTS_CSV_PATH)
 
     #Save results to CSV    
     with open(path, 'a', newline='') as f:  
@@ -31,8 +32,8 @@ def add_blueprint_rows(blueprint_path, rows, mkdir=False):
     path = blueprint_path
 
     if mkdir:
-        if not os.path.exists(BLUEPRINTS_CSV_PATH):
-            os.mkdir(BLUEPRINTS_CSV_PATH)
+        if not os.path.exists(Blueprints_constants.BLUEPRINTS_CSV_PATH):
+            os.mkdir(Blueprints_constants.BLUEPRINTS_CSV_PATH)
 
     #Save results to CSV    
     with open(path, 'w', newline='') as f:  
@@ -187,7 +188,7 @@ def terraform_create_blueprint():
         cwd = dir_and_stage[0] 
         stage_name = dir_and_stage[1] 
         
-        add_blueprint(BLUEPRINTS_CSV_PATH + blueprint_name + ".csv", cwd, stage_name, True)
+        add_blueprint(Blueprints_constants.BLUEPRINTS_CSV_PATH + blueprint_name + ".csv", cwd, stage_name, True)
     
     print("Blueprint \"%s.csv\" has been saved!" % blueprint_name)
 

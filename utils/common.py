@@ -1,6 +1,10 @@
 import csv
 import os 
 import sys
+import time
+
+class Common_constants:
+    TERRAFORM_MANAGER = "terraform_manager"
 
 def get_dir_of_terraform_manager_from_sys_executable():
     terraform_manager_path = get_dir_of_terraform_manager_from_sys_executable_onefile(sys.executable)
@@ -8,8 +12,11 @@ def get_dir_of_terraform_manager_from_sys_executable():
     if not os.path.exists(terraform_manager_path):
         terraform_manager_path = get_dir_of_terraform_manager_from_sys_executable_onedir(sys.executable)
     
-    while not os.path.basename(terraform_manager_path) == "terraform_manager":
+    while not os.path.basename(terraform_manager_path) == Common_constants.TERRAFORM_MANAGER:
         terraform_manager_path = os.path.dirname(terraform_manager_path)
+
+        if len(terraform_manager_path) < len(Common_constants.TERRAFORM_MANAGER):
+            return
 
     return terraform_manager_path
 
