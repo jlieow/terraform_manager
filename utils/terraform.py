@@ -162,7 +162,19 @@ def terraform_workflow(cwd):
 
 def terraform_destroy_from_history():
 
+<<<<<<< HEAD
     history_path = get_dir_of_terraform_manager_from_sys_executable() + HISTORY_CSV_PATH
+=======
+    history_path = get_dir_of_terraform_manager_from_sys_executable() + History_constants.HISTORY_CSV_PATH
+
+    histories = get_rows_as_list(history_path)
+
+    list_history(histories)
+
+    # if len(histories) == 0:
+    #     print_warning("\nThere is no record of anything being provisioned based on your history. The program will now exit.")
+    #     return
+>>>>>>> 5a1ecb5 (Refactor History constants to use a class)
 
     histories = get_rows_as_list(history_path)
 

@@ -1,0 +1,4 @@
+colorama==0.4.4
+pyhcl==0.4.4
+PyYAML==6.0
+awscli==1.27.46
