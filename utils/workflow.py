@@ -527,10 +527,11 @@ def get_stages(cwd):
 
     return stages, stages_errors
 
-def workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=False):
+def workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=False, github_action=False):
     tfvars_settings(cwd)
     
-    add_history(cwd, stage_name)
+    if not github_action:
+        add_history(cwd, stage_name)
     
     target_process = ["-target=" + sub for sub in stage_targets]
 
@@ -607,7 +608,7 @@ def check_stages_errors(stages_errors):
 
     return error
 
-def stage_workflow_terraform_apply(cwd, override_workflow=False):
+def stage_workflow_terraform_apply(cwd, override_workflow=False, github_action=False):
     stages, stages_errors = get_stages(cwd)
 
     active_stages, err, err_message = get_active_stages_from_workflow(cwd)
@@ -638,7 +639,7 @@ def stage_workflow_terraform_apply(cwd, override_workflow=False):
             print("%s. %s" % (index+1, stage_targets[index]))
 
         # Prepare terraform command
-        workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve)
+        workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve, github_action)
 
 def stage_workflow_terraform_destroy(cwd, override_workflow=False):
     stages, stages_errors = get_stages(cwd)

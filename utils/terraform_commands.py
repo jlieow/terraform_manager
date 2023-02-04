@@ -71,11 +71,12 @@ def terraform_init(cwd, CUSTOM_VAR_FILE="", set_stdin=None, set_stdout=None, set
 
     subprocess.Popen(init_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
 
-def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=False, set_stdin=None, set_stdout=None, set_stderr=None):
 
     tfvars_settings(cwd)
-
-    add_history(cwd)
+    
+    if not github_action:
+        add_history(cwd)
 
     apply_auto_approve_process = Terraform_commands_constants.APPLY_AUTO_APPROVE_PROCESS
     apply_process = Terraform_commands_constants.APPLY_PROCESS

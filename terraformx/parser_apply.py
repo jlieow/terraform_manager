@@ -32,7 +32,21 @@ def apply_rebuild_true(cwd, var_file):
         terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=True)
         return
 
-def apply_rebuild_false(cwd, var_file, auto_approve, override_workflow):
+def apply_only(cwd, var_file, auto_approve, override_workflow, github_action=False):
+    
+    if github_action:
+        if does_workflow_file_exist(cwd):
+            print("\ngithub_action with workflow")
+
+            print_warning("\n[WARNING] All stages will be auto approved regardless of the configuration present in workflow/config.yaml")
+            stage_workflow_terraform_apply(cwd, override_workflow=True, github_action=True)
+            return
+
+        else:
+            print("\ngithub_action no workflow")
+            terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=True, github_action=True)
+            return
+
     if does_workflow_file_exist(cwd):
 
             if len(var_file) > 0:
@@ -40,17 +54,18 @@ def apply_rebuild_false(cwd, var_file, auto_approve, override_workflow):
 
             if not auto_approve:
                 stage_workflow_terraform_apply(cwd)
+                return
 
             if auto_approve and not override_workflow:
                 print_warning("\n[WARNING] -auto-approve should be configured through workflow config.yaml when it is present.")
                 print_warning("You may also include -override-workflow to override workflow stages auto_approve keys and auto approve every stage.")
                 stage_workflow_terraform_apply(cwd)
+                return
 
             if auto_approve and override_workflow:
                 print_warning("\n[WARNING] All stages will be auto approved as -auto-approve and -override-workflow flags are present in the terraformx command.")
                 stage_workflow_terraform_apply(cwd, override_workflow)
-            
-            return
+                return
 
     else:
         terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=auto_approve)
@@ -101,5 +116,5 @@ def apply(args):
         apply_rebuild_true(cwd, var_file)
         return
     else:
-        apply_rebuild_false(cwd, var_file, auto_approve, override_workflow)
+        apply_only(cwd, var_file, auto_approve, override_workflow, github_action=False)
         return
