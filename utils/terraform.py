@@ -11,10 +11,9 @@ from .blueprints import *
 
 # ----- CONSTANTS ----- #
 
-TERRAFORM_PATH = 'terraform'
-WAITING_MESSAGE = "Please wait..."
-
-BREAKER = False
+class Terraform_constants:
+    TERRAFORM_PATH = 'terraform'
+    WAITING_MESSAGE = "Please wait..."
 
 # ----- CONSTANTS ----- #
 
@@ -92,7 +91,7 @@ def terraform():
 
             tfvars_settings(cwd)  
             
-            print(WAITING_MESSAGE)
+            print(Terraform_constants.WAITING_MESSAGE)
 
             match COMMAND_NUMBER:
                 case 0:
@@ -162,7 +161,15 @@ def terraform_workflow(cwd):
 
 def terraform_destroy_from_history():
 
-    history_path = get_dir_of_terraform_manager_from_sys_executable() + HISTORY_CSV_PATH
+    history_path = get_dir_of_terraform_manager_from_sys_executable() + History_constants.HISTORY_CSV_PATH
+
+    histories = get_rows_as_list(history_path)
+
+    list_history(histories)
+
+    # if len(histories) == 0:
+    #     print_warning("\nThere is no record of anything being provisioned based on your history. The program will now exit.")
+    #     return
 
     histories = get_rows_as_list(history_path)
 
@@ -220,7 +227,7 @@ def terraform_destroy_from_history():
 #         DIR_NUMBER = input_options(TERRAFORM_ROOTS_PREFACE, [os.path.basename(directory) for directory in list_terraform_root_dir], TERRAFORM_ROOTS_CHECK_DRIFT_OPTIONS)
 #         print("\"%d. %s\" was selected.\n" % (DIR_NUMBER+1, os.path.basename(list_terraform_root_dir[DIR_NUMBER])))
 
-#         print(WAITING_MESSAGE)
+#         print(Terraform_constants.WAITING_MESSAGE)
 
 #         cwd = list_terraform_root_dir[DIR_NUMBER]
 

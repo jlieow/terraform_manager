@@ -10,7 +10,7 @@ def history(args):
     list = args.list
 
     if list:
-        history_path = get_dir_of_terraform_manager_from_sys_executable() + HISTORY_CSV_PATH
+        history_path = get_dir_of_terraform_manager_from_sys_executable() + History_constants.HISTORY_CSV_PATH
 
         histories = get_rows_as_list(history_path)
 
