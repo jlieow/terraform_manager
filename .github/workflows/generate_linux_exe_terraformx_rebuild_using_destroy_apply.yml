@@ -1,5 +1,4 @@
-# .github/workflows/test_action.yaml
-name: Test Action
+name: Generate Linux exe for Terraformx Rebuild using Destroy and Apply Action
 on:
   push:
     tags:
