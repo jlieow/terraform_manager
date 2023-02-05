@@ -38,5 +38,5 @@ jobs:
         shell: bash
       - uses: actions/upload-artifact@v3
         with:
-          name: name-of-artifact
+          name: github_action_terraformx_rebuild_using_destroy_apply
           path: actions/dist/github_action_terraformx_rebuild_using_destroy_apply
