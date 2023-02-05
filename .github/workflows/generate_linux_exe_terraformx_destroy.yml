@@ -38,5 +38,5 @@ jobs:
         shell: bash
       - uses: actions/upload-artifact@v3
         with:
-          name: github_action_terraformx_destroy
+          name: destroy
           path: actions/dist/github_action_terraformx_destroy
