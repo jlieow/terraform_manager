@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Perform Terraformx Apply on Terraform Root EC2
     steps:
+      - name: Exit if not on main branch
+        if: endsWith(github.event.base_ref, 'main') == false
+        run: exit -1
+        
       - name: Checkout
         uses: actions/checkout@v3
 
