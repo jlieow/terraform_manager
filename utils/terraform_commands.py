@@ -95,7 +95,7 @@ def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=F
 
     terraform_apply_auto_approve_refresh(cwd)
 
-def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=False, set_stdin=None, set_stdout=None, set_stderr=None):
 
     tfvars_settings(cwd)
 
@@ -113,8 +113,10 @@ def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, set_stdin=Non
     if process == 1:
         # If the process experiences an error, skip the remaining commands
         return 1
-
-    delete_latest_row_from_history(cwd)
+    # Do not delete history if command is invoked from github action
+    # Github action does not store the terraform history directory or file
+    if not github_action:
+        delete_latest_row_from_history(cwd)
 
 def terraformOutput(cwd, set_stdin=None, set_stdout=None, set_stderr=None):
     tfvars_settings(cwd)

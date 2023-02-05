@@ -530,6 +530,8 @@ def get_stages(cwd):
 def workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=False, github_action=False):
     tfvars_settings(cwd)
     
+    # Do not delete history if command is invoked from github action
+    # Github action does not store the terraform history directory or file
     if not github_action:
         add_history(cwd, stage_name)
     
@@ -552,7 +554,7 @@ def workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=False,
 
     terraform_apply_auto_approve_refresh(cwd)
 
-def workflow_terraform_destroy(cwd, stage_targets, stage_name, AUTO_APPROVE=False):
+def workflow_terraform_destroy(cwd, stage_targets, stage_name, AUTO_APPROVE=False, github_action=False):
 
     tfvars_settings(cwd)
 
@@ -569,7 +571,10 @@ def workflow_terraform_destroy(cwd, stage_targets, stage_name, AUTO_APPROVE=Fals
         # If the process experiences an error, skip the remaining commands
         return 1
 
-    delete_latest_row_from_history(cwd, stage_name)
+    # Do not delete history if command is invoked from github action
+    # Github action does not store the terraform history directory or file
+    if not github_action:
+        delete_latest_row_from_history(cwd, stage_name)
 
 def workflow_terraform_apply_refresh(cwd, stage_targets, AUTO_APPROVE=False):
     tfvars_settings(cwd)
@@ -641,7 +646,7 @@ def stage_workflow_terraform_apply(cwd, override_workflow=False, github_action=F
         # Prepare terraform command
         workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve, github_action)
 
-def stage_workflow_terraform_destroy(cwd, override_workflow=False):
+def stage_workflow_terraform_destroy(cwd, override_workflow=False, github_action=False):
     stages, stages_errors = get_stages(cwd)
 
     active_stages, err, err_message = get_active_stages_from_workflow(cwd)
@@ -674,7 +679,7 @@ def stage_workflow_terraform_destroy(cwd, override_workflow=False):
             print("%s. %s" % (index+1, stage_targets[index]))
         
         # Prepare terraform command
-        workflow_terraform_destroy(cwd, stage_targets, stage_name, stage_auto_approve)
+        workflow_terraform_destroy(cwd, stage_targets, stage_name, stage_auto_approve, github_action)
 
 def stage_workflow_terraform_apply_refresh(cwd):
     stages, stages_errors = get_stages(cwd)

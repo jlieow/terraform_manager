@@ -3,7 +3,7 @@
 /terraformx/__pycache__/
 /actions/build/
 /actions/dist/
-/actions/github_action_terraformx_apply.spec
+*.spec
 /terraformx/build/
 /terraformx/dist/
 /dist/
