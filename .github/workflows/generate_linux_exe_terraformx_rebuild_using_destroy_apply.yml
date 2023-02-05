@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      - 'release/github_action_terraformx_apply/v[012].[0-9]+.[0-9]+'
+      - "release/github_action_terraformx_rebuild_using_destroy_apply/v[012].[0-9]+.[0-9]+"
 
 jobs:
   generate_linux_exe:
@@ -18,7 +18,7 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11.1'  
+          python-version: "3.11.1"
 
       - name: Install Dependencies and PyInstaller
         run: pip install -r $GITHUB_WORKSPACE/requirements.txt
@@ -27,8 +27,8 @@ jobs:
       - name: Generate linux exe with pyinstaller
         working-directory: actions
         run: |
-                pyinstaller --onefile github_action_terraformx_rebuild_using_destroy_apply.py -p $GITHUB_WORKSPACE -y 
-                
+          pyinstaller --onefile github_action_terraformx_rebuild_using_destroy_apply.py -p $GITHUB_WORKSPACE -y
+
         shell: bash
       - uses: actions/upload-artifact@v3
         with:
