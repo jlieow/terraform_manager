@@ -1,8 +1,8 @@
 import csv
 
-from .print_options import *
-from .terraform_commands import *
-from .workflow import *
+from utils.print_options import *
+from utils.terraform_commands import *
+from utils.workflow import *
 
 # ----- CONSTANTS ----- #
 

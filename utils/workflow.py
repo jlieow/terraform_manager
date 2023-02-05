@@ -2,9 +2,9 @@ import yaml
 import hcl
 import glob
 
-from .terraform_commands import *
-from .print_options import *
-from .history import *
+from utils.terraform_commands import *
+from utils.print_options import *
+from utils.history import *
 
 # ----- CONSTANTS ----- #
 

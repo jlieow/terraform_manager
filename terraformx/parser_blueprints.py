@@ -41,7 +41,53 @@ def create_blueprint(blueprint_path):
             print("Blueprint \"%s.csv\" has been saved!" % file_name)
             return
 
-def apply_blueprint(blueprint_path):
+def apply_blueprint_via_github_action(blueprint):
+    for dir_and_stage in blueprint:
+        cwd = dir_and_stage[0] 
+        stage_name = dir_and_stage[1] 
+
+        terraform_init(cwd)
+
+        if len(stage_name) == 0:
+            print("\nPerforming \"terraform apply --auto-approve\" on %s" % os.path.basename(cwd))
+            process = terraform_apply(cwd, AUTO_APPROVE=True, github_action=True)
+        else:
+            print("\nPerforming \"terraform apply --auto-approve\" on %s - Stage \"%s\"" % (os.path.basename(cwd), stage_name))
+
+            stage = get_stage(cwd, stage_name)
+            stage_targets = stage["stage_targets"]
+            stage_name = stage["stage_name"]
+
+            process = workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=True, github_action=True)
+        
+        if process == 1:
+            # If the process experiences an error, break
+            break
+
+def apply_blueprint_via_terraformx(blueprint):
+    for dir_and_stage in blueprint:
+        cwd = dir_and_stage[0] 
+        stage_name = dir_and_stage[1] 
+
+        terraform_init(cwd)
+
+        if len(stage_name) == 0:
+            print("\nPerforming \"terraform apply --auto-approve\" on %s" % os.path.basename(cwd))
+            process = terraform_apply(cwd, AUTO_APPROVE=True, github_action=False)
+        else:
+            print("\nPerforming \"terraform apply --auto-approve\" on %s - Stage \"%s\"" % (os.path.basename(cwd), stage_name))
+
+            stage = get_stage(cwd, stage_name)
+            stage_targets = stage["stage_targets"]
+            stage_name = stage["stage_name"]
+
+            process = workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=True, github_action=False)
+        
+        if process == 1:
+            # If the process experiences an error, break
+            break
+
+def apply_blueprint(blueprint_path, github_action=False):
     print("\nVerifying blueprint...")
     if not is_this_a_verified_blueprint(blueprint_path):
         return
@@ -60,31 +106,12 @@ def apply_blueprint(blueprint_path):
         else:
             print("%d. %s - Stage \"%s\"" % (i+1, os.path.basename(blueprint[i][0]), stage_name))
     
+    if github_action:
+        apply_blueprint_via_github_action(blueprint)
+        return
+
     if input("\nPlease enter \"Y\" to continue: ").upper() == "Y":
-        for dir_and_stage in blueprint:
-            # print("dir_and_stage")
-            # print(dir_and_stage)
-
-            cwd = dir_and_stage[0] 
-            stage_name = dir_and_stage[1] 
-
-            terraform_init(cwd)
-
-            if len(stage_name) == 0:
-                print("\nPerforming \"terraform apply --auto-approve\" on %s" % os.path.basename(cwd))
-                process = terraform_apply(cwd, AUTO_APPROVE=True)
-            else:
-                print("\nPerforming \"terraform apply --auto-approve\" on %s - Stage \"%s\"" % (os.path.basename(cwd), stage_name))
-
-                stage = get_stage(cwd, stage_name)
-                stage_targets = stage["stage_targets"]
-                stage_name = stage["stage_name"]
-
-                process = workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=True)
-            
-            if process == 1:
-                # If the process experiences an error, break
-                break
+        apply_blueprint_via_terraformx(blueprint)
 
 def blueprints(args):
 

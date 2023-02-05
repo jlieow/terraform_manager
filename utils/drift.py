@@ -1,7 +1,7 @@
 import os
 
-from .common import *
-from .workflow import *
+from utils.common import *
+from utils.workflow import *
 
 def terraform_apply_refresh_or_apply_all(drifted_terraform_roots):
 

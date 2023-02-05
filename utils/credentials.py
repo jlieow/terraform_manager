@@ -1,7 +1,8 @@
 import subprocess
 import os
 import glob
-from .print_options import *
+
+from utils.print_options import *
 
 # For each credential found in /aws_credentials, import using "aws configure import" command
 # Print out number of profiles successfully imported

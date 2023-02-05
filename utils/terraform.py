@@ -2,12 +2,12 @@ import os
 import glob
 import subprocess
 
-from .common import *
-from .terraform_commands import *
-from .workflow import *
-from .print_options import *
-from .drift import *
-from .blueprints import *
+from utils.common import *
+from utils.terraform_commands import *
+from utils.workflow import *
+from utils.print_options import *
+from utils.drift import *
+from utils.blueprints import *
 
 # ----- CONSTANTS ----- #
 
