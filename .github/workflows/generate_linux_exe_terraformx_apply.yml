@@ -3,20 +3,12 @@ on:
   push:
     tags:
       - "release/github_action_terraformx_apply/v[012].[0-9]+.[0-9]+"
-
+      
 jobs:
   generate_linux_exe:
     runs-on: ubuntu-latest
     name: Perform Terraformx Apply on Terraform Root EC2
     steps:
-      - name: Exit if pushed with correct tags but not on main branch
-        env:
-          BRANCH_NAME: ${{ github.head_red || github.ref_name }}
-        if: contains(env.BRANCH_NAME, 'main') == false
-        uses: actions/github-script@v3
-        with:
-          script: |
-            core.setFailed('Commit pushed with correct tags but not on main branch. Current branch detected is ${{ env.BRANCH_NAME }}')
 
       - name: Checkout
         uses: actions/checkout@v3
