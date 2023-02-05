@@ -2,13 +2,13 @@
 import sys
 import argparse
 
-from parser_init import *
-from parser_apply import *
-from parser_destroy import *
-from parser_output import *
-from parser_blueprints import *
-from parser_history import *
-from parser_list import *
+from terraformx.parser_init import *
+from terraformx.parser_apply import *
+from terraformx.parser_destroy import *
+from terraformx.parser_output import *
+from terraformx.parser_blueprints import *
+from terraformx.parser_history import *
+from terraformx.parser_list import *
 
 class Parser_constants:
     INIT = "init"

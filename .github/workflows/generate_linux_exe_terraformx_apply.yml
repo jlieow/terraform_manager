@@ -7,7 +7,7 @@ on:
 jobs:
   generate_linux_exe:
     runs-on: ubuntu-latest
-    name: Perform Terraformx Apply on Terraform Root EC2
+    name: Generate Linux exe for Terraformx Apply Action
     steps:
 
       - name: Checkout

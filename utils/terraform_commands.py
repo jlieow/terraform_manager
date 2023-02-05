@@ -2,8 +2,8 @@ import os
 import glob
 import subprocess
 
-from .common import *
-from .history import *
+from utils.common import *
+from utils.history import *
 
 # ----- CONSTANTS ----- #
 

@@ -2,8 +2,8 @@ import os
 import csv
 import sys
 
-from .common import *
-from .print_options import *
+from utils.common import *
+from utils.print_options import *
 
 # ----- CONSTANTS ----- #
 
