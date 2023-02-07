@@ -438,7 +438,7 @@ def terraform_blueprints():
 
     while True:
         # Get csv files from blueprints directory
-        path =  os.getcwd() + "./data/blueprints/*.csv"
+        path =  get_dir_of_terraform_manager() + "/data/blueprints/*.csv"
         blueprints = glob.glob(path)
 
         OPEN_BLUEPRINTS = True
