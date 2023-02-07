@@ -639,7 +639,7 @@ def github_action_stage_workflow_terraform_apply(cwd, override_workflow=False, a
     for stage in stages:
         workflow_terraform_apply_active_stages(cwd, stage, override_workflow, True)
 
-def stage_workflow_terraform_apply(cwd, override_workflow=False, github_action=False):
+def stage_workflow_terraform_apply(cwd, override_workflow=False):
     stages, stages_errors = get_stages(cwd)
 
     active_stages, err, err_message = get_active_stages_from_workflow(cwd)
@@ -694,7 +694,7 @@ def github_action_stage_workflow_terraform_destroy(cwd, override_workflow=False,
         workflow_terraform_destroy_active_stages(cwd, stage, override_workflow, github_action=True)
 
 
-def stage_workflow_terraform_destroy(cwd, override_workflow=False, github_action=False):
+def stage_workflow_terraform_destroy(cwd, override_workflow=Falses):
     stages, stages_errors = get_stages(cwd)
 
     active_stages, err, err_message = get_active_stages_from_workflow(cwd)
