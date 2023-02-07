@@ -261,7 +261,7 @@ def terraform_check_for_drift():
         print("Checking for drift - In Progress...\n")
         
         # Get list of terraform roots
-        list_terraform_root_dir = locate_terraform_root_directories(os.path.dirname(os.getcwd()))
+        list_terraform_root_dir = locate_terraform_root_directories(os.getcwd())
 
         drifted_terraform_roots = []
 
