@@ -32,20 +32,33 @@ def apply_rebuild_true(cwd, var_file):
         terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=True)
         return
 
+def github_action_apply_only(cwd, var_file, auto_approve, override_workflow, github_action_active_stages=""):
+    if does_workflow_file_exist(cwd):
+
+        print_warning("\n[WARNING] All stages will be auto approved regardless of the configuration present in workflow/config.yaml")
+        
+        github_action_stage_workflow_terraform_apply(cwd, override_workflow=True, active_stages_statements=github_action_active_stages)
+        return
+
+    else:
+        print("\ngithub_action no workflow")
+        terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=True, github_action=True)
+        return
+
 def apply_only(cwd, var_file, auto_approve, override_workflow, github_action=False):
     
-    if github_action:
-        if does_workflow_file_exist(cwd):
-            print("\ngithub_action with workflow")
+    # if github_action:
+    #     if does_workflow_file_exist(cwd):
+    #         print("\ngithub_action with workflow")
 
-            print_warning("\n[WARNING] All stages will be auto approved regardless of the configuration present in workflow/config.yaml")
-            stage_workflow_terraform_apply(cwd, override_workflow=True, github_action=True)
-            return
+    #         print_warning("\n[WARNING] All stages will be auto approved regardless of the configuration present in workflow/config.yaml")
+    #         stage_workflow_terraform_apply(cwd, override_workflow=True, github_action=True)
+    #         return
 
-        else:
-            print("\ngithub_action no workflow")
-            terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=True, github_action=True)
-            return
+    #     else:
+    #         print("\ngithub_action no workflow")
+    #         terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=True, github_action=True)
+    #         return
 
     if does_workflow_file_exist(cwd):
 
