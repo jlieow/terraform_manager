@@ -7,7 +7,6 @@ def destroy_only(cwd, var_file, auto_approve, override_workflow, github_action=F
 
     if github_action:
         if does_workflow_file_exist(cwd):
-            print("\ngithub_action with workflow")
 
             print_warning("\n[WARNING] All stages will be auto approved regardless of the configuration present in workflow/config.yaml")
             stage_workflow_terraform_destroy(cwd, override_workflow=True, github_action=True)

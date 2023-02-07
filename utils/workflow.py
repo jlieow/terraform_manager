@@ -73,6 +73,44 @@ def does_stage_name_exist(cwd, stage_name):
     else:
         return True
 
+def github_action_get_active_stages_from_workflow(active_stages_statements):
+    active_stages = []
+
+    # Checks based on numbers
+    active_statements = str(active_stages_statements)
+    # Splits and Strips white spaces
+    statements = [item.strip() for item in active_statements.split(",")]
+
+    if "0" in statements:
+        return [], True, "Active stages have to start from 1." 
+
+    for numeric_statement in statements:
+        numeric_statement = numeric_statement.strip()
+
+        if numeric_statement.isnumeric():
+            active_stage = int(numeric_statement) - 1
+            active_stages.append(active_stage)
+
+        for element in ["-", "to"]:
+            if element in numeric_statement:
+                start_end = numeric_statement.split(element)
+                start = start_end[0].strip()
+                end = start_end[1].strip()
+
+                if start.isnumeric() and end.isnumeric():
+                    start = int(start) - 1
+                    end = int(end)
+                    active_stages =  active_stages + list(range(start, end))
+
+    # Removes duplicates
+    active_stages = set(active_stages)
+    active_stages = list(active_stages)
+
+    err = False
+    err_message = ""
+
+    return active_stages, err, err_message
+
 def get_active_stages_from_workflow(cwd):
 
     # does_stage_name_contain_special_characters(cwd)
@@ -83,8 +121,6 @@ def get_active_stages_from_workflow(cwd):
         data_loaded = yaml.safe_load(stream)
 
     active_stages = []
-    # missing_stage_name = []
-    # stage_names = []
 
     if "active_stages" in data_loaded:
 
@@ -95,14 +131,6 @@ def get_active_stages_from_workflow(cwd):
 
         if "0" in statements:
             return [], True, "Active stages have to start from 1." 
-
-        # numeric_statements = []
-        # string_statements = []
-        # for statement in statements:
-        #     if "\"" in statement:
-        #         string_statements.append(statement.strip("\""))
-        #     else:
-        #         numeric_statements.append(statement)
 
         for numeric_statement in statements:
             numeric_statement = numeric_statement.strip()
@@ -121,44 +149,6 @@ def get_active_stages_from_workflow(cwd):
                         start = int(start) - 1
                         end = int(end)
                         active_stages =  active_stages + list(range(start, end))
-        
-        # Checks based on stage name
-        # stages = data_loaded["stages"]
-
-        # for index in range(len(stages)):
-        #     stage = stages[index]
-        #     stage_name = str(stage["name"]).strip()
-        #     stage_names.append(stage_name)
-        
-        #     if stage_name in string_statements:
-        #         active_stages.append(index)
-
-        # print("stages")
-        # print(stages)
-        # print("string_statements")
-        # print(string_statements)
-        # #TODO refactor error checking
-
-        # for string_statement in string_statements:
-        #     if string_statement not in stage_names:
-        #         missing_stage_name.append(string_statement)
-    
-    # Flag errors
-    # if len(missing_stage_name) > 0:
-    #     err_message = "\nThe following stage names are declared in the workflow's \"active\" field but they do not exist:"
-    #     for stage_name in missing_stage_name:
-    #         err_message = err_message + "\n%s" % stage_name
-
-    #     err_message = err_message + "\n\nPlease fix the error(s) before continuing."
-
-    #     err = True
-    #     return [], err, err_message
-
-    # if max(active_stages) > len(stages) - 1:
-    #     err_message = "\nThere are only %d workflow stage(s). However, stage %d has been declared in the workflow's \"active\" field and is out of range." % (len(stages), max(active_stages) + 1)
-    #     err_message = err_message + "\n\nPlease fix the error(s) before continuing."
-    #     err = True
-    #     return [], err, err_message
 
     # Removes duplicates
     active_stages = set(active_stages)
@@ -612,6 +602,43 @@ def check_stages_errors(stages_errors):
                     print_error(value)
 
     return error
+
+def github_action_stage_workflow_terraform_apply(cwd, override_workflow=False, active_stages_statements=""):
+
+    stages, stages_errors = get_stages(cwd)
+
+    active_stages, err, err_message = get_active_stages_from_workflow(cwd)
+
+    if len(active_stages_statements) > 0:
+        active_stages, err, err_message = github_action_get_active_stages_from_workflow(active_stages_statements)
+
+    if err:
+        print_error(err_message)
+        return
+
+    stages = get_stages_to_apply_from_active_stages(active_stages, stages)
+    
+    for stage in stages:
+
+        stage_name = stage["stage_name"]
+        stage_auto_approve = stage["stage_auto_approve"]
+        stage_targets = stage["stage_targets"]
+
+        if override_workflow:
+            stage_auto_approve = override_workflow
+
+        print("\nApplying Stage \"%s\"" % stage_name)
+        
+        if stage_auto_approve:
+            print("\nPerforming \"terraform apply -auto-approve\" on the following target(s):")
+        else:
+            print("\nPerforming \"terraform apply\" on the following target(s):")
+            
+        for index in range(len(stage_targets)):
+            print("%s. %s" % (index+1, stage_targets[index]))
+
+        # Prepare terraform command
+        workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve, True)
 
 def stage_workflow_terraform_apply(cwd, override_workflow=False, github_action=False):
     stages, stages_errors = get_stages(cwd)

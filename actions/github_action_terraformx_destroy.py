@@ -6,6 +6,15 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from terraformx.parser_destroy import *
 
 def main():
+
+    # top-level parser
+    top_level_parser = argparse.ArgumentParser(description = "terraformx")
+    top_level_parser.add_argument(Args_constants.ACTIVE_STAGES, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.ACTIVE_STAGES)
+
+    args = top_level_parser.parse_args()
+    
+    active_stages = args.active_stages
+    
     cwd = os.getcwd()
 
     if not os.path.exists(cwd + "/backend.tf"):
