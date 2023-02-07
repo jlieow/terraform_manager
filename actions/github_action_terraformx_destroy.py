@@ -26,6 +26,7 @@ def main():
     args = top_level_parser.parse_args()
     
     active_stages = args.active_stages
+    
     cwd = os.getcwd()
 
     if not os.path.exists(cwd + "/backend.tf"):
