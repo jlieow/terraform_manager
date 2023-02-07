@@ -26,4 +26,4 @@ def main(blueprint_path):
     # apply_blueprint(blueprint_path, github_action=True)
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main()
