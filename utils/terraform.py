@@ -34,7 +34,7 @@ class Terraform_constants:
 def terraform():
 
     TERRAFORM_ROOTS_PREFACE = "The following directories are terraform roots:\n"
-    TERRAFORM_ROOTS_OPTIONS = "\nWhich directory would you like to invoke terraform commands on: "
+    TERRAFORM_ROOTS_OPTIONS = "\nWhich terraform root would you like to invoke terraform commands on: "
 
     TERRAFORM_COMMAND_PREFACE = "The following terraform commands can be invoked:\n"
     LIST_TERRAFORM_COMMAND=[
@@ -327,7 +327,7 @@ def terraform_check_for_drift():
 
 def terraform_multi_build():
     TERRAFORM_ROOTS_PREFACE = "The following directories are terraform roots:\n"
-    TERRAFORM_MULTI_BUILD_OPTIONS = "\nWhich directory would you like to multi-build: "
+    TERRAFORM_MULTI_BUILD_OPTIONS = "\nWhich terraform root would you like to multi-build: "
 
     TERRAFORM_MULTI_BUILD_STAGES_PREFACE = "The following stages are found in:\n"
     TERRAFORM_MULTI_BUILD_STAGES_OPTIONS = "\nWhich stage would you like to save to multi-build: "

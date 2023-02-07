@@ -7,20 +7,19 @@ from utils.workflow import *
 # ----- CONSTANTS ----- #
 
 class Blueprints_constants:
-    BLUEPRINTS_CSV_PATH = "./data/blueprints/"
+    BLUEPRINTS_CSV_PATH = "/data/blueprints/"
 
 # ----- CONSTANTS ----- #
 
 def add_blueprint(blueprint_path, cwd, stage_name="", mkdir=False):
-    # path = BLUEPRINTS_CSV_PATH + blueprint_name + ".csv"
-    path = blueprint_path
-
+    
+    # If folder in which blueprint file resides does not exist, create it.
     if mkdir:
-        if not os.path.exists(Blueprints_constants.BLUEPRINTS_CSV_PATH):
-            os.mkdir(Blueprints_constants.BLUEPRINTS_CSV_PATH)
+        if not os.path.exists(os.path.dirname(blueprint_path)):
+            os.mkdir(os.path.dirname(blueprint_path))
 
     #Save results to CSV    
-    with open(path, 'a', newline='') as f:  
+    with open(blueprint_path, 'a', newline='') as f:  
         # using csv.writer method from CSV package
         write = csv.writer(f)
         
@@ -118,7 +117,7 @@ def list_blueprint(blueprint):
 def terraform_create_blueprint():
 
     TERRAFORM_ROOTS_PREFACE = "The following directories are terraform roots:\n"
-    TERRAFORM_ROOTS_ADD_BLUEPRINT_OPTIONS = "\nWhich directory would you like to add to the blueprint: "
+    TERRAFORM_ROOTS_ADD_BLUEPRINT_OPTIONS = "\nWhich terraform root would you like to add to the blueprint: "
 
     TERRAFORM_BLUEPRINT_STAGES_PREFACE = "The following stages are found in:\n"
     TERRAFORM_BLUEPRINT_STAGES_OPTIONS = "\nWhich stage would you like to save to blueprint: "
@@ -126,7 +125,8 @@ def terraform_create_blueprint():
     blueprint_name = input("\nPlease provide the name of the blueprint: ")
 
     # Get list of terraform roots
-    list_terraform_root_dir = locate_terraform_root_directories(os.path.dirname(os.getcwd()))
+    # list_terraform_root_dir = locate_terraform_root_directories(os.path.dirname(os.getcwd()))
+    list_terraform_root_dir = locate_terraform_root_directories(os.getcwd())
     blueprint = []
 
     terraform_roots = [os.path.basename(directory) for directory in list_terraform_root_dir]
@@ -187,8 +187,10 @@ def terraform_create_blueprint():
     for dir_and_stage in blueprint:
         cwd = dir_and_stage[0] 
         stage_name = dir_and_stage[1] 
+
+        blueprint_path = get_dir_of_terraform_manager() + Blueprints_constants.BLUEPRINTS_CSV_PATH + blueprint_name + ".csv"
         
-        add_blueprint(Blueprints_constants.BLUEPRINTS_CSV_PATH + blueprint_name + ".csv", cwd, stage_name, True)
+        add_blueprint(blueprint_path, cwd, stage_name, True)
     
     print("Blueprint \"%s.csv\" has been saved!" % blueprint_name)
 
