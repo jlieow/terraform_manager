@@ -32,6 +32,7 @@ class Args_constants:
     LIST = "-list"
     DESTROY = "-destroy"
     HISTORY = "-history"
+    ACTIVE_STAGES = "-active-stages"
 
 class Action_constants:
     STORE_TRUE = "store_true"
@@ -51,6 +52,7 @@ class Help_constants:
     CREATE_BLUEPRINT = "Create a blueprint."
     LIST_BLUEPRINT = "List Blueprint."
     LIST_HISTORY = "List History."
+    ACTIVE_STAGES = "Specify the active stages overriding the active stages in the workflow."
 
 
 top_level_help_message = "Usage: terraformx [global options] <subcommand> [args]\n\
