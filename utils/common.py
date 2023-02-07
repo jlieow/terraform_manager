@@ -6,12 +6,47 @@ import time
 class Common_constants:
     TERRAFORM_MANAGER = "terraform_manager"
 
-def get_dir_of_terraform_manager_from_sys_executable():
-    terraform_manager_path = get_dir_of_terraform_manager_from_sys_executable_onefile(sys.executable)
+# def get_dir_of_terraform_manager_from_sys_executable():
+#     terraform_manager_path = get_dir_of_terraform_manager_from_sys_executable_onefile(sys.executable)
 
-    if not os.path.exists(terraform_manager_path):
-        terraform_manager_path = get_dir_of_terraform_manager_from_sys_executable_onedir(sys.executable)
+#     if not os.path.exists(terraform_manager_path):
+#         terraform_manager_path = get_dir_of_terraform_manager_from_sys_executable_onedir(sys.executable)
     
+#     while not os.path.basename(terraform_manager_path) == Common_constants.TERRAFORM_MANAGER:
+#         terraform_manager_path = os.path.dirname(terraform_manager_path)
+
+#         if len(terraform_manager_path) < len(Common_constants.TERRAFORM_MANAGER):
+#             return
+
+#     return terraform_manager_path
+
+
+def check_if_terraform_manager_root_is_valid(directory):
+    while not os.path.basename(directory) == Common_constants.TERRAFORM_MANAGER:
+        directory = os.path.dirname(directory)
+
+        if len(directory) < len(Common_constants.TERRAFORM_MANAGER):
+                return ""
+    
+    if os.path.exists(directory + "/utils") and os.path.exists(directory + "/data") and os.path.exists(directory + "/terraformx"):
+        return directory
+    
+    return ""
+        
+
+def get_dir_of_terraform_manager():
+
+    # Returns root dir where python script or exe is run from
+    FILE_PATH = os.path.realpath(__file__)
+    EXE_PATH = sys.executable
+
+    if len(check_if_terraform_manager_root_is_valid(FILE_PATH)) > 0:
+        terraform_manager_path = FILE_PATH
+    elif len(check_if_terraform_manager_root_is_valid(EXE_PATH)) > 0:
+        terraform_manager_path = EXE_PATH
+    else:
+        return ""
+
     while not os.path.basename(terraform_manager_path) == Common_constants.TERRAFORM_MANAGER:
         terraform_manager_path = os.path.dirname(terraform_manager_path)
 
@@ -20,12 +55,11 @@ def get_dir_of_terraform_manager_from_sys_executable():
 
     return terraform_manager_path
 
+# def get_dir_of_terraform_manager_from_sys_executable_onefile(directory):
+#     return os.path.dirname(os.path.dirname(os.path.dirname(directory)))
 
-def get_dir_of_terraform_manager_from_sys_executable_onefile(directory):
-    return os.path.dirname(os.path.dirname(os.path.dirname(directory)))
-
-def get_dir_of_terraform_manager_from_sys_executable_onedir(directory):
-    return os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(directory))))
+# def get_dir_of_terraform_manager_from_sys_executable_onedir(directory):
+#     return os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(directory))))
 
 def input_options(preface, options, input_question, return_input=False, use_prev_as_default=False, choice=None, allow_special_break=False, special_break = ""):
     print(preface)

@@ -37,7 +37,7 @@ def list_history(histories, turn_high_alert_on=True):
 
 def add_history(cwd, stage_name="", unit_testing=False, unit_testing_path=""):
     
-    history_path = get_dir_of_terraform_manager_from_sys_executable() + History_constants.HISTORY_CSV_PATH
+    history_path = get_dir_of_terraform_manager() + History_constants.HISTORY_CSV_PATH
 
     if unit_testing is True:
         history_path = unit_testing_path
@@ -52,10 +52,10 @@ def add_history(cwd, stage_name="", unit_testing=False, unit_testing_path=""):
 
 def delete_latest_row_from_history(cwd, stage_name="", unit_testing=False, unit_testing_path=""):
 
-    history_path = get_dir_of_terraform_manager_from_sys_executable_onefile(sys.executable) + History_constants.HISTORY_CSV_PATH
+    history_path = get_dir_of_terraform_manager() + History_constants.HISTORY_CSV_PATH
 
-    if not os.path.exists(history_path):
-        history_path = get_dir_of_terraform_manager_from_sys_executable_onedir(sys.executable) + History_constants.HISTORY_CSV_PATH
+    # if not os.path.exists(history_path):
+    #     history_path = get_dir_of_terraform_manager_from_sys_executable_onedir(sys.executable) + History_constants.HISTORY_CSV_PATH
 
 
     if unit_testing is True:
