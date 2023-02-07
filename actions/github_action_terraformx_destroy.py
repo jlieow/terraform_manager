@@ -15,11 +15,6 @@ def main():
     args = top_level_parser.parse_args()
     
     active_stages = args.active_stages
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 279da8b5b92f2a06e6e9acd0a0e9f45cd12cf580
     cwd = os.getcwd()
 
     if not os.path.exists(cwd + "/backend.tf"):
