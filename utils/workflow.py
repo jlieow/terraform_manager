@@ -603,6 +603,28 @@ def check_stages_errors(stages_errors):
 
     return error
 
+def workflow_terraform_apply_active_stages(cwd, stage, override_workflow, github_action=False):
+
+    stage_name = stage["stage_name"]
+    stage_auto_approve = stage["stage_auto_approve"]
+    stage_targets = stage["stage_targets"]
+
+    if override_workflow:
+        stage_auto_approve = override_workflow
+
+    print("\nApplying Stage \"%s\"" % stage_name)
+    
+    if stage_auto_approve:
+        print("\nPerforming \"terraform apply -auto-approve\" on the following target(s):")
+    else:
+        print("\nPerforming \"terraform apply\" on the following target(s):")
+        
+    for index in range(len(stage_targets)):
+        print("%s. %s" % (index+1, stage_targets[index]))
+
+    # Prepare terraform command
+    workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve, github_action)
+
 def github_action_stage_workflow_terraform_apply(cwd, override_workflow=False, active_stages_statements=""):
 
     stages, stages_errors = get_stages(cwd)
@@ -617,28 +639,29 @@ def github_action_stage_workflow_terraform_apply(cwd, override_workflow=False, a
         return
 
     stages = get_stages_to_apply_from_active_stages(active_stages, stages)
-    
+
     for stage in stages:
+        workflow_terraform_apply_active_stages(cwd, stage, override_workflow, True)
 
-        stage_name = stage["stage_name"]
-        stage_auto_approve = stage["stage_auto_approve"]
-        stage_targets = stage["stage_targets"]
+    #     stage_name = stage["stage_name"]
+    #     stage_auto_approve = stage["stage_auto_approve"]
+    #     stage_targets = stage["stage_targets"]
 
-        if override_workflow:
-            stage_auto_approve = override_workflow
+    #     if override_workflow:
+    #         stage_auto_approve = override_workflow
 
-        print("\nApplying Stage \"%s\"" % stage_name)
+    #     print("\nApplying Stage \"%s\"" % stage_name)
         
-        if stage_auto_approve:
-            print("\nPerforming \"terraform apply -auto-approve\" on the following target(s):")
-        else:
-            print("\nPerforming \"terraform apply\" on the following target(s):")
+    #     if stage_auto_approve:
+    #         print("\nPerforming \"terraform apply -auto-approve\" on the following target(s):")
+    #     else:
+    #         print("\nPerforming \"terraform apply\" on the following target(s):")
             
-        for index in range(len(stage_targets)):
-            print("%s. %s" % (index+1, stage_targets[index]))
+    #     for index in range(len(stage_targets)):
+    #         print("%s. %s" % (index+1, stage_targets[index]))
 
-        # Prepare terraform command
-        workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve, True)
+    #     # Prepare terraform command
+    #     workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve, True)
 
 def stage_workflow_terraform_apply(cwd, override_workflow=False, github_action=False):
     stages, stages_errors = get_stages(cwd)
@@ -650,28 +673,50 @@ def stage_workflow_terraform_apply(cwd, override_workflow=False, github_action=F
         return
 
     stages = get_stages_to_apply_from_active_stages(active_stages, stages)
-    
+
     for stage in stages:
+        workflow_terraform_apply_active_stages(cwd, stage, override_workflow, True)
 
-        stage_name = stage["stage_name"]
-        stage_auto_approve = stage["stage_auto_approve"]
-        stage_targets = stage["stage_targets"]
+    #     stage_name = stage["stage_name"]
+    #     stage_auto_approve = stage["stage_auto_approve"]
+    #     stage_targets = stage["stage_targets"]
 
-        if override_workflow:
-            stage_auto_approve = override_workflow
+    #     if override_workflow:
+    #         stage_auto_approve = override_workflow
 
-        print("\nApplying Stage \"%s\"" % stage_name)
+    #     print("\nApplying Stage \"%s\"" % stage_name)
         
-        if stage_auto_approve:
-            print("\nPerforming \"terraform apply -auto-approve\" on the following target(s):")
-        else:
-            print("\nPerforming \"terraform apply\" on the following target(s):")
+    #     if stage_auto_approve:
+    #         print("\nPerforming \"terraform apply -auto-approve\" on the following target(s):")
+    #     else:
+    #         print("\nPerforming \"terraform apply\" on the following target(s):")
             
-        for index in range(len(stage_targets)):
-            print("%s. %s" % (index+1, stage_targets[index]))
+    #     for index in range(len(stage_targets)):
+    #         print("%s. %s" % (index+1, stage_targets[index]))
 
-        # Prepare terraform command
-        workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve, github_action)
+    #     # Prepare terraform command
+    #     workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve, github_action)
+
+def workflow_terraform_destroy_active_stages(cwd, stage, override_workflow, github_action=False):
+    stage_name = stage["stage_name"]
+    stage_auto_approve = stage["stage_auto_approve"]
+    stage_targets = stage["stage_targets"]
+
+    if override_workflow:
+        stage_auto_approve = override_workflow
+
+    print("\nDestroying Stage \"%s\"" % stage_name)
+    
+    if stage_auto_approve:
+        print("\nPerforming \"terraform destroy -auto-approve\" on the following target(s):")
+    else:
+        print("\nPerforming \"terraform destroy\" on the following target(s):")
+        
+    for index in range(len(stage_targets)):
+        print("%s. %s" % (index+1, stage_targets[index]))
+    
+    # Prepare terraform command
+    workflow_terraform_destroy(cwd, stage_targets, stage_name, stage_auto_approve, github_action)
 
 def github_action_stage_workflow_terraform_destroy(cwd, override_workflow=False, active_stages_statements=""):
     stages, stages_errors = get_stages(cwd)
@@ -690,26 +735,26 @@ def github_action_stage_workflow_terraform_destroy(cwd, override_workflow=False,
     stages.reverse()
 
     for stage in stages:
+        workflow_terraform_destroy_active_stages(cwd, stage, override_workflow, github_action=True)
+        # stage_name = stage["stage_name"]
+        # stage_auto_approve = stage["stage_auto_approve"]
+        # stage_targets = stage["stage_targets"]
 
-        stage_name = stage["stage_name"]
-        stage_auto_approve = stage["stage_auto_approve"]
-        stage_targets = stage["stage_targets"]
+        # if override_workflow:
+        #     stage_auto_approve = override_workflow
 
-        if override_workflow:
-            stage_auto_approve = override_workflow
-
-        print("\nDestroying Stage \"%s\"" % stage_name)
+        # print("\nDestroying Stage \"%s\"" % stage_name)
         
-        if stage_auto_approve:
-            print("\nPerforming \"terraform destroy -auto-approve\" on the following target(s):")
-        else:
-            print("\nPerforming \"terraform destroy\" on the following target(s):")
+        # if stage_auto_approve:
+        #     print("\nPerforming \"terraform destroy -auto-approve\" on the following target(s):")
+        # else:
+        #     print("\nPerforming \"terraform destroy\" on the following target(s):")
             
-        for index in range(len(stage_targets)):
-            print("%s. %s" % (index+1, stage_targets[index]))
+        # for index in range(len(stage_targets)):
+        #     print("%s. %s" % (index+1, stage_targets[index]))
         
-        # Prepare terraform command
-        workflow_terraform_destroy(cwd, stage_targets, stage_name, stage_auto_approve, True)
+        # # Prepare terraform command
+        # workflow_terraform_destroy(cwd, stage_targets, stage_name, stage_auto_approve, True)
 
 def stage_workflow_terraform_destroy(cwd, override_workflow=False, github_action=False):
     stages, stages_errors = get_stages(cwd)
@@ -725,26 +770,26 @@ def stage_workflow_terraform_destroy(cwd, override_workflow=False, github_action
     stages.reverse()
 
     for stage in stages:
+        workflow_terraform_destroy_active_stages(cwd, stage, override_workflow, github_action=False)
+        # stage_name = stage["stage_name"]
+        # stage_auto_approve = stage["stage_auto_approve"]
+        # stage_targets = stage["stage_targets"]
 
-        stage_name = stage["stage_name"]
-        stage_auto_approve = stage["stage_auto_approve"]
-        stage_targets = stage["stage_targets"]
+        # if override_workflow:
+        #     stage_auto_approve = override_workflow
 
-        if override_workflow:
-            stage_auto_approve = override_workflow
-
-        print("\nDestroying Stage \"%s\"" % stage_name)
+        # print("\nDestroying Stage \"%s\"" % stage_name)
         
-        if stage_auto_approve:
-            print("\nPerforming \"terraform destroy -auto-approve\" on the following target(s):")
-        else:
-            print("\nPerforming \"terraform destroy\" on the following target(s):")
+        # if stage_auto_approve:
+        #     print("\nPerforming \"terraform destroy -auto-approve\" on the following target(s):")
+        # else:
+        #     print("\nPerforming \"terraform destroy\" on the following target(s):")
             
-        for index in range(len(stage_targets)):
-            print("%s. %s" % (index+1, stage_targets[index]))
+        # for index in range(len(stage_targets)):
+        #     print("%s. %s" % (index+1, stage_targets[index]))
         
-        # Prepare terraform command
-        workflow_terraform_destroy(cwd, stage_targets, stage_name, stage_auto_approve, github_action)
+        # # Prepare terraform command
+        # workflow_terraform_destroy(cwd, stage_targets, stage_name, stage_auto_approve, github_action)
 
 def stage_workflow_terraform_apply_refresh(cwd):
     stages, stages_errors = get_stages(cwd)
