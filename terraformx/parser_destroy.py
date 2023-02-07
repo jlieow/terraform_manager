@@ -3,17 +3,17 @@ import os
 from terraformx.terraformx_common import *
 from utils import *
 
-def github_action_destroy_only(cwd, var_file, auto_approve, override_workflow, github_action_active_stages=""):
-    if does_workflow_file_exist(cwd):
+# def github_action_destroy_only(cwd, var_file, auto_approve, override_workflow, github_action_active_stages=""):
+#     if does_workflow_file_exist(cwd):
 
-        print_warning("\n[WARNING] All stages will be auto approved regardless of the configuration present in workflow/config.yaml")
-        github_action_stage_workflow_terraform_destroy(cwd, override_workflow=True, active_stages_statements=github_action_active_stages)
-        return
+#         print_warning("\n[WARNING] All stages will be auto approved regardless of the configuration present in workflow/config.yaml")
+#         github_action_stage_workflow_terraform_destroy(cwd, override_workflow=True, active_stages_statements=github_action_active_stages)
+#         return
 
-    else:
-        print("\ngithub_action no workflow")
-        terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=True, github_action=True)
-        return
+#     else:
+#         print("\ngithub_action no workflow")
+#         terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=True, github_action=True)
+#         return
 
 def destroy_only(cwd, var_file, auto_approve, override_workflow, github_action=False):
 
