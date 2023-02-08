@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Generate Linux exe for Terraformx Rebuild with Destroy and Apply Action
     steps:
-    
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -26,9 +25,10 @@ jobs:
         working-directory: actions
         run: |
           pyinstaller --onefile github_action_terraformx_rebuild_with_destroy_apply.py -p $GITHUB_WORKSPACE -y
+          mv /dist/github_action_terraformx_rebuild_with_destroy_apply /dist/rebuild
 
         shell: bash
       - uses: actions/upload-artifact@v3
         with:
-          name: rebuild_with_destroy_apply
+          name: rebuild
           path: actions/dist/github_action_terraformx_rebuild_with_destroy_apply

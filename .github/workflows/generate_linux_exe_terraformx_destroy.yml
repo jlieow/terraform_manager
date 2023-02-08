@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Generate Linux exe for Terraformx Destroy Action
     steps:
-    
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -26,6 +25,7 @@ jobs:
         working-directory: actions
         run: |
           pyinstaller --onefile github_action_terraformx_destroy.py -p $GITHUB_WORKSPACE -y
+          mv /dist/github_action_terraformx_destroy /dist/destroy
 
         shell: bash
       - uses: actions/upload-artifact@v3
