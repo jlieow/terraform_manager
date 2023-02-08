@@ -25,6 +25,7 @@ jobs:
         working-directory: actions
         run: |
           pyinstaller --onefile github_action_terraformx_rebuild_with_destroy_apply.py -p $GITHUB_WORKSPACE -y
+          mv /dist/github_action_terraformx_rebuild_with_destroy_apply /dist/rebuild
 
         shell: bash
       - uses: actions/upload-artifact@v3
