@@ -1,5 +1,4 @@
-# Ignore everything
-*
+
 
 # Do not ignore these files...
 !/data/aws_credentials/.gitkeep
@@ -8,7 +7,7 @@
 !*/terraformx/dist/terraformx.exe
 !*/terraformx/one-dir-terraformx-install.sh
 !*/terraformx/one-file-terraformx-install.sh
-!*/dist/main.exe
+!/dist/main.exe
 !/docs/*
 !LICENSE
 !Makefile
