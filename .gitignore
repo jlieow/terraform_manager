@@ -1,20 +1,16 @@
-/tests/__pycache__/
-/utils/__pycache__/
-/terraformx/__pycache__/
-/actions/build/
-/actions/dist/
-*.spec
-/terraformx/build/
-/terraformx/dist/
-/dist/
-/build/
-terraformx.spec
-main.spec
-/data/aws_credentials/*
-/data/blueprints/*
-/data/history/*
+# Ignore everything
+*
 
 # Do not ignore these files...
 !/data/aws_credentials/.gitkeep
 !/data/blueprints/.gitkeep
 !/data/history/.gitkeep
+!*/terraformx/dist/terraformx.exe
+!*/terraformx/one-dir-terraformx-install.sh
+!*/terraformx/one-file-terraformx-install.sh
+!*/dist/main.exe
+!/docs/*
+!LICENSE
+!Makefile
+!one-dir-terraform-manager-install.sh
+!one-file-terraform-manager-install.sh

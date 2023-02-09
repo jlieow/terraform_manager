@@ -1,8 +1,0 @@
-ignore: False
-active_stages:
-stages:
-  - name: "stage"
-    auto_approve: "Wrong Value"
-    targets:
-      - module:
-          - mi-1
