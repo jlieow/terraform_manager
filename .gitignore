@@ -1,4 +1,5 @@
-
+# Ignore everything
+*
 
 # Do not ignore these files...
 !/data/aws_credentials/.gitkeep
