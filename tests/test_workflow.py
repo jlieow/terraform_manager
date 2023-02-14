@@ -294,6 +294,54 @@ class WorkflowTestSuite(unittest.TestCase):
         else:
             assert True
 
+    def test_get_targets_module(self):
+        targets_module =  [{'module': ['mi-24']}]
+
+        targets = workflow.get_targets(targets_module)
+
+        if targets == ['module.mi-24']:
+            assert True
+        else: 
+            assert False
+
+    def test_get_targets_module(self):
+        targets_module =  [{'resource': ['mi-1.name']}]
+        
+        targets = workflow.get_targets(targets_module)
+        
+        print("targets: %s" % targets)
+
+        if targets == ['resource.mi-1["name"]']:
+            assert True
+        else: 
+            assert False
+
+    def test_check_stages_return_module(self):
+
+        cwd = "./test_data/workflow/stages_with_no_workflow_errors"
+
+        stages, stages_errors = workflow.get_stages(cwd)
+
+        print("stages: %s" % stages)
+
+        if workflow.check_stages_errors(stages_errors):
+            assert False
+        else:
+            assert True
+    
+    def test_check_stages_return_resources(self):
+
+        cwd = "./test_data/workflow/stages_with_no_workflow_errors_target_resource"
+
+        stages, stages_errors = workflow.get_stages(cwd)
+
+        print("stages: %s" % stages)
+
+        if workflow.check_stages_errors(stages_errors):
+            assert False
+        else:
+            assert True
+
     def test_check_stages_errors_with_workflow_errors(self):
 
         workflow_less_than_maintf_cwd = "./test_data/workflow/config_less_than_maintf"

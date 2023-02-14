@@ -103,5 +103,5 @@ def apply(args):
         apply_rebuild_true(cwd, var_file)
         return
     else:
-        apply_only(cwd, var_file, auto_approve, override_workflow, github_action=False)
+        apply_only(cwd, var_file, auto_approve, override_workflow)
         return
