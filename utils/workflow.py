@@ -426,7 +426,11 @@ def get_targets(test):
     for target in test:
         for key in target:
             for value in target[key]:
-                targets.append("%s.%s" % (key, value))
+                if key == "resource":
+                    value = value.replace(".", "[\"") + "\"]"
+                    targets.append("%s.%s" % (key, value))
+                else:
+                    targets.append("%s.%s" % (key, value))
                 # targets.append("-target=\"%s.%s\"" % (key, value))
                 # Applying "-target="" can be performed here instead of a separate function applyTargetResources()
     return targets
@@ -499,7 +503,7 @@ def get_stages(cwd):
             stage_auto_approve_error_message = "[ERROR] The value for key \"auto_approve\" in workflow config yaml needs to be a boolean."
             error = True
             stage_auto_approve = False
-
+        
         stage_targets = get_targets(stage["targets"])
 
         stages.append({
