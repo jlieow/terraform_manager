@@ -427,10 +427,10 @@ def get_targets(test):
         for key in target:
             for value in target[key]:
                 if key == "resource":
-                    value = value.replace(".", "[\"") + "\"]"
+                    value = value.replace(".", "[\"") + "\"]"   # When specifying resources as targets the format is: resource.type["name"] 
                     targets.append("%s.%s" % (key, value))
                 else:
-                    targets.append("%s.%s" % (key, value))
+                    targets.append("%s.%s" % (key, value))      # When specifying modules as targets the format is : module.name
                 # targets.append("-target=\"%s.%s\"" % (key, value))
                 # Applying "-target="" can be performed here instead of a separate function applyTargetResources()
     return targets
