@@ -44,14 +44,15 @@ class Help_constants:
     LOCATION_OF_TERRAFORM_ROOT = "Location of terraform root."
     LOCATION_OF_TFVARS_FILE = "Location of variable definitions file."
     LOCATION_OF_BLUEPRINT_FILE = "Location of blueprint file. Full and relative paths are allowed."
+    LOCATION_OF_BLUEPRINT_FILE_CREATE = "Location of blueprint file. Full and relative paths are allowed. If used without the parameter -create, the blueprint file is applied. If used with the parameter -create, a blueprint file is created."
     AUTO_APPROVE_COMMAND = "Auto approve command without requiring user input."
     OVERRIDE_WORKFLOW = "Overrides workflow stages auto_approve keys and auto approves every stage."
     TERRAFORM_STATE_FILE_REVIEW = "Review how terraform would update your state file."
     REBUILD = "Rebuild terraform by destroying and applying the script."
-    DESTORY_ALL_IN_HISTORY = "Destroys all in terraform_history.csv."
-    CREATE_BLUEPRINT = "Create a blueprint."
-    LIST_BLUEPRINT = "List Blueprint."
-    LIST_HISTORY = "List History."
+    DESTORY_ALL_IN_HISTORY = "Destroys all terraform roots' managed resources in terraform_history.csv."
+    CREATE_BLUEPRINT = "Creates a blueprint. Must be used with -blueprint."
+    LIST_BLUEPRINT = "List terraform roots in a Blueprint."
+    LIST_HISTORY = "List terraform roots in History."
     ACTIVE_STAGES = "Specify the active stages overriding the active stages in the workflow."
 
 
@@ -89,8 +90,8 @@ def main():
     terraformx_apply.add_argument(Args_constants.AUTO_APPROVE, action=Action_constants.STORE_TRUE, help = Help_constants.AUTO_APPROVE_COMMAND)
     terraformx_apply.add_argument(Args_constants.OVERRIDE_WORKFLOW, action=Action_constants.STORE_TRUE, help = Help_constants.OVERRIDE_WORKFLOW)
     terraformx_apply.add_argument(Args_constants.REFRESH_ONLY, action=Action_constants.STORE_TRUE, help = Help_constants.TERRAFORM_STATE_FILE_REVIEW)
-    terraformx_apply.add_argument(Args_constants.REBUILD, action=Action_constants.STORE_TRUE, help = Help_constants.TERRAFORM_STATE_FILE_REVIEW)
-    terraformx_apply.add_argument(Args_constants.BLUEPRINT, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_BLUEPRINT_FILE)
+    terraformx_apply.add_argument(Args_constants.REBUILD, action=Action_constants.STORE_TRUE, help = Help_constants.REBUILD)
+    terraformx_apply.add_argument(Args_constants.BLUEPRINT, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_BLUEPRINT_FILE_CREATE)
     terraformx_apply.add_argument(Args_constants.CREATE, action=Action_constants.STORE_TRUE, help = Help_constants.CREATE_BLUEPRINT)
 
     terraformx_destroy = subparsers.add_parser(Parser_constants.DESTROY)
@@ -108,10 +109,9 @@ def main():
 
     terraformx_blueprints = subparsers.add_parser(Parser_constants.BLUEPRINTS)
     terraformx_blueprints.set_defaults(function=blueprints)
-    terraformx_blueprints.add_argument(Args_constants.FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_BLUEPRINT_FILE, required=True)
-    terraformx_blueprints.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
-    terraformx_blueprints.add_argument(Args_constants.CREATE, action=Action_constants.STORE_TRUE, help = Help_constants.CREATE_BLUEPRINT)
+    terraformx_blueprints.add_argument(Args_constants.FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_BLUEPRINT_FILE_CREATE, required=True)
     terraformx_blueprints.add_argument(Args_constants.LIST, action=Action_constants.STORE_TRUE, help = Help_constants.LIST_BLUEPRINT)
+    terraformx_blueprints.add_argument(Args_constants.CREATE, action=Action_constants.STORE_TRUE, help = Help_constants.CREATE_BLUEPRINT)
 
     terraformx_history = subparsers.add_parser(Parser_constants.HISTORY)
     terraformx_history.set_defaults(function=history)
