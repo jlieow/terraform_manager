@@ -1,3 +1,3 @@
-pyinstaller --onefile github_action_terraformx_apply.py -p $(pwd) -y
-pyinstaller --onefile github_action_terraformx_destroy.py -p $(pwd) -y
-pyinstaller --onefile github_action_terraformx_rebuild_with_destroy_apply.py -p $(pwd) -y
+# API Documentation for actions.
+
+Actions turn terraformx commands into executables for use in custom CI actions.

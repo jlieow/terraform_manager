@@ -104,7 +104,7 @@ def terraform():
                     terraform_destroy(cwd)
                     terraform_apply(cwd, AUTO_APPROVE=True)
                 case 4:
-                    terraformOutput(cwd)
+                    terraform_output(cwd)
                 case 5:
                     terraform_apply_refresh(cwd)
             
@@ -155,7 +155,7 @@ def terraform_workflow(cwd):
                 stage_workflow_terraform_apply(cwd)
                 # terraform_apply(cwd, AUTO_APPROVE=True)
             case 4:
-                terraformOutput(cwd)
+                terraform_output(cwd)
             case 5:
                 stage_workflow_terraform_apply_refresh(cwd)
 
