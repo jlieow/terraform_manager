@@ -118,7 +118,7 @@ def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action
     if not github_action:
         delete_latest_row_from_history(cwd)
 
-def terraformOutput(cwd, set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_output(cwd, set_stdin=None, set_stdout=None, set_stderr=None):
     tfvars_settings(cwd)
     subprocess.Popen(Terraform_commands_constants.OUTPUT_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
 

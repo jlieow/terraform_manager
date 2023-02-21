@@ -1,60 +1,83 @@
-# About
+# API Documentation for terraformx.
 
-Terraformx builds on top of Terraform CLI to provide a few additional features:
+Terraformx provides Terraform Manager core features in a CLI.
 
-1. Workflows for targeted applies and destroys.
-2. Destroy based on history
+---
+### File Summary
 
-## To run terraformx commands via terraformx.py
+Core features are broken down into the various files
 
-In directory terraform_manager:
+1. [parser_apply](#parser_apply)
+    - apply_rebuild_true
+    - apply_only
+    - blueprints
+    - apply
+2. [parser_blueprints](#parser_blueprints)
+    - create_blueprint
+    - apply_blueprint_via_github_action
+    - apply_blueprint_via_terraformx
+    - apply_blueprint
+    - blueprints
+3. [parser_destroy](#parser_destroy)
+    - destroy_only
+    - destroy
+4. [parser_history](#parser_history)
+    - history
+5. [parser_init](#parser_init)
+    - init
+6. [parser_list](#parser_list)
+    - list
+7. [parser_output](#parser_output)
+    - output
+8. [terraformx_common](#terraformx_common)
+    - get_cwd
+    - get_full_path_else_return_empty_str
+9. [terraformx](#terraformx)
+    - default
+    - main
 
-To set temporary path and alias:
-export PYTHONPATH="${PYTHONPATH}:$PWD"
-alias terraformx="python3 $PWD/terraformx/terraformx.py"
+---
+#### parser_apply
+- apply_rebuild_true
+- apply_only
+- blueprints
+- apply
 
-## To install Terraformx as a UNIX exe with pyinstaller --onefile perform the following commands
+---
+#### parser_blueprints
+- create_blueprint
+- apply_blueprint_via_github_action
+- apply_blueprint_via_terraformx
+- apply_blueprint
+- blueprints
 
-In directory terraformx run the following commands:
-pyinstaller --onefile terraformx.py -p $(pwd)
+---
+#### parser_destroy
+- destroy_only
+- destroy
 
-To set temporary path and alias:
+---
+#### parser_history
+- history
 
-export PATH=$PATH:$(pwd)/dist/terraformx
-alias terraformx=$(pwd)"/dist/terraformx"
+---
+#### parser_init
+- init
 
-To set permanent path and alias:
+---
+#### parser_list
+- list
 
-echo '\n# Setting PATH for terraformx
-PATH="${PATH}:'$PWD'/dist/terraformx"
-export PATH' >> ~/.zprofile
+---
+#### parser_output
+- output
 
-echo '\n# The next line updates alias for terraformx
-alias terraformx="'$PWD'/dist/terraformx"' >> ~/.zshrc
+---
+#### terraformx_common
+- get_cwd
+- get_full_path_else_return_empty_str
 
-Note: If you experience zsh permission denied error, execute this command in the terraformx directory
-Give user exec permissions
-chmod +x $(pwd)/dist/terraformx
-
-## To install Terraformx as a UNIX exe with pyinstaller --onedir perform the following commands
-
-In directory terraformx run the pyinstaller command:
-pyinstaller --onedir terraformx.py -p $(pwd)
-
-To set temporary path and alias:
-
-export PATH=$PATH:$(pwd)/dist/terraformx/terraformx
-alias terraformx=$(pwd)"/dist/terraformx/terraformx"
-
-To set permanent path and alias:
-
-echo '\n# Setting PATH for terraformx
-PATH="${PATH}:'$PWD'/dist/terraformx/terraformx"
-export PATH' >> ~/.zprofile
-
-echo '\n# The next line updates alias for terraformx
-alias terraformx="'$PWD'/dist/terraformx/terraformx"' >> ~/.zshrc
-
-Note: If you experience zsh permission denied error, execute this command in the terraformx directory
-Give user exec permissions
-chmod +x $(pwd)/dist/terraformx
+---
+#### terraformx
+- default
+- main
