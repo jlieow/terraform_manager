@@ -20,17 +20,43 @@ Core features are broken down into the various files
 
 ---
 #### github_action_terraformx_apply_blueprint
-- main
+- main 
+    - Description
+        - Entry point for Custom GitHub Action terraformx apply blueprint
+    - Args
+    - Return
 
 ---
 #### github_action_terraformx_apply
 - github_action_apply_only
+    - Description
+        - Perform terraformx apply when users use it through a custom GitHub action.
+    - Args
+        - cwd: string
+        - var_file: string
+        - auto_approve: boolean
+        - override_workflow: boolean
+        - github_action_active_stages: string
+    - Return
+
 - main
+    - Description
+        - Entry point for Custom GitHub Action terraformx apply
+    - Args
+    - Return
 
 ---
 #### github_action_terraformx_destroy
 - main
+    - Description
+        - Entry point for Custom GitHub Action terraformx destroy
+    - Args
+    - Return
 
 ---
 #### github_action_terraformx_rebuild_with_destroy_apply
 - main
+    - Description
+        - Entry point for Custom GitHub Action terraformx rebuild
+    - Args
+    - Return
