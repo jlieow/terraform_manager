@@ -5,7 +5,11 @@ Terraform Manager extends the Terraform CLI with additional functonalities and a
 Terraform Manager consists of 3 parts:
 1. Utils: Core Features of Terraform Manager
 2. Terraformx: Extends Terraform Manager core features into a CLI
-3. Actions: Extends Terraform Manager core features into building .exe for Terraform Manager Custom GitHub Actions
+3. Actions: Turns basic terraformx commands into executables for use in custom CI actions.
+
+For the API documentation please refer to the **/utils/README.MD**, **/terraforms/README.MD** and **/actions/README.MD**.
+
+The following sections will explain the features of Terraform Manager. 
 
 ---
 ## Utils: Core Features of Terraform Manager
@@ -207,7 +211,7 @@ Commands:
       <br/>
 
 ---
-## Actions: Extends Terraform Manager core features into building .exe for Terraform Manager Custom GitHub Actions
+## Actions: Turns basic terraformx commands into executables for use in custom CI actions.
 
 The code transforms the following features into exes for custom GitHub Actions:
 
