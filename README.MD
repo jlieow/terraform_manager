@@ -1,6 +1,6 @@
 # Terraform Manager
 
-Terraform Manager extends the Terraform CLI with additional functonalities and aids to standardize Terraform code structure thorughout the entire development lifecycle to enable more consistent Ops deployment of Terraform for use cases such as GitOps.
+Terraform Manager extends the Terraform CLI with additional functonalities and aids to standardize Terraform code structure throughout the entire development lifecycle to enable more consistent Ops deployment of Terraform for use cases such as GitOps.
 
 Terraform Manager consists of 3 parts:
 1. Utils: Core Features of Terraform Manager
