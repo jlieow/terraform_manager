@@ -1,13 +1,13 @@
 # Terraform Manager
 
-Terraform Manager extends the Terraform CLI with additional functonalities and aids to standardize Terraform code structure to enable more consistent Ops deployment of Terraform such as in GitOps.
+Terraform Manager extends the Terraform CLI with additional functonalities and aids to standardize Terraform code structure thorughout the entire development lifecycle to enable more consistent Ops deployment of Terraform for use cases such as GitOps.
 
 Terraform Manager consists of 3 parts:
 1. Utils: Core Features of Terraform Manager
 2. Terraformx: Extends Terraform Manager core features into a CLI
 3. Actions: Turns basic terraformx commands into executables for use in custom CI actions.
 
-For the API documentation please refer to the **/utils/README.MD**, **/terraforms/README.MD** and **/actions/README.MD**.
+Please refer to **/utils/README.MD**, **/terraformx/README.MD** and **/actions/README.MD** for more details about the functions contained in their respective directories. 
 
 The following sections will explain the features of Terraform Manager. 
 
