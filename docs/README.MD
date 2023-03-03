@@ -116,7 +116,7 @@ Commands:
         - Location of variable definitions file.
     <br/>
 
-2. terraformx <br/><br/>
+2. terraformx apply<br/><br/>
 
     The terraformx apply command executes the actions proposed in a Terraform plan.<br/><br/>
 
