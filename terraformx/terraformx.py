@@ -1,6 +1,8 @@
 # importing required modules
 import sys
 import argparse
+import os
+from dotenv import load_dotenv
 
 from terraformx.parser_init import *
 from terraformx.parser_apply import *
@@ -72,6 +74,9 @@ def default(args):
     print(top_level_help_message)
 
 def main():
+    # export environmental variables from /config/.env if it exists
+    load_dotenv("config/.env") 
+
     # top-level parser
     top_level_parser = argparse.ArgumentParser(description = "terraformx")
     top_level_parser.set_defaults(function=default)
