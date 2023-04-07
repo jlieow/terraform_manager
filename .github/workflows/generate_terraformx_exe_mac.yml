@@ -1,0 +1,33 @@
+name: Generate Linux exe for Terraformx Rebuild with Destroy and Apply Action
+on:
+  push:
+    tags:
+      - "release/github_action_terraformx_exe_mac/v[012].[0-9]+.[0-9]+"
+
+jobs:
+  generate_linux_exe:
+    runs-on: macos-latest
+    name: Generate Terraformx exe for Mac
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11.1"
+
+      - name: Install Dependencies and PyInstaller
+        run: pip install -r $GITHUB_WORKSPACE/requirements.txt
+        shell: bash
+
+      - name: Generate linux exe with pyinstaller
+        working-directory: terraformx
+        run: |
+          pyinstaller --onefile terraformx.py -p $GITHUB_WORKSPACE -y
+
+        shell: bash
+      - uses: actions/upload-artifact@v3
+        with:
+          name: rebuild
+          path: terraformx/dist/terraformx
