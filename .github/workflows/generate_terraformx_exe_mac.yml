@@ -29,5 +29,5 @@ jobs:
         shell: bash
       - uses: actions/upload-artifact@v3
         with:
-          name: terraformx
+          name: terraformx.tar.gz
           path: terraformx/dist/terraformx
