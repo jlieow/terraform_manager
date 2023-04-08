@@ -21,7 +21,7 @@ jobs:
         run: pip install -r $GITHUB_WORKSPACE/requirements.txt
         shell: bash
 
-      - name: Generate linux exe with pyinstaller
+      - name: Generate Mac exe with pyinstaller
         working-directory: terraformx
         run: |
           pyinstaller --onefile terraformx.py -p $GITHUB_WORKSPACE -y
@@ -29,5 +29,5 @@ jobs:
         shell: bash
       - uses: actions/upload-artifact@v3
         with:
-          name: rebuild
+          name: terraformx
           path: terraformx/dist/terraformx
