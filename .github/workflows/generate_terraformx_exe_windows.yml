@@ -1,4 +1,4 @@
-name: Generate Linux exe for Terraformx Rebuild with Destroy and Apply Action
+name: Generate Terraformx exe for Windows
 on:
   push:
     tags:
