@@ -50,6 +50,7 @@ Features include:
 
     .
     ├── config                # Terraform Manager and Terraformx CLI locates all your tfvars files in the root directory and combines them into a settings.tfvars file here.
+    │   └── .env              # Environmental variables declared in a .env file will be loaded
     │   └── settings.tfvars   # Values in backend.tfvars and config.tfvars will be stored here
     ├── modules               # Location of Terraform modules.
     ├── workflow
