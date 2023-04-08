@@ -2,7 +2,7 @@ name: Generate Linux exe for Terraformx Rebuild with Destroy and Apply Action
 on:
   push:
     tags:
-      - "release/terraformx_exe_windows/v[012].[0-9]+.[0-9]+"
+      - "release/one_file_terraformx_exe_windows/v[012].[0-9]+.[0-9]+"
 
 jobs:
   generate_linux_exe:
@@ -21,7 +21,7 @@ jobs:
         run: pip install -r $GITHUB_WORKSPACE/requirements.txt
         shell: bash
 
-      - name: Generate Windows exe with pyinstaller
+      - name: Generate Windows exe with pyinstaller onefile
         working-directory: terraformx
         run: |
           pyinstaller --onefile terraformx.py -p $GITHUB_WORKSPACE -y
