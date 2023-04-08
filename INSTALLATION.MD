@@ -1,5 +1,17 @@
 ## Run following command to compile .py code into .exe for Terraform Manager features
 
+### (Recommended) To install with HomeBrew
+
+- terraformx
+      1. For Mac:
+      `brew tap jlieow/terraform-manager`
+      `brew install terraformx-mac`
+      2. For Windows:
+      `brew tap jlieow/terraform-manager`
+      `brew install terraformx-windows`
+
+### To install manually
+
 For Mac:
   1. For terraform_manager:<br/><br/>
         
