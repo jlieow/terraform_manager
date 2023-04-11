@@ -712,7 +712,7 @@ def stage_workflow_terraform_destroy(cwd, override_workflow=False):
     stages.reverse()
 
     for stage in stages:
-        workflow_terraform_destroy_active_stages(cwd, stage, override_workflow, github_action=False)
+        workflow_terraform_destroy_active_stages(cwd, stage, override_workflow, github_action=True)
 
 def stage_workflow_terraform_apply_refresh(cwd):
     stages, stages_errors = get_stages(cwd)
