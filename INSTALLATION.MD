@@ -4,13 +4,24 @@
 
 terraformx:
 1. For MacOS use HomeBrew:
-`brew tap jlieow/terraform-manager`
-`brew install terraformx-mac`
+- `brew tap jlieow/terraform-manager`
+- `brew install terraformx-mac`
 
-2. For Windows, download the executable directly and set up path:
-Download latest release from `https://github.com/jlieow/terraform_manager/releases/tag/release%2Fone_file_terraformx_exe_windows%2Fv0.0.1`
-Recommend to place the executable in `Program Files/Terraform Manager/cli`
-Add directory to PATH via System Properties > Advanced > Environmental Variables
+2. For MacOS download the latest version [here](https://github.com/jlieow/terraform_manager/releases). Place the executable in the folder and perform the following commands to add it to path.      
+-     echo '\n# Setting PATH for terraformx
+      PATH="${PATH}:'$PWD'"
+      export PATH' >> ~/.zprofile
+      
+      
+      echo '\n# The next line updates alias for terraformx
+      alias terraformx="'$PWD'/dist/terraformx"' >> ~/.zshrc
+      
+
+3. For Windows, download the latest version [here](https://github.com/jlieow/terraform_manager/releases). Place the executable in the folder and set up path:
+
+      Recommend to place the executable in `Program Files/Terraform Manager/cli`
+
+      Add directory to PATH via System Properties > Advanced > Environmental Variables
 
 ### To install manually
 
