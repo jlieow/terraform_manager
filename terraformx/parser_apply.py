@@ -26,10 +26,10 @@ def apply_rebuild_true(cwd, var_file):
         return
     else:
         print_warning(warning_message_initiating_destroy)
-        terraform_destroy(cwd, CUSTOM_VAR_FILE=var_file)
+        terraform_destroy(cwd, CUSTOM_VAR_FILE=var_file, github_action=True)
 
         print_warning(warning_message_initiating_apply)
-        terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=True)
+        terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=True, github_action=True)
         return
 
 def apply_only(cwd, var_file, auto_approve, override_workflow):
