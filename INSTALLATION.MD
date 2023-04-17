@@ -65,6 +65,6 @@ For Windows:
 
     DOSKEY terraformx=D:\Documents\Projects\GitHub\terraform_manager\terraformx\dist\terraformx.exe```
   
-  2. Run regedit and go to HKEY_CURRENT_USER\Software\Microsoft\Command Processor
+  2. Run regedit and go to HKEY_LOCAL_MACHINE\Software\Microsoft\Command Processor
 
   3. Add String Value entry with the name AutoRun and the full path of your .bat/.cmd file.
