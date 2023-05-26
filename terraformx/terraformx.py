@@ -11,6 +11,8 @@ from terraformx.parser_output import *
 from terraformx.parser_blueprints import *
 from terraformx.parser_history import *
 from terraformx.parser_list import *
+from terraformx.parser_import import *
+from terraformx.parser_state import *
 
 class Parser_constants:
     INIT = "init"
@@ -20,6 +22,9 @@ class Parser_constants:
     BLUEPRINTS = "blueprints"
     HISTORY = "history"
     LIST = "list"
+    IMPORT = "import"
+    STATE = "state"
+
 class Args_constants:
     CHDIR = "-chdir"
     VAR_FILE = "-var-file"
@@ -35,6 +40,7 @@ class Args_constants:
     DESTROY = "-destroy"
     HISTORY = "-history"
     ACTIVE_STAGES = "-active-stages"
+    STRINGVARS = "stringvars"
 
 class Action_constants:
     STORE_TRUE = "store_true"
@@ -56,7 +62,7 @@ class Help_constants:
     LIST_BLUEPRINT = "List terraform roots in a Blueprint."
     LIST_HISTORY = "List terraform roots in History."
     ACTIVE_STAGES = "Specify the active stages overriding the active stages in the workflow."
-
+    STRING_ARGUMENTS = "Specify the string arguments."
 
 top_level_help_message = "Usage: terraformx [global options] <subcommand> [args]\n\
 \n\
@@ -68,7 +74,9 @@ Main commands:\n\
   init          Prepare your working directory for other commands\n\
   apply         Create or update infrastructure\n\
   destroy       Destroy previously-created infrastructure\n\
-  output        Output information about your infrastructure"
+  output        Output information about your infrastructure\n\
+  import        Import existing infrastructure resources\n\
+  rm            Remove a binding to an existing remote object without first destroying it"
 
 def default(args):
     print(top_level_help_message)
@@ -129,6 +137,17 @@ def main():
     terraformx_list.add_argument(Args_constants.BLUEPRINT, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_BLUEPRINT_FILE)
     terraformx_list.add_argument(Args_constants.HISTORY, action=Action_constants.STORE_TRUE, help = Help_constants.LIST_HISTORY)
     
+    terraformx_import = subparsers.add_parser(Parser_constants.IMPORT)
+    terraformx_import.set_defaults(function=t_import)
+    terraformx_import.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+    terraformx_import.add_argument(Args_constants.VAR_FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TFVARS_FILE)
+    terraformx_import.add_argument(Args_constants.STRINGVARS, metavar = "N", type = str, nargs = "+", default=Default_constants.EMPTY_STRING, help = Help_constants.STRING_ARGUMENTS)
+
+    terraformx_state_rm = subparsers.add_parser(Parser_constants.STATE)
+    terraformx_state_rm.set_defaults(function=state_rm)
+    terraformx_state_rm.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
+    terraformx_state_rm.add_argument(Args_constants.STRINGVARS, metavar = "N", type = str, nargs = "+", default=Default_constants.EMPTY_STRING, help = Help_constants.STRING_ARGUMENTS)
+
     # parse the arguments and call the right function
     args = top_level_parser.parse_args()
     args.function(args)

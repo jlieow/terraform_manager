@@ -16,7 +16,7 @@ def apply_rebuild_true(cwd, var_file):
     if does_workflow_file_exist(cwd):
 
         if len(var_file) > 0:
-                print_warning("\n[WARNING] -var-file flag will be ignored as a workflow file is detected. The -var-file referenced is located in config/settings.tfvars.")
+            print_warning("\n[WARNING] -var-file flag will be ignored as a workflow file is detected. The -var-file referenced is located in config/settings.tfvars.")
         
         print_warning(warning_message_initiating_destroy)
         stage_workflow_terraform_destroy(cwd, override_workflow=True)
