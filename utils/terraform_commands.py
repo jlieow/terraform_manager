@@ -16,6 +16,8 @@ class Terraform_commands_constants:
     APPLY = 'apply'
     DESTROY = 'destroy'
     PLAN = 'plan'
+    IMPORT = 'import'
+    STATE = 'state'
     AUTO_APPROVE = '-auto-approve'
     REFRESH_ONLY = '-refresh-only'
 
@@ -29,6 +31,8 @@ class Terraform_commands_constants:
     APPLY_REFRESH_PROCESS = [TERRAFORM_PARSER, APPLY, REFRESH_ONLY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
     APPLY_REFRESH_AUTO_APPROVE_PROCESS = [TERRAFORM_PARSER, APPLY, REFRESH_ONLY, '-var-file=%s' % TERRAFORMX_VAR_FILE, AUTO_APPROVE]
     PLAN_REFRESH_PROCESS = [TERRAFORM_PARSER, PLAN, REFRESH_ONLY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
+    IMPORT_PROCESS = [TERRAFORM_PARSER, IMPORT,'-var-file=%s' % TERRAFORMX_VAR_FILE]
+    STATE_PROCESS = [TERRAFORM_PARSER, STATE]
 
     TERRAFORM_COMMAND_PREFACE = "The following terraform commands can be invoked:\n"
     TERRAFORM_COMMAND_OPTIONS = "\nWhich command would you like to invoke: "
@@ -170,3 +174,19 @@ def locate_terraform_root_directories(root_directory):
     list_terraform_root_dir.sort()
 
     return list_terraform_root_dir
+
+def terraform_import(cwd, stringvars):
+
+    import_process = Terraform_commands_constants.IMPORT_PROCESS + stringvars
+
+    subprocess.Popen(import_process, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
+
+def terraform_state_rm(cwd, stringvars):
+
+    if stringvars[0] != "rm":
+        print_error("Performing terraform state rm, but we have detected an issue with the command.")
+        return
+
+    state_rm_process = Terraform_commands_constants.STATE_PROCESS + stringvars
+
+    subprocess.Popen(state_rm_process, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
