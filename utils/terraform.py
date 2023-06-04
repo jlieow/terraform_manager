@@ -231,9 +231,9 @@ def terraform_destroy_from_history():
 
 #         cwd = list_terraform_root_dir[DIR_NUMBER]
 
-#         # subprocess.Popen(APPLY_REFRESH_PROCESS, cwd=cwd).wait()
+#         # subprocess.Popen(APPLY_REFRESH_PROCESS, cwd=cwd, env=nt.environ).wait()
 
-#         p = subprocess.Popen(PLAN_REFRESH_PROCESS, cwd=cwd, stdout=subprocess.PIPE)
+#         p = subprocess.Popen(PLAN_REFRESH_PROCESS, cwd=cwd, stdout=subprocess.PIPE, env=nt.environ)
 
 #         out, err = p.communicate()
 

@@ -2,6 +2,7 @@
 import sys
 import argparse
 import os
+import nt
 from dotenv import load_dotenv
 
 from terraformx.parser_init import *
@@ -78,12 +79,21 @@ Main commands:\n\
   import        Import existing infrastructure resources\n\
   rm            Remove a binding to an existing remote object without first destroying it"
 
+def load_nt_env(file_path):
+    with open(file_path, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#'):
+                key, value = line.split('=', 1)
+                nt.environ[key] = value
+
 def default(args):
     print(top_level_help_message)
 
 def main():
     # export environmental variables from /config/.env if it exists
-    load_dotenv("config/.env") 
+    # load_dotenv("config/.env") 
+    load_nt_env("config/.env") 
 
     # top-level parser
     top_level_parser = argparse.ArgumentParser(description = "terraformx")

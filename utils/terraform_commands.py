@@ -1,4 +1,5 @@
 import os
+import nt
 import glob
 import subprocess
 
@@ -73,7 +74,7 @@ def terraform_init(cwd, CUSTOM_VAR_FILE="", set_stdin=None, set_stdout=None, set
     if len(CUSTOM_VAR_FILE) > 0:   
         init_process = [Terraform_commands_constants.TERRAFORM_PARSER, 'init', '-backend-config=%s' % CUSTOM_VAR_FILE]
 
-    subprocess.Popen(init_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+    subprocess.Popen(init_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr, env=nt.environ).wait()
 
 def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=False, set_stdin=None, set_stdout=None, set_stderr=None):
 
@@ -89,9 +90,9 @@ def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=F
         apply_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.APPLY, '-var-file=%s' % CUSTOM_VAR_FILE]
     
     if AUTO_APPROVE:
-        process = subprocess.Popen(apply_auto_approve_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+        process = subprocess.Popen(apply_auto_approve_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr, env=nt.environ).wait()
     else:
-        process = subprocess.Popen(apply_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+        process = subprocess.Popen(apply_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr, env=nt.environ).wait()
 
     if process == 1:
         # If the process experiences an error, skip the remaining commands
@@ -110,9 +111,9 @@ def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action
         destroy_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.DESTROY, '-var-file=%s' % CUSTOM_VAR_FILE]
 
     if AUTO_APPROVE:
-        process = subprocess.Popen(destroy_auto_approve_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+        process = subprocess.Popen(destroy_auto_approve_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr, env=nt.environ).wait()
     else:
-        process = subprocess.Popen(destroy_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+        process = subprocess.Popen(destroy_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr, env=nt.environ).wait()
 
     if process == 1:
         # If the process experiences an error, skip the remaining commands
@@ -124,14 +125,14 @@ def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action
 
 def terraform_output(cwd, set_stdin=None, set_stdout=None, set_stderr=None):
     tfvars_settings(cwd)
-    subprocess.Popen(Terraform_commands_constants.OUTPUT_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr).wait()
+    subprocess.Popen(Terraform_commands_constants.OUTPUT_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr, env=nt.environ).wait()
 
 def terraform_apply_refresh(cwd, AUTO_APPROVE=False):
     tfvars_settings(cwd)
     if AUTO_APPROVE:
-        process = subprocess.Popen(Terraform_commands_constants.APPLY_REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
+        process = subprocess.Popen(Terraform_commands_constants.APPLY_REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=nt.environ).wait()
     else:
-        process = subprocess.Popen(Terraform_commands_constants.APPLY_REFRESH_PROCESS, cwd=cwd).wait()
+        process = subprocess.Popen(Terraform_commands_constants.APPLY_REFRESH_PROCESS, cwd=cwd, env=nt.environ).wait()
 
     if process == 1:
         # If the process experiences an error, skip the remaining commands
@@ -139,13 +140,13 @@ def terraform_apply_refresh(cwd, AUTO_APPROVE=False):
 
 def terraform_plan_refresh(cwd):
     tfvars_settings(cwd)
-    return subprocess.Popen(Terraform_commands_constants.PLAN_REFRESH_PROCESS, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    return subprocess.Popen(Terraform_commands_constants.PLAN_REFRESH_PROCESS, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=nt.environ)
 
 def terraform_apply_auto_approve_refresh(cwd):
     tfvars_settings(cwd)
     
     print("\nPerforming -apply-refresh to sync statefile and match the current provisioned state")
-    subprocess.Popen(Terraform_commands_constants.APPLY_REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
+    subprocess.Popen(Terraform_commands_constants.APPLY_REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=nt.environ).wait()
 
     # if input("\nEnter Y if you would you like to invoke \"terraform apply -refresh-only\" to the drifted Terraform Roots' state to match the current provisioned state: ").upper() == "Y":
     #     for index in range(len(drifted_terraform_roots)):
@@ -153,7 +154,7 @@ def terraform_apply_auto_approve_refresh(cwd):
 
     #         print("Invoking -refresh-only on %s" % os.path.basename(cwd))
     #         terraform_apply_refresh(cwd)
-            # subprocess.Popen(APPLY_REFRESH_PROCESS, cwd=cwd).wait()
+            # subprocess.Popen(APPLY_REFRESH_PROCESS, cwd=cwd, env=nt.environ).wait()
 
 def locate_terraform_root_directories(root_directory):
     
@@ -179,7 +180,7 @@ def terraform_import(cwd, stringvars):
 
     import_process = Terraform_commands_constants.IMPORT_PROCESS + stringvars
 
-    subprocess.Popen(import_process, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
+    subprocess.Popen(import_process, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=nt.environ).wait()
 
 def terraform_state_rm(cwd, stringvars):
 
@@ -189,4 +190,4 @@ def terraform_state_rm(cwd, stringvars):
 
     state_rm_process = Terraform_commands_constants.STATE_PROCESS + stringvars
 
-    subprocess.Popen(state_rm_process, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
+    subprocess.Popen(state_rm_process, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=nt.environ).wait()
