@@ -10,7 +10,7 @@ from utils import *
 def get_cwd(dir):
 
     if len(dir) == 0:
-        return os.getcwd()
+        return getcwd()
     else:
         cwd = dir
         if not os.path.exists(cwd):
@@ -29,13 +29,13 @@ def get_full_path_else_return_empty_str(path, optional_ext=""):
     
     working_path = path
     if not os.path.exists(working_path):
-        working_path = os.getcwd() + path
+        working_path = getcwd() + path
     if not os.path.exists(working_path):
-        working_path = os.getcwd() + "/" + path
+        working_path = getcwd() + "/" + path
     if not os.path.exists(working_path):
-        working_path = os.getcwd() + path + optional_ext
+        working_path = getcwd() + path + optional_ext
     if not os.path.exists(working_path):
-        working_path = os.getcwd() + "/" + path + optional_ext
+        working_path = getcwd() + "/" + path + optional_ext
     if not os.path.exists(working_path):
         return ""
 

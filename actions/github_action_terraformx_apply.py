@@ -29,7 +29,7 @@ def main():
     
     active_stages = args.active_stages
 
-    cwd = os.getcwd()
+    cwd = getcwd()
 
     if not os.path.exists(cwd + "/backend.tf"):
         print_error("\n[ERROR] Unable to locate Terraform root in the specified directory: \n%s" % cwd)

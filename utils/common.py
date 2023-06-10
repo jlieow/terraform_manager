@@ -106,3 +106,11 @@ def get_rows_as_list(path):
             rows.append(row)
     
     return rows
+
+def getcwd():
+    # getcwd()() breaks when used in an exe created by pyinstaller
+    # determine if application is a script file or frozen exe and use correct path
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
+    elif __file__:
+        return os.path.dirname(__file__)
