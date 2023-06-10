@@ -4,6 +4,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from terraformx.terraformx import *
+from utils.common import getcwd
 
 def github_action_destroy_only(cwd, var_file, auto_approve, override_workflow, github_action_active_stages=""):
     if does_workflow_file_exist(cwd):
@@ -27,7 +28,7 @@ def main():
     
     active_stages = args.active_stages
     
-    cwd = os.getcwd()
+    cwd = getcwd()
 
     if not os.path.exists(cwd + "/backend.tf"):
         print_error("\n[ERROR] Unable to locate Terraform root in the specified directory: \n%s" % cwd)
