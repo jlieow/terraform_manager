@@ -619,7 +619,8 @@ def workflow_terraform_apply_active_stages(cwd, stage, override_workflow, github
         print("%s. %s" % (index+1, stage_targets[index]))
 
     # Prepare terraform command
-    workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve, github_action)
+    returncode = workflow_terraform_apply(cwd, stage_targets, stage_name, stage_auto_approve, github_action)
+    return returncode
 
 def github_action_stage_workflow_terraform_apply(cwd, override_workflow=False, active_stages_statements=""):
 
@@ -637,7 +638,9 @@ def github_action_stage_workflow_terraform_apply(cwd, override_workflow=False, a
     stages = get_stages_to_apply_from_active_stages(active_stages, stages)
 
     for stage in stages:
-        workflow_terraform_apply_active_stages(cwd, stage, override_workflow, True)
+        returncode = workflow_terraform_apply_active_stages(cwd, stage, override_workflow, True)
+        if returncode == 1:
+            raise Exception(f"Error running workflow terraform apply at Stage {stage['stage_name']}")
 
 def stage_workflow_terraform_apply(cwd, override_workflow=False):
     stages, stages_errors = get_stages(cwd)
