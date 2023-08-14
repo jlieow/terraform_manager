@@ -26,10 +26,10 @@ jobs:
         working-directory: actions
         run: |
           pyinstaller --onefile github_action_terraformx_apply.py -p $GITHUB_WORKSPACE -y
-          mv /dist/github_action_terraformx_apply /dist/apply
+          mv dist/github_action_terraformx_apply dist/apply
 
         shell: bash
       - uses: actions/upload-artifact@v3
         with:
           name: apply
-          path: actions/dist/github_action_terraformx_apply
+          path: actions/dist/apply
