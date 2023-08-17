@@ -30,8 +30,8 @@ class Terraform_commands_constants:
     APPLY_AUTO_APPROVE_PROCESS = [TERRAFORM_PARSER, APPLY, '-var-file=%s' % TERRAFORMX_VAR_FILE, AUTO_APPROVE]
     DESTROY_PROCESS = [TERRAFORM_PARSER, DESTROY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
     DESTROY_AUTO_APPROVE_PROCESS = [TERRAFORM_PARSER, DESTROY, '-var-file=%s' % TERRAFORMX_VAR_FILE, AUTO_APPROVE]
-    APPLY_REFRESH_PROCESS = [TERRAFORM_PARSER, APPLY, REFRESH_ONLY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
-    APPLY_REFRESH_AUTO_APPROVE_PROCESS = [TERRAFORM_PARSER, APPLY, REFRESH_ONLY, '-var-file=%s' % TERRAFORMX_VAR_FILE, AUTO_APPROVE]
+    REFRESH_PROCESS = [TERRAFORM_PARSER, APPLY, REFRESH_ONLY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
+    REFRESH_AUTO_APPROVE_PROCESS = [TERRAFORM_PARSER, APPLY, REFRESH_ONLY, '-var-file=%s' % TERRAFORMX_VAR_FILE, AUTO_APPROVE]
     PLAN_REFRESH_PROCESS = [TERRAFORM_PARSER, PLAN, REFRESH_ONLY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
     IMPORT_PROCESS = [TERRAFORM_PARSER, IMPORT,'-var-file=%s' % TERRAFORMX_VAR_FILE]
     STATE_PROCESS = [TERRAFORM_PARSER, STATE]
@@ -99,7 +99,7 @@ def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=F
         # If the process experiences an error, skip the remaining commands
         return 1
 
-    terraform_apply_auto_approve_refresh(cwd)
+    terraform_auto_approve_refresh(cwd)
 
 def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=False, set_stdin=None, set_stdout=None, set_stderr=None):
 
@@ -128,12 +128,12 @@ def terraform_output(cwd, set_stdin=None, set_stdout=None, set_stderr=None):
     tfvars_settings(cwd)
     subprocess.Popen(Terraform_commands_constants.OUTPUT_PROCESS, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr, env=nt.environ).wait()
 
-def terraform_apply_refresh(cwd, AUTO_APPROVE=False):
+def terraform_refresh(cwd, AUTO_APPROVE=False):
     tfvars_settings(cwd)
     if AUTO_APPROVE:
-        process = subprocess.Popen(Terraform_commands_constants.APPLY_REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=nt.environ).wait()
+        process = subprocess.Popen(Terraform_commands_constants.REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=nt.environ).wait()
     else:
-        process = subprocess.Popen(Terraform_commands_constants.APPLY_REFRESH_PROCESS, cwd=cwd, env=nt.environ).wait()
+        process = subprocess.Popen(Terraform_commands_constants.REFRESH_PROCESS, cwd=cwd, env=nt.environ).wait()
 
     if process == 1:
         # If the process experiences an error, skip the remaining commands
@@ -143,19 +143,19 @@ def terraform_plan_refresh(cwd):
     tfvars_settings(cwd)
     return subprocess.Popen(Terraform_commands_constants.PLAN_REFRESH_PROCESS, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=nt.environ)
 
-def terraform_apply_auto_approve_refresh(cwd):
+def terraform_auto_approve_refresh(cwd):
     tfvars_settings(cwd)
     
     print("\nPerforming -apply-refresh to sync statefile and match the current provisioned state")
-    subprocess.Popen(Terraform_commands_constants.APPLY_REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=nt.environ).wait()
+    subprocess.Popen(Terraform_commands_constants.REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=nt.environ).wait()
 
     # if input("\nEnter Y if you would you like to invoke \"terraform apply -refresh-only\" to the drifted Terraform Roots' state to match the current provisioned state: ").upper() == "Y":
     #     for index in range(len(drifted_terraform_roots)):
     #         cwd = drifted_terraform_roots[index]
 
     #         print("Invoking -refresh-only on %s" % os.path.basename(cwd))
-    #         terraform_apply_refresh(cwd)
-            # subprocess.Popen(APPLY_REFRESH_PROCESS, cwd=cwd, env=nt.environ).wait()
+    #         terraform_refresh(cwd)
+            # subprocess.Popen(REFRESH_PROCESS, cwd=cwd, env=nt.environ).wait()
 
 def locate_terraform_root_directories(root_directory):
     

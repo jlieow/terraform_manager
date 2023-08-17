@@ -22,7 +22,7 @@ Core features are broken down into the various files
 3. [credentials](#credentials)
     - import_aws_profiles
 4. [drift](#drift)
-    - terraform_apply_refresh_or_apply_all
+    - terraform_refresh_or_apply_all
 5. [history](#history)
     - list_history
     - add_history
@@ -41,9 +41,9 @@ Core features are broken down into the various files
     - terraform_apply
     - terraform_destroy
     - terraform_output
-    - terraform_apply_refresh
+    - terraform_refresh
     - terraform_plan_refresh
-    - terraform_apply_auto_approve_refresh
+    - terraform_auto_approve_refresh
     - locate_terraform_root_directories
 8. [terraform](#terraform)
     - terraform
@@ -74,7 +74,7 @@ Core features are broken down into the various files
     - get_stages
     - workflow_terraform_apply
     - workflow_terraform_destroy
-    - workflow_terraform_apply_refresh
+    - workflow_terraform_refresh
     - workflow_terraform_plan_refresh
     - check_stages_errors
     - workflow_terraform_apply_active_stages
@@ -83,7 +83,7 @@ Core features are broken down into the various files
     - workflow_terraform_destroy_active_stages
     - github_action_stage_workflow_terraform_destroy
     - stage_workflow_terraform_destroy
-    - stage_workflow_terraform_apply_refresh
+    - stage_workflow_terraform_refresh
 
 ---
 #### Blueprints
@@ -185,7 +185,7 @@ Core features are broken down into the various files
 
 ---
 #### Drift
-- terraform_apply_refresh_or_apply_all
+- terraform_refresh_or_apply_all
     - Description
         - Request for user input on how to resolve drift 
     - Args
@@ -336,7 +336,7 @@ Core features are broken down into the various files
         - set_stderr: subprocess()
     - Return
 
-- terraform_apply_refresh
+- terraform_refresh
     - Description
         - Performs terraformx apply refresh
     - Args
@@ -351,7 +351,7 @@ Core features are broken down into the various files
         - cwd: string
     - Return
 
-- terraform_apply_auto_approve_refresh
+- terraform_auto_approve_refresh
     - Description
         - Performs terraformx apply auto refresh
     - Args
@@ -616,7 +616,7 @@ Core features are broken down into the various files
         - github_action: boolean
     - Return
 
-- workflow_terraform_apply_refresh
+- workflow_terraform_refresh
     - Description
         - Perform terraformx apply refresh on each stage.
     - Args
@@ -696,7 +696,7 @@ Core features are broken down into the various files
         - active_stages_statements: string
     - Return
 
-- stage_workflow_terraform_apply_refresh
+- stage_workflow_terraform_refresh
     - Description
         - Perform terraformx apply refresh on all stages.
     - Args
