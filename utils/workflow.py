@@ -542,7 +542,7 @@ def workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=False,
         # If the process experiences an error, skip the remaining commands
         return 1
 
-    terraform_auto_approve_refresh(cwd)
+    terraform_refresh(cwd, AUTO_APPROVE=True)
 
 def workflow_terraform_destroy(cwd, stage_targets, stage_name, AUTO_APPROVE=False, github_action=False):
 
@@ -580,7 +580,7 @@ def workflow_terraform_refresh(cwd, stage_targets, AUTO_APPROVE=False):
         # If the process experiences an error, skip the remaining commands
         return 1
 
-    terraform_auto_approve_refresh(cwd)
+    terraform_refresh(cwd, AUTO_APPROVE=True)
     
 def workflow_terraform_plan_refresh(cwd, stage_targets):
     tfvars_settings(cwd)

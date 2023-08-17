@@ -99,7 +99,7 @@ def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=F
         # If the process experiences an error, skip the remaining commands
         return 1
 
-    terraform_auto_approve_refresh(cwd)
+    terraform_refresh(cwd, AUTO_APPROVE=True)
 
 def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=False, set_stdin=None, set_stdout=None, set_stderr=None):
 
@@ -131,6 +131,7 @@ def terraform_output(cwd, set_stdin=None, set_stdout=None, set_stderr=None):
 def terraform_refresh(cwd, AUTO_APPROVE=False):
     tfvars_settings(cwd)
     if AUTO_APPROVE:
+        print("\nPerforming apply -refresh-only to sync statefile and match the current provisioned state")
         process = subprocess.Popen(Terraform_commands_constants.REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=nt.environ).wait()
     else:
         process = subprocess.Popen(Terraform_commands_constants.REFRESH_PROCESS, cwd=cwd, env=nt.environ).wait()
@@ -142,20 +143,6 @@ def terraform_refresh(cwd, AUTO_APPROVE=False):
 def terraform_plan_refresh(cwd):
     tfvars_settings(cwd)
     return subprocess.Popen(Terraform_commands_constants.PLAN_REFRESH_PROCESS, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=nt.environ)
-
-def terraform_auto_approve_refresh(cwd):
-    tfvars_settings(cwd)
-    
-    print("\nPerforming -apply-refresh to sync statefile and match the current provisioned state")
-    subprocess.Popen(Terraform_commands_constants.REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=nt.environ).wait()
-
-    # if input("\nEnter Y if you would you like to invoke \"terraform apply -refresh-only\" to the drifted Terraform Roots' state to match the current provisioned state: ").upper() == "Y":
-    #     for index in range(len(drifted_terraform_roots)):
-    #         cwd = drifted_terraform_roots[index]
-
-    #         print("Invoking -refresh-only on %s" % os.path.basename(cwd))
-    #         terraform_refresh(cwd)
-            # subprocess.Popen(REFRESH_PROCESS, cwd=cwd, env=nt.environ).wait()
 
 def locate_terraform_root_directories(root_directory):
     

@@ -43,7 +43,6 @@ Core features are broken down into the various files
     - terraform_output
     - terraform_refresh
     - terraform_plan_refresh
-    - terraform_auto_approve_refresh
     - locate_terraform_root_directories
 8. [terraform](#terraform)
     - terraform
@@ -347,13 +346,6 @@ Core features are broken down into the various files
 - terraform_plan_refresh
     - Description
         - Performs terraformx plan refresh
-    - Args
-        - cwd: string
-    - Return
-
-- terraform_auto_approve_refresh
-    - Description
-        - Performs terraformx apply auto refresh
     - Args
         - cwd: string
     - Return
