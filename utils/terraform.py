@@ -161,7 +161,7 @@ def terraform_workflow(cwd):
 
 def terraform_destroy_from_history():
 
-    history_path = get_dir_of_terraform_manager() + History_constants.HISTORY_CSV_PATH
+    history_path = os.path.join(get_dir_of_terraform_manager(), History_constants.HISTORY_CSV_PATH)
 
     histories = get_rows_as_list(history_path)
 
@@ -438,7 +438,7 @@ def terraform_blueprints():
 
     while True:
         # Get csv files from blueprints directory
-        path =  get_dir_of_terraform_manager() + "/data/blueprints/*.csv"
+        path = os.path.join(get_dir_of_terraform_manager(), "data", "blueprints", "*.csv")
         blueprints = glob.glob(path)
 
         OPEN_BLUEPRINTS = True

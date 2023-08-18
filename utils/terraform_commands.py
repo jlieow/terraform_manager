@@ -54,12 +54,12 @@ class Terraform_commands_constants:
 # Concat all the located tfvars files
 # Place the results in /config/settings.tfvars
 def tfvars_settings(cwd):
-    filenames = glob.glob(cwd + "/*.tfvars")   
+    filenames = glob.glob(os.path.join(cwd, "*.tfvars"))   
 
-    if not os.path.exists(cwd + "/config"):
-        os.mkdir(cwd + "/config")
+    if not os.path.exists(os.path.join(cwd, "config")):
+        os.mkdir(os.path.join(cwd, "config"))
 
-    with open(cwd + "/" + Terraform_commands_constants.TERRAFORMX_VAR_FILE, 'w') as outfile:
+    with open(os.path.join(cwd, Terraform_commands_constants.TERRAFORMX_VAR_FILE), 'w') as outfile:
         for fname in filenames:
             with open(fname) as infile:
                 for line in infile:
@@ -154,7 +154,7 @@ def locate_terraform_root_directories(root_directory):
     # If backend.tf exists, get its parent directory and append it to a list
     for directory in os.listdir(root_directory):
         
-        path = root_directory + "/" + directory + "/backend.tf"
+        path = os.path.join(root_directory, directory, "backend.tf")
 
         does_backend_tf_exist = glob.glob(path)
         if len(does_backend_tf_exist) != 0:

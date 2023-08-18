@@ -8,7 +8,7 @@ from utils.history import *
 
 # ----- CONSTANTS ----- #
 
-WORKFLOW_CONFIG_LOCATION = "/workflow/config.yaml"
+WORKFLOW_CONFIG_LOCATION = "workflow/config.yaml"
 
 TERRAFORM_COMMAND_PREFACE = "The following terraform commands can be invoked:\n"
 TERRAFORM_COMMAND_OPTIONS = "\nWhich command would you like to invoke: "
@@ -59,7 +59,7 @@ def is_stage_auto_approve(path):
     return False
 
 def does_stage_name_exist(cwd, stage_name):
-    workflow_path =  cwd + WORKFLOW_CONFIG_LOCATION
+    workflow_path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
     
     with open(workflow_path, 'r') as stream:
         data_loaded = yaml.safe_load(stream)
@@ -115,7 +115,7 @@ def get_active_stages_from_workflow(cwd):
 
     # does_stage_name_contain_special_characters(cwd)
 
-    workflow_path =  cwd + WORKFLOW_CONFIG_LOCATION
+    workflow_path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
 
     with open(workflow_path, 'r') as stream:
         data_loaded = yaml.safe_load(stream)
@@ -163,7 +163,7 @@ def get_active_stage_names_from_workflow(cwd):
 
     # does_stage_name_contain_special_characters(cwd)
 
-    workflow_path =  cwd + WORKFLOW_CONFIG_LOCATION
+    workflow_path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
 
     with open(workflow_path, 'r') as stream:
         data_loaded = yaml.safe_load(stream)
@@ -263,7 +263,7 @@ def get_stages_to_apply_from_active_stages(active_stages, stages):
 
 def does_workflow_file_exist(cwd):
     # Get csv files from blueprints directory
-    path =  cwd + WORKFLOW_CONFIG_LOCATION
+    path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
     workflow = glob.glob(path)
     
     if is_workflow_file_ignored(path):
@@ -377,8 +377,8 @@ def does_workflow_objects_exist_in_maintf(workflow_resources, maintf_resources, 
     return True
 
 def does_workflow_contain_error_and_warnings(cwd, disable_print=False):
-    workflow_path =  cwd + WORKFLOW_CONFIG_LOCATION
-    maintf_path =  cwd + "/main.tf"
+    workflow_path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
+    maintf_path =  os.path.join(cwd, "main.tf")
     
     number_of_workflow_resources = get_number_of_resources_from_workflow(workflow_path)
     number_of_maintf_resources = get_number_of_resources_from_maintf(maintf_path)
@@ -437,7 +437,7 @@ def get_targets(test):
 
 def get_stage(cwd, stage_name):
 
-    workflow_path = cwd + "/workflow/config.yaml"
+    workflow_path = os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
 
     error = False
 
@@ -479,7 +479,7 @@ def get_stage(cwd, stage_name):
 
 def get_stages(cwd):
 
-    workflow_path =  cwd + WORKFLOW_CONFIG_LOCATION
+    workflow_path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
 
     with open(workflow_path, 'r') as stream:
         data_loaded = yaml.safe_load(stream)

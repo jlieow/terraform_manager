@@ -7,7 +7,7 @@ from utils.workflow import *
 # ----- CONSTANTS ----- #
 
 class Blueprints_constants:
-    BLUEPRINTS_CSV_PATH = "/data/blueprints/"
+    BLUEPRINTS_CSV_PATH = "data/blueprints/"
 
 # ----- CONSTANTS ----- #
 
@@ -57,12 +57,12 @@ def is_this_a_verified_blueprint(blueprint_path):
     for index in range(len(list_of_terraform_roots)):
         terraform_root = list_of_terraform_roots[index]
 
-        if not os.path.exists(terraform_root + "/backend.tf"):
+        if not os.path.exists(os.path.join(terraform_root, "backend.tf")):
             need_to_update_blueprint = True
             
             new_terraform_root = terraform_root
 
-            while not os.path.exists(new_terraform_root + "/backend.tf"): 
+            while not os.path.exists(os.path.join(new_terraform_root, "backend.tf")): 
                 new_terraform_root = input("\nUnable to locate Terraform root \"%s\" in the blueprint file.\nPlease key in the full Terraform root path to update the blueprint file: " % terraform_root)
 
             rows[index][0] = new_terraform_root
@@ -188,7 +188,7 @@ def terraform_create_blueprint():
         cwd = dir_and_stage[0] 
         stage_name = dir_and_stage[1] 
 
-        blueprint_path = get_dir_of_terraform_manager() + Blueprints_constants.BLUEPRINTS_CSV_PATH + blueprint_name + ".csv"
+        blueprint_path = os.path.join(get_dir_of_terraform_manager(), Blueprints_constants.BLUEPRINTS_CSV_PATH, blueprint_name + ".csv")
         
         add_blueprint(blueprint_path, cwd, stage_name, True)
     
