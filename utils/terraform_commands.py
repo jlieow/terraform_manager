@@ -12,7 +12,7 @@ from utils.common import getcwd
 class Terraform_commands_constants:
     TERRAFORM_PARSER = 'terraform'
     BACKEND_CONFIG_FILE = 'backend.tfvars'
-    TERRAFORMX_VAR_FILE = 'config/settings.tfvars'
+    TERRAFORMX_VAR_FILE = os.path.join('config', 'settings.tfvars')
 
     INIT = 'init'
     APPLY = 'apply'

@@ -8,7 +8,7 @@ from utils.history import *
 
 # ----- CONSTANTS ----- #
 
-WORKFLOW_CONFIG_LOCATION = "workflow/config.yaml"
+WORKFLOW_CONFIG_LOCATION = os.path.join("workflow", "config.yaml")
 
 TERRAFORM_COMMAND_PREFACE = "The following terraform commands can be invoked:\n"
 TERRAFORM_COMMAND_OPTIONS = "\nWhich command would you like to invoke: "

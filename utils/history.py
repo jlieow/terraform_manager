@@ -8,7 +8,7 @@ from utils.print_options import *
 # ----- CONSTANTS ----- #
 
 class History_constants:
-    HISTORY_CSV_PATH = "data/history/terraform_history.csv"
+    HISTORY_CSV_PATH = os.path.join("data", "history", "terraform_history.csv")
 
 # ----- CONSTANTS ----- #
 

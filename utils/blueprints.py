@@ -7,7 +7,7 @@ from utils.workflow import *
 # ----- CONSTANTS ----- #
 
 class Blueprints_constants:
-    BLUEPRINTS_CSV_PATH = "data/blueprints/"
+    BLUEPRINTS_CSV_PATH = os.path.join("data", "blueprints")
 
 # ----- CONSTANTS ----- #
 
