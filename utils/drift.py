@@ -3,7 +3,7 @@ import os
 from utils.common import *
 from utils.workflow import *
 
-def terraform_apply_refresh_or_apply_all(drifted_terraform_roots):
+def terraform_refresh_or_apply_all(drifted_terraform_roots):
 
     print("Please select the desired method to resolve following drifted Terraform Root(s):")
 
@@ -51,8 +51,8 @@ def terraform_apply_refresh_or_apply_all(drifted_terraform_roots):
             case 1:
 
                 if len(stage_name) == 0:
-                    terraform_apply_refresh(cwd, AUTO_APPROVE=True)
+                    terraform_refresh(cwd, AUTO_APPROVE=True)
                 else:
                     stage_and_targets = get_stage(cwd, stage_name)
                     stage_targets = stage_and_targets["stage_targets"]
-                    workflow_terraform_apply_refresh(cwd, stage_targets, stage_name, AUTO_APPROVE=True)
+                    workflow_terraform_refresh(cwd, stage_targets, stage_name, AUTO_APPROVE=True)

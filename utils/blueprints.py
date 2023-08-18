@@ -7,7 +7,7 @@ from utils.workflow import *
 # ----- CONSTANTS ----- #
 
 class Blueprints_constants:
-    BLUEPRINTS_CSV_PATH = "/data/blueprints/"
+    BLUEPRINTS_CSV_PATH = os.path.join("data", "blueprints")
 
 # ----- CONSTANTS ----- #
 
@@ -57,12 +57,12 @@ def is_this_a_verified_blueprint(blueprint_path):
     for index in range(len(list_of_terraform_roots)):
         terraform_root = list_of_terraform_roots[index]
 
-        if not os.path.exists(terraform_root + "/backend.tf"):
+        if not os.path.exists(os.path.join(terraform_root, "backend.tf")):
             need_to_update_blueprint = True
             
             new_terraform_root = terraform_root
 
-            while not os.path.exists(new_terraform_root + "/backend.tf"): 
+            while not os.path.exists(os.path.join(new_terraform_root, "backend.tf")): 
                 new_terraform_root = input("\nUnable to locate Terraform root \"%s\" in the blueprint file.\nPlease key in the full Terraform root path to update the blueprint file: " % terraform_root)
 
             rows[index][0] = new_terraform_root
@@ -188,7 +188,7 @@ def terraform_create_blueprint():
         cwd = dir_and_stage[0] 
         stage_name = dir_and_stage[1] 
 
-        blueprint_path = get_dir_of_terraform_manager() + Blueprints_constants.BLUEPRINTS_CSV_PATH + blueprint_name + ".csv"
+        blueprint_path = os.path.join(get_dir_of_terraform_manager(), Blueprints_constants.BLUEPRINTS_CSV_PATH, blueprint_name + ".csv")
         
         add_blueprint(blueprint_path, cwd, stage_name, True)
     
@@ -196,80 +196,80 @@ def terraform_create_blueprint():
 
 
 
-    TERRAFORM_BLUEPRINTS_SELECTION_PREFACE = "What would you like to do with blueprints:\n" 
-    LIST_SELECTION_COMMAND=[
-        "Create a new blueprint",
-        "Build existing blueprint",
-    ]
-    TERRAFORM_ROOTS_BLUEPRINTS_SELECTION_OPTIONS = "\nPlease key in your selection: "
+    # TERRAFORM_BLUEPRINTS_SELECTION_PREFACE = "What would you like to do with blueprints:\n" 
+    # LIST_SELECTION_COMMAND=[
+    #     "Create a new blueprint",
+    #     "Build existing blueprint",
+    # ]
+    # TERRAFORM_ROOTS_BLUEPRINTS_SELECTION_OPTIONS = "\nPlease key in your selection: "
 
-    TERRAFORM_BLUEPRINTS_PREFACE = "The following blueprints are found:\n"
-    TERRAFORM_ROOTS_BLUEPRINTS_OPTIONS = "\nWhich blueprint would you like to invoke \"terraform apply\": "
+    # TERRAFORM_BLUEPRINTS_PREFACE = "The following blueprints are found:\n"
+    # TERRAFORM_ROOTS_BLUEPRINTS_OPTIONS = "\nWhich blueprint would you like to invoke \"terraform apply\": "
 
-    while True:
-        # Get csv files from blueprints directory
-        path =  os.getcwd() + "/blueprints/*.csv"
-        blueprints = glob.glob(path)
+    # while True:
+    #     # Get csv files from blueprints directory
+    #     path =  os.getcwd() + "/blueprints/*.csv"
+    #     blueprints = glob.glob(path)
 
-        OPEN_BLUEPRINTS = True
+    #     OPEN_BLUEPRINTS = True
 
-        # If there are no blueprints, create one. 
-        # If there are existing blueprints, allow user to choose if they would like to create a new blueprint or build an existing one.
-        if len(blueprints) == 0:
-            OPEN_BLUEPRINTS = False
+    #     # If there are no blueprints, create one. 
+    #     # If there are existing blueprints, allow user to choose if they would like to create a new blueprint or build an existing one.
+    #     if len(blueprints) == 0:
+    #         OPEN_BLUEPRINTS = False
 
-            if input("No blueprints were found. Enter Y to create one? ").upper() == "Y":
-                terraform_create_blueprint()
-            else:
-                break
+    #         if input("No blueprints were found. Enter Y to create one? ").upper() == "Y":
+    #             terraform_create_blueprint()
+    #         else:
+    #             break
     
-        if OPEN_BLUEPRINTS:
-            BLUEPRINT_SELECTION_NUMBER = input_options(TERRAFORM_BLUEPRINTS_SELECTION_PREFACE, LIST_SELECTION_COMMAND, TERRAFORM_ROOTS_BLUEPRINTS_SELECTION_OPTIONS, allow_special_break=True, special_break="<")
-            if BLUEPRINT_SELECTION_NUMBER == "<":
-                break
+    #     if OPEN_BLUEPRINTS:
+    #         BLUEPRINT_SELECTION_NUMBER = input_options(TERRAFORM_BLUEPRINTS_SELECTION_PREFACE, LIST_SELECTION_COMMAND, TERRAFORM_ROOTS_BLUEPRINTS_SELECTION_OPTIONS, allow_special_break=True, special_break="<")
+    #         if BLUEPRINT_SELECTION_NUMBER == "<":
+    #             break
 
-            match BLUEPRINT_SELECTION_NUMBER:
-                case 0:
-                    terraform_create_blueprint()
-                case 1:
-                    BLUEPRINT_NUMBER = input_options(TERRAFORM_BLUEPRINTS_PREFACE, [os.path.basename(directory) for directory in blueprints], TERRAFORM_ROOTS_BLUEPRINTS_OPTIONS, allow_special_break=True, special_break="<")
-                    if BLUEPRINT_NUMBER == "<":
-                        break
+    #         match BLUEPRINT_SELECTION_NUMBER:
+    #             case 0:
+    #                 terraform_create_blueprint()
+    #             case 1:
+    #                 BLUEPRINT_NUMBER = input_options(TERRAFORM_BLUEPRINTS_PREFACE, [os.path.basename(directory) for directory in blueprints], TERRAFORM_ROOTS_BLUEPRINTS_OPTIONS, allow_special_break=True, special_break="<")
+    #                 if BLUEPRINT_NUMBER == "<":
+    #                     break
 
-                    # print("correct")
-                    # print(blueprints[BLUEPRINT_NUMBER])
-                    BLUEPRINT_CSV_PATH = blueprints[BLUEPRINT_NUMBER]
-                    blueprint = get_rows_as_list(BLUEPRINT_CSV_PATH)
+    #                 # print("correct")
+    #                 # print(blueprints[BLUEPRINT_NUMBER])
+    #                 BLUEPRINT_CSV_PATH = blueprints[BLUEPRINT_NUMBER]
+    #                 blueprint = get_rows_as_list(BLUEPRINT_CSV_PATH)
                     
-                    print("\nContinuing will invoke \"terraform apply --auto-approve\" on the folders in the following order:\n"
-                    )
+    #                 print("\nContinuing will invoke \"terraform apply --auto-approve\" on the folders in the following order:\n"
+    #                 )
                     
-                    for i in range(len(blueprint)):
-                        if len(blueprint[i][1]) == 0:
-                            print("%d. %s" % (i+1, os.path.basename(blueprint[i][0])))
-                        else:
-                            print("%d. %s - Stage \"%s\"" % (i+1, os.path.basename(blueprint[i][0]), blueprint[i][1]))
+    #                 for i in range(len(blueprint)):
+    #                     if len(blueprint[i][1]) == 0:
+    #                         print("%d. %s" % (i+1, os.path.basename(blueprint[i][0])))
+    #                     else:
+    #                         print("%d. %s - Stage \"%s\"" % (i+1, os.path.basename(blueprint[i][0]), blueprint[i][1]))
                     
-                    if input("\nPlease enter \"Y\" to continue: ").upper() == "Y":
-                        for dir_and_stage in blueprint:
-                            # print("dir_and_stage")
-                            # print(dir_and_stage)
+    #                 if input("\nPlease enter \"Y\" to continue: ").upper() == "Y":
+    #                     for dir_and_stage in blueprint:
+    #                         # print("dir_and_stage")
+    #                         # print(dir_and_stage)
 
-                            cwd = dir_and_stage[0] 
-                            stage_name = dir_and_stage[1] 
+    #                         cwd = dir_and_stage[0] 
+    #                         stage_name = dir_and_stage[1] 
 
-                            terraform_init(cwd)
+    #                         terraform_init(cwd)
 
-                            if len(stage_name) == 0:
-                                print("\nPerforming \"terraform apply --auto-approve\" on %s" % os.path.basename(cwd))
-                                process = terraform_apply(cwd, AUTO_APPROVE=True)
-                            else:
-                                print("\nPerforming \"terraform apply --auto-approve\" on %s - Stage \"%s\"" % (os.path.basename(cwd), stage_name))
+    #                         if len(stage_name) == 0:
+    #                             print("\nPerforming \"terraform apply --auto-approve\" on %s" % os.path.basename(cwd))
+    #                             process = terraform_apply(cwd, AUTO_APPROVE=True)
+    #                         else:
+    #                             print("\nPerforming \"terraform apply --auto-approve\" on %s - Stage \"%s\"" % (os.path.basename(cwd), stage_name))
 
-                                stage = get_stage(cwd, stage_name)
+    #                             stage = get_stage(cwd, stage_name)
 
-                                process = workflow_terraform_apply(cwd, stage["stage_targets"], stage["stage_name"], AUTO_APPROVE=True)
+    #                             process = workflow_terraform_apply(cwd, stage["stage_targets"], stage["stage_name"], AUTO_APPROVE=True)
                             
-                            if process == 1:
-                                # If the process experiences an error, break
-                                break
+    #                         if process == 1:
+    #                             # If the process experiences an error, break
+    #                             break

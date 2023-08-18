@@ -8,7 +8,7 @@ from utils.history import *
 
 # ----- CONSTANTS ----- #
 
-WORKFLOW_CONFIG_LOCATION = "/workflow/config.yaml"
+WORKFLOW_CONFIG_LOCATION = os.path.join("workflow", "config.yaml")
 
 TERRAFORM_COMMAND_PREFACE = "The following terraform commands can be invoked:\n"
 TERRAFORM_COMMAND_OPTIONS = "\nWhich command would you like to invoke: "
@@ -59,7 +59,7 @@ def is_stage_auto_approve(path):
     return False
 
 def does_stage_name_exist(cwd, stage_name):
-    workflow_path =  cwd + WORKFLOW_CONFIG_LOCATION
+    workflow_path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
     
     with open(workflow_path, 'r') as stream:
         data_loaded = yaml.safe_load(stream)
@@ -115,7 +115,7 @@ def get_active_stages_from_workflow(cwd):
 
     # does_stage_name_contain_special_characters(cwd)
 
-    workflow_path =  cwd + WORKFLOW_CONFIG_LOCATION
+    workflow_path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
 
     with open(workflow_path, 'r') as stream:
         data_loaded = yaml.safe_load(stream)
@@ -163,7 +163,7 @@ def get_active_stage_names_from_workflow(cwd):
 
     # does_stage_name_contain_special_characters(cwd)
 
-    workflow_path =  cwd + WORKFLOW_CONFIG_LOCATION
+    workflow_path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
 
     with open(workflow_path, 'r') as stream:
         data_loaded = yaml.safe_load(stream)
@@ -263,7 +263,7 @@ def get_stages_to_apply_from_active_stages(active_stages, stages):
 
 def does_workflow_file_exist(cwd):
     # Get csv files from blueprints directory
-    path =  cwd + WORKFLOW_CONFIG_LOCATION
+    path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
     workflow = glob.glob(path)
     
     if is_workflow_file_ignored(path):
@@ -377,8 +377,8 @@ def does_workflow_objects_exist_in_maintf(workflow_resources, maintf_resources, 
     return True
 
 def does_workflow_contain_error_and_warnings(cwd, disable_print=False):
-    workflow_path =  cwd + WORKFLOW_CONFIG_LOCATION
-    maintf_path =  cwd + "/main.tf"
+    workflow_path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
+    maintf_path =  os.path.join(cwd, "main.tf")
     
     number_of_workflow_resources = get_number_of_resources_from_workflow(workflow_path)
     number_of_maintf_resources = get_number_of_resources_from_maintf(maintf_path)
@@ -437,7 +437,7 @@ def get_targets(test):
 
 def get_stage(cwd, stage_name):
 
-    workflow_path = cwd + "/workflow/config.yaml"
+    workflow_path = os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
 
     error = False
 
@@ -479,7 +479,7 @@ def get_stage(cwd, stage_name):
 
 def get_stages(cwd):
 
-    workflow_path =  cwd + WORKFLOW_CONFIG_LOCATION
+    workflow_path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
 
     with open(workflow_path, 'r') as stream:
         data_loaded = yaml.safe_load(stream)
@@ -542,7 +542,7 @@ def workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=False,
         # If the process experiences an error, skip the remaining commands
         return 1
 
-    terraform_apply_auto_approve_refresh(cwd)
+    terraform_refresh(cwd, AUTO_APPROVE=True)
 
 def workflow_terraform_destroy(cwd, stage_targets, stage_name, AUTO_APPROVE=False, github_action=False):
 
@@ -566,27 +566,27 @@ def workflow_terraform_destroy(cwd, stage_targets, stage_name, AUTO_APPROVE=Fals
     if not github_action:
         delete_latest_row_from_history(cwd, stage_name)
 
-def workflow_terraform_apply_refresh(cwd, stage_targets, AUTO_APPROVE=False):
+def workflow_terraform_refresh(cwd, stage_targets, AUTO_APPROVE=False):
     tfvars_settings(cwd)
     
     if AUTO_APPROVE:
-        workflow_apply_auto_approve_target_process = Terraform_commands_constants.APPLY_REFRESH_AUTO_APPROVE_PROCESS + ["-target=" + sub for sub in stage_targets]
-        process = subprocess.Popen(workflow_apply_auto_approve_target_process, cwd=cwd, env=nt.environ).wait()
+        workflow_refresh_auto_approve_target_process = Terraform_commands_constants.REFRESH_AUTO_APPROVE_PROCESS + ["-target=" + sub for sub in stage_targets]
+        process = subprocess.Popen(workflow_refresh_auto_approve_target_process, cwd=cwd, env=nt.environ).wait()
     else:
-        workflow_apply_target_process = Terraform_commands_constants.APPLY_REFRESH_PROCESS + ["-target=" + sub for sub in stage_targets]
-        process = subprocess.Popen(workflow_apply_target_process, cwd=cwd, env=nt.environ).wait()
+        workflow_refresh_target_process = Terraform_commands_constants.REFRESH_PROCESS + ["-target=" + sub for sub in stage_targets]
+        process = subprocess.Popen(workflow_refresh_target_process, cwd=cwd, env=nt.environ).wait()
 
     if process == 1:
         # If the process experiences an error, skip the remaining commands
         return 1
 
-    terraform_apply_auto_approve_refresh(cwd)
+    terraform_refresh(cwd, AUTO_APPROVE=True)
     
 def workflow_terraform_plan_refresh(cwd, stage_targets):
     tfvars_settings(cwd)
     
-    workflow_apply_auto_approve_target_process = Terraform_commands_constants.PLAN_REFRESH_PROCESS + ["-target=" + sub for sub in stage_targets]
-    return subprocess.Popen(workflow_apply_auto_approve_target_process, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=nt.environ)
+    workflow_plan_refresh_target_process = Terraform_commands_constants.PLAN_REFRESH_PROCESS + ["-target=" + sub for sub in stage_targets]
+    return subprocess.Popen(workflow_plan_refresh_target_process, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=nt.environ)
 
 def check_stages_errors(stages_errors):
 
@@ -714,7 +714,7 @@ def stage_workflow_terraform_destroy(cwd, override_workflow=False):
     for stage in stages:
         workflow_terraform_destroy_active_stages(cwd, stage, override_workflow, github_action=True)
 
-def stage_workflow_terraform_apply_refresh(cwd):
+def stage_workflow_terraform_refresh(cwd):
     stages, stages_errors = get_stages(cwd)
 
     active_stages, err, err_message = get_active_stages_from_workflow(cwd)
@@ -742,4 +742,4 @@ def stage_workflow_terraform_apply_refresh(cwd):
             print("%s. %s" % (index+1, stage_targets[index]))
 
         # Prepare terraform command
-        workflow_terraform_apply_refresh(cwd, stage_targets, stage_auto_approve)
+        workflow_terraform_refresh(cwd, stage_targets, stage_auto_approve)
