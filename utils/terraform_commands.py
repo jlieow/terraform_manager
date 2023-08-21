@@ -54,6 +54,9 @@ class Terraform_commands_constants:
 # Concat all the located tfvars files
 # Place the results in /config/settings.tfvars
 def tfvars_settings(cwd):
+    if not is_dir_a_terraform_root(cwd):
+        return
+
     filenames = glob.glob(os.path.join(cwd, "*.tfvars"))   
 
     if not os.path.exists(os.path.join(cwd, "config")):
