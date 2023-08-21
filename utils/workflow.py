@@ -27,6 +27,16 @@ WORKFLOW_CONFIG_DETECTED_MESSAGE = "\nA workflow config has been detected!\
 
 # ----- CONSTANTS ----- #
 
+def is_workflow_file_empty(path):
+    if os.path.exists(path):
+        with open(path, 'r') as stream:
+            data_loaded = yaml.safe_load(stream)
+
+            if data_loaded is None:
+                return True
+            
+    return False
+
 def is_workflow_file_ignored(path):
     if os.path.exists(path):
         with open(path, 'r') as stream:
@@ -265,6 +275,10 @@ def does_workflow_file_exist(cwd):
     # Get csv files from blueprints directory
     path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
     workflow = glob.glob(path)
+
+    if is_workflow_file_empty(path):
+        print_error("Workflow file is empty")
+        return False
     
     if is_workflow_file_ignored(path):
         return False
@@ -273,6 +287,43 @@ def does_workflow_file_exist(cwd):
         return True
 
     return False
+
+def does_workflow_contain_stages_and_targets(path):
+    with open(path, 'r') as stream:
+        data_loaded = yaml.safe_load(stream)
+
+    if not isinstance(data_loaded, dict):
+        print_error("Workflow file is misconfigured")
+        return False
+
+    stages = data_loaded.get("stages")
+    if not stages:
+        print_error("No stages found in workflow")
+        return False
+    
+    for index, stage in enumerate(stages):
+        if not isinstance(stage, dict):
+            print_error(f"Stage {index+1} is misconfigured")
+            return False
+        
+        targets = stage.get("targets")
+        if not targets:
+            print_error(f"No targets found in stage {index+1}")
+            return False
+    
+    return True
+
+def are_workflow_resources_correctly_configured(path):
+    with open(path, 'r') as stream:
+        data_loaded = yaml.safe_load(stream)
+
+    for stage_index, stage in enumerate(data_loaded["stages"]):
+        for resource_index, resource in enumerate(stage["targets"]):
+            if not isinstance(resource, dict):
+                print_error(f"Resource {resource_index+1} in stage {stage_index+1} is misconfigured")
+                return False
+
+    return True
 
 def get_number_of_resources_from_workflow(workflow_config_path):
     with open(workflow_config_path, 'r') as stream:
@@ -379,7 +430,13 @@ def does_workflow_objects_exist_in_maintf(workflow_resources, maintf_resources, 
 def does_workflow_contain_error_and_warnings(cwd, disable_print=False):
     workflow_path =  os.path.join(cwd, WORKFLOW_CONFIG_LOCATION)
     maintf_path =  os.path.join(cwd, "main.tf")
+
+    if not does_workflow_contain_stages_and_targets(workflow_path):
+        return True
     
+    if not are_workflow_resources_correctly_configured(workflow_path):
+        return True
+
     number_of_workflow_resources = get_number_of_resources_from_workflow(workflow_path)
     number_of_maintf_resources = get_number_of_resources_from_maintf(maintf_path)
 
