@@ -144,21 +144,28 @@ def terraform_plan_refresh(cwd):
     tfvars_settings(cwd)
     return subprocess.Popen(Terraform_commands_constants.PLAN_REFRESH_PROCESS, cwd=cwd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=nt.environ)
 
+def is_dir_a_terraform_root(base_dir):
+    path = os.path.join(base_dir, "*.tf")
+
+    tf_files = glob.glob(path)
+    if len(tf_files) != 0:
+        return True
+    
+    return False
+
 def locate_terraform_root_directories(root_directory):
     
     # root_directory = os.path.dirname(getcwd())
     list_terraform_root_dir = []
 
-    # Get list of files and directories present in root directory
-    # Search for backend.tf file in the directory
-    # If backend.tf exists, get its parent directory and append it to a list
+    # Get list of directories present in root directory
+    # Check if directory is a terraform root
+    # If it is, append it to a list
     for directory in os.listdir(root_directory):
+        base_dir = os.path.join(root_directory, directory)
         
-        path = os.path.join(root_directory, directory, "backend.tf")
-
-        does_backend_tf_exist = glob.glob(path)
-        if len(does_backend_tf_exist) != 0:
-            list_terraform_root_dir.append(os.path.dirname(does_backend_tf_exist[0]))
+        if is_dir_a_terraform_root(base_dir):
+            list_terraform_root_dir.append(base_dir)
 
     list_terraform_root_dir.sort()
 
