@@ -57,12 +57,12 @@ def is_this_a_verified_blueprint(blueprint_path):
     for index in range(len(list_of_terraform_roots)):
         terraform_root = list_of_terraform_roots[index]
 
-        if not os.path.exists(os.path.join(terraform_root, "backend.tf")):
+        if not is_dir_a_terraform_root(terraform_root):
             need_to_update_blueprint = True
             
             new_terraform_root = terraform_root
 
-            while not os.path.exists(os.path.join(new_terraform_root, "backend.tf")): 
+            while not is_dir_a_terraform_root(new_terraform_root): 
                 new_terraform_root = input("\nUnable to locate Terraform root \"%s\" in the blueprint file.\nPlease key in the full Terraform root path to update the blueprint file: " % terraform_root)
 
             rows[index][0] = new_terraform_root
