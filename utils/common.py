@@ -28,7 +28,7 @@ def check_if_terraform_manager_root_is_valid(directory):
         if len(directory) < len(Common_constants.TERRAFORM_MANAGER):
                 return ""
     
-    if os.path.exists(directory + "/utils") and os.path.exists(directory + "/data") and os.path.exists(directory + "/terraformx"):
+    if os.path.exists(os.path.join(directory, "utils")) and os.path.exists(os.path.join(directory, "data")) and os.path.exists(os.path.join(directory, "terraformx")):
         return directory
     
     return ""

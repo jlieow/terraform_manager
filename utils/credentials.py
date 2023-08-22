@@ -10,8 +10,8 @@ from utils.common import getcwd
 
 def import_aws_profiles():
 
-    AWS_CREDENTIALS_PATH = os.path.abspath(getcwd()) + "/data/aws_credentials"
-    AWS_CREDENTIALS_CSV = glob.glob(AWS_CREDENTIALS_PATH + "/*.csv")
+    AWS_CREDENTIALS_PATH = os.path.join(os.path.abspath(getcwd()), "data", "aws_credentials")
+    AWS_CREDENTIALS_CSV = glob.glob(os.path.join(AWS_CREDENTIALS_PATH, "/*.csv"))
     
     successful_imports = 0
     unsuccessful_imports = 0
