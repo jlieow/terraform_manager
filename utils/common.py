@@ -28,7 +28,7 @@ def check_if_terraform_manager_root_is_valid(directory):
         if len(directory) < len(Common_constants.TERRAFORM_MANAGER):
                 return ""
     
-    if os.path.exists(directory + "/utils") and os.path.exists(directory + "/data") and os.path.exists(directory + "/terraformx"):
+    if os.path.exists(os.path.join(directory, "utils")) and os.path.exists(os.path.join(directory, "data")) and os.path.exists(os.path.join(directory, "terraformx")):
         return directory
     
     return ""
@@ -106,3 +106,11 @@ def get_rows_as_list(path):
             rows.append(row)
     
     return rows
+
+def getcwd():
+    # getcwd()() breaks when used in an exe created by pyinstaller
+    # determine if application is a script file or frozen exe and use correct path
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
+    elif __file__:
+        return os.path.dirname(__file__)

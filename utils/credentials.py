@@ -3,14 +3,15 @@ import os
 import glob
 
 from utils.print_options import *
+from utils.common import getcwd
 
 # For each credential found in /aws_credentials, import using "aws configure import" command
 # Print out number of profiles successfully imported
 
 def import_aws_profiles():
 
-    AWS_CREDENTIALS_PATH = os.path.abspath(os.getcwd()) + "/data/aws_credentials"
-    AWS_CREDENTIALS_CSV = glob.glob(AWS_CREDENTIALS_PATH + "/*.csv")
+    AWS_CREDENTIALS_PATH = os.path.join(os.path.abspath(getcwd()), "data", "aws_credentials")
+    AWS_CREDENTIALS_CSV = glob.glob(os.path.join(AWS_CREDENTIALS_PATH, "/*.csv"))
     
     successful_imports = 0
     unsuccessful_imports = 0

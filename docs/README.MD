@@ -1,99 +1,56 @@
-## To install python dependencies
+# Terraform Manager
 
-pip install -r requirements.txt
+Terraform Manager extends the Terraform CLI with additional functonalities and aids to standardize Terraform code structure thorughout the entire development lifecycle to enable more consistent Ops deployment of Terraform for use cases such as GitOps.
 
-## To generate new requirements.txt
+Terraform Manager consists of 3 parts:
+1. Utils: Core Features of Terraform Manager
+2. Terraformx: Extends Terraform Manager core features into a CLI
+3. Actions: Turns basic terraformx commands into executables for use in custom CI actions.
 
-pip install pipreqs
-python -m pipreqs.pipreqs .
+Please refer to **/utils/README.MD**, **/terraformx/README.MD** and **/actions/README.MD** for more details about the functions contained in their respective directories. 
 
-# Run following command to compile .py code into .exe
+The following sections will explain the features of Terraform Manager. 
 
-In the root directory of terraform_manager, install the exe using PyInstaller and set the PATH and alias. The following are examples:
+---
+## Utils: Core Features of Terraform Manager
 
-1. Using PyInstaller --onefile
+Features include:
 
-```
-pyinstaller --onefile main.py
-export PATH=$PATH:$(pwd)/dist/terraformx
-alias terraformx=$(pwd)"/dist/terraformx"
-```
+1. Import AWS profiles from CSVs stored in /aws_credentials
+    
+    - Import .csv profiles found in /aws_credentials using aws configure import --csv command.
 
-2. Using PyInstaller --onedir
+2. Perform Terraform Commands
 
-```
-pyinstaller --onedir main.py
-export PATH=$PATH:$(pwd)/dist/terraformx/terraformx
-alias terraformx=$(pwd)"/dist/terraformx/terraformx"
-```
+    - Detects if a workflow file exists in the terraform root and perform regular or more complex terraform commands
 
-Otherwise you may use the following shell scripts to install and update PATH and alias:
+3. Check Terraform Roots for Configuration Drift
 
-1. one-dir-terraform-manager-install.sh
-2. one-file-terraform-manager-install.sh
+    - Detects configuration drift based on workflow configuration
 
-# Run tests with the following methods
+4. Perform Terraform Multi-Build
 
-1. To run a single test module, in this case test_antigravity.py:
+    - Allows sequential building of multiple terrform roots
 
-   - To run a single test module, in this case test_antigravity.py:<br /><br />
-     python -m unittest test.test_antigravity
+5. Apply Terraform Blueprints
 
-2. Running a single test case or test method:
+    - Allows you to save sequential build steps into a csv file and reference them later on when a build is required.
 
-   - Also you can run a single TestCase or a single test method:<br /><br />
-     python -m unittest test.test_antigravity.GravityTestCase
+6. Terraform Destroy based on History
 
-3. Running all tests:
+    - Each time a terraform root is built, it is saved to a history .csv file. When required, the file can be later referenced to destroy each root sequentially.
 
-   - This command will discover and run all the tests for you, they must be modules or packages named test\*.py (can be changed with the -p, --pattern flag):<br /><br />
-     python -m unittest
+7. Use Workflows
 
-## Runnings Terraform Manager
+    - Workflows is a method to perform terraform apply on targeted modules/resources by storing them as steps in a yaml file.
 
-vi ~/.zshrc
-
-alias terraform_manager="python3 /Users/jeromelieow/Documents/GitHub/terraform_manager/main.py"
-
-export PATH=$PATH:/Users/jeromelieow/Documents/GitHub/terraform_manager/dist/main
-alias terraform_manager2="/Users/jeromelieow/Documents/GitHub/terraform_manager/dist/main"
-
-## Features of Terraform Manager
-
-### Import AWS profiles from CSVs stored in /aws_credentials
-
-Import .csv profiles found in /aws_credentials using aws configure import --csv command.
-
-### Perform Terraform Commands
-
-Detects if a workflow file exists in the terraform root and perform regular or more complex terraform commands
-
-### Check Terraform Roots for Configuration Drift
-
-Detects configuration drift based on workflow configuration
-
-### Perform Terraform Multi-Build
-
-Allows sequential building of multiple terrform roots
-
-### Apply Terraform Blueprints
-
-Allows you to save sequential build steps into a csv file and reference them later on when a build is required.
-
-### Terraform Destroy based on History
-
-Each time a terraform root is built, it is saved to a history .csv file. When required, the file can be later referenced to destroy each root sequentially.
-
-### Use Workflows
-
-Workflows is a method to perform terraform apply on targeted modules/resources by storing them as steps in a yaml file.
-
-By simply creating a directory called workflow on the root dir of a Terraform root and placing a config.yaml file in your terraform root, Terraform Manager and Terraformx CLI will detect the yaml file and invoke terraform commands on targets modules and resources.
+...By simply creating a directory called workflow on the root dir of a Terraform root and placing a config.yaml file in your terraform root, Terraform Manager and Terraformx CLI will detect the yaml file and invoke terraform commands on targets modules and resources.
 
 #### A typical terraform root directory layout with workflow
 
     .
     ├── config                # Terraform Manager and Terraformx CLI locates all your tfvars files in the root directory and combines them into a settings.tfvars file here.
+    │   └── .env              # Environmental variables declared in a .env file will be loaded
     │   └── settings.tfvars   # Values in backend.tfvars and config.tfvars will be stored here
     ├── modules               # Location of Terraform modules.
     ├── workflow
@@ -142,3 +99,125 @@ config.yaml legend:
 | stages.targets | Specifies which modules or resources should be built in this stage | dict | module, resource | None | Operation would fail |
 | stages.targets.module | Specifies the name of the modules which should be built in this stage | arr | "name_of_module" | None | No modules will be targeted |
 | stages.targets.resources | Specifies the name of the resources which should be built in this stage | arr | "type_of_resource.name_of_resource" | None | No resources will be targeted |
+
+---
+## Terraformx: Extends Terraform Manager core features into a CLI
+
+Commands:
+
+1. terraformx init<br/><br/>
+
+    The terraformx init command initializes a terraform root.<br/><br/>
+
+    Optional Parameters:
+    
+    1. -ch-dir
+        - Location of terraform root.
+    2. -var-file        
+        - Location of variable definitions file.
+    <br/>
+
+2. terraformx apply<br/><br/>
+
+    The terraformx apply command executes the actions proposed in a Terraform plan.<br/><br/>
+
+    Optional Parameters:
+    
+    1. -ch-dir
+        - Location of terraform root.
+    2. -var-file
+        - Location of variable definitions file.
+    3. -auto-approve
+        - Auto approve command without requiring user input.
+    4. -override-workflow
+        - Overrides workflow stages auto_approve keys and auto approves every stage.
+    5. -refresh-only
+        - Review how terraform would update your state file.
+    6. -rebuild
+        - Rebuild terraform by destroying and applying the script.
+    7. -blueprint
+        - Location of blueprint file. Full and relative paths are allowed. If used without the parameter -create, the blueprint file is applied. If used with the parameter -create, a blueprint file is created.
+    8. -create
+        - Creates a blueprint. Must be used with the parameter -blueprint.
+    <br/>
+
+3. terraformx destroy<br/><br/>
+
+    The terraformx destroy command destroys the resources managed by the terraform root.<br/><br/>
+
+    Optional Parameters:
+    
+    1. -ch-dir
+        - Location of terraform root.
+    2. -var-file
+        - Location of variable definitions file.
+    3. -auto-approve
+        - Auto approve command without requiring user input.
+    4. -override-workflow
+        - Overrides workflow stages auto_approve keys and auto approves every stage.
+    5. -refresh-only
+        - Review how terraform would update your state file.
+    6. -destroy-history
+        - Destroys all terraform roots' managed resources in terraform_history.csv.
+    <br/>
+
+4. terraformx output<br/><br/>
+
+    The terraformx output command is used to extract the value of output variables from the terraform root.<br/><br/>
+
+    Optional Parameters:
+    
+    1. -ch-dir
+        - Location of terraform root.
+    <br/>
+
+5. terraformx blueprints<br/><br/>
+
+    The terraformx blueprints command is used to extract the value of output variables from the terraform root.<br/><br/>
+    
+    Optional Parameters:
+    
+    1. -file
+        - Location of blueprint file. Full and relative paths are allowed. If used without the parameter -create, the blueprint file is applied. If used with the parameter -create, a blueprint file is created.
+    2. -list
+        - List terraform roots in a Blueprint.
+    3. -create
+        - Creates a blueprint. Must be used with -blueprint.
+    <br/>
+
+6. terraformx history<br/><br/>
+
+    The terraformx blueprints command is used to extract the value of output variables from the terraform root.<br/><br/>
+
+      Optional Parameters:
+      
+      1. -ch-dir
+          - Location of terraform root.
+      2. -destroy
+          - Destroys all terraform roots' managed resources in terraform_history.csv.
+      3. -list
+          - List terraform roots in History.
+      <br/>
+
+7. terraformx list<br/><br/>
+
+    The terraformx blueprints command is used to extract the value of output variables from the terraform root.<br/><br/>
+
+      Optional Parameters:
+      
+      1. -blueprint
+          - Location of blueprint file. Full and relative paths are allowed.
+      2. -history
+          - Destroys all terraform roots' managed resources in terraform_history.csv.
+      <br/>
+
+---
+## Actions: Turns basic terraformx commands into executables for use in custom CI actions.
+
+The code transforms the following features into exes for custom GitHub Actions:
+
+1. Terraformx Apply
+2. Terraformx Destroy
+3. Terraformx Rebuild
+
+Please refer to the earlier sections for their behaviours.

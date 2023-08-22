@@ -115,9 +115,9 @@ def apply_blueprint(blueprint_path, github_action=False):
 
 def blueprints(args):
 
-    create = args.create
     file = args.file.replace("/", "" )
     list = args.list
+    create = args.create
 
     blueprint_path = get_full_path_else_return_empty_str(file, ".csv")
     if not os.path.exists(blueprint_path):

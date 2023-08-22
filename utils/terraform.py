@@ -104,9 +104,9 @@ def terraform():
                     terraform_destroy(cwd)
                     terraform_apply(cwd, AUTO_APPROVE=True)
                 case 4:
-                    terraformOutput(cwd)
+                    terraform_output(cwd)
                 case 5:
-                    terraform_apply_refresh(cwd)
+                    terraform_refresh(cwd)
             
             # To break out of while loop for Question 2
             match input("\nContinue invoking terraform commands for directory \"%s\"? N to stop, NN to return to main menu: " % os.path.basename(cwd)).upper():
@@ -155,13 +155,13 @@ def terraform_workflow(cwd):
                 stage_workflow_terraform_apply(cwd)
                 # terraform_apply(cwd, AUTO_APPROVE=True)
             case 4:
-                terraformOutput(cwd)
+                terraform_output(cwd)
             case 5:
-                stage_workflow_terraform_apply_refresh(cwd)
+                stage_workflow_terraform_refresh(cwd)
 
 def terraform_destroy_from_history():
 
-    history_path = get_dir_of_terraform_manager() + History_constants.HISTORY_CSV_PATH
+    history_path = os.path.join(get_dir_of_terraform_manager(), History_constants.HISTORY_CSV_PATH)
 
     histories = get_rows_as_list(history_path)
 
@@ -231,9 +231,9 @@ def terraform_destroy_from_history():
 
 #         cwd = list_terraform_root_dir[DIR_NUMBER]
 
-#         # subprocess.Popen(APPLY_REFRESH_PROCESS, cwd=cwd).wait()
+#         # subprocess.Popen(REFRESH_PROCESS, cwd=cwd, env=nt.environ).wait()
 
-#         p = subprocess.Popen(PLAN_REFRESH_PROCESS, cwd=cwd, stdout=subprocess.PIPE)
+#         p = subprocess.Popen(PLAN_REFRESH_PROCESS, cwd=cwd, stdout=subprocess.PIPE, env=nt.environ)
 
 #         out, err = p.communicate()
 
@@ -320,7 +320,7 @@ def terraform_check_for_drift():
                     print("%d. %s" % (index+1, os.path.basename(drifted_terraform_roots[index][0])))
             
             # Attempt to sync the difted Terraform Roots' State file to amtch the current provisioned state 
-            terraform_apply_refresh_or_apply_all(drifted_terraform_roots)
+            terraform_refresh_or_apply_all(drifted_terraform_roots)
 
         if input("\nEnter Y to perform another configuration drift check and any key to return to main menu: ").upper() != "Y":
             break
@@ -438,7 +438,7 @@ def terraform_blueprints():
 
     while True:
         # Get csv files from blueprints directory
-        path =  get_dir_of_terraform_manager() + "/data/blueprints/*.csv"
+        path = os.path.join(get_dir_of_terraform_manager(), "data", "blueprints", "*.csv")
         blueprints = glob.glob(path)
 
         OPEN_BLUEPRINTS = True
