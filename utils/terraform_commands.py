@@ -106,6 +106,7 @@ def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=F
         # If the process experiences an error, skip the remaining commands
         return 1
 
+    print("\nPerforming apply -refresh-only to sync statefile and match the current provisioned state")
     terraform_refresh(cwd, AUTO_APPROVE=True)
 
 def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=False, set_stdin=None, set_stdout=None, set_stderr=None):
@@ -138,7 +139,6 @@ def terraform_output(cwd, set_stdin=None, set_stdout=None, set_stderr=None):
 def terraform_refresh(cwd, AUTO_APPROVE=False):
     tfvars_settings(cwd)
     if AUTO_APPROVE:
-        print("\nPerforming apply -refresh-only to sync statefile and match the current provisioned state")
         process = subprocess.Popen(Terraform_commands_constants.REFRESH_AUTO_APPROVE_PROCESS, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=Terraform_commands_constants.ENV).wait()
     else:
         process = subprocess.Popen(Terraform_commands_constants.REFRESH_PROCESS, cwd=cwd, env=Terraform_commands_constants.ENV).wait()

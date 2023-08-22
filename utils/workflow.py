@@ -599,6 +599,7 @@ def workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=False,
         # If the process experiences an error, skip the remaining commands
         return 1
 
+    print("\nPerforming apply -refresh-only to sync statefile and match the current provisioned state")
     terraform_refresh(cwd, AUTO_APPROVE=True)
 
 def workflow_terraform_destroy(cwd, stage_targets, stage_name, AUTO_APPROVE=False, github_action=False):
