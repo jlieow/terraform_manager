@@ -22,11 +22,7 @@ class Terraform_commands_constants:
     AUTO_APPROVE = '-auto-approve'
     REFRESH_ONLY = '-refresh-only'
 
-    if sys.platform == "win32":
-        import nt
-        ENV = nt.environ
-    else:
-        ENV = os.environ
+    ENV = get_env_object()
 
     INIT_PROCESS = [TERRAFORM_PARSER, INIT, '-backend-config=%s' % BACKEND_CONFIG_FILE]
     OUTPUT_PROCESS = [TERRAFORM_PARSER, 'output']

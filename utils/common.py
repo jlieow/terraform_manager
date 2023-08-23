@@ -114,3 +114,10 @@ def getcwd():
         return os.path.dirname(sys.executable)
     elif __file__:
         return os.path.dirname(__file__)
+    
+def get_env_object():
+    if sys.platform == "win32":
+        import nt
+        return nt.environ
+    else:
+        return os.environ

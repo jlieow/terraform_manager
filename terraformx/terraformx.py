@@ -84,11 +84,8 @@ def load_nt_env(file_path):
             line = line.strip()
             if line and not line.startswith('#'):
                 key, value = line.split('=', 1)
-                if sys.platform == "win32":
-                    import nt
-                    nt.environ[key] = value
-                else:
-                    os.environ[key] = value
+                env = get_env_object()
+                env[key] = value
 
 def default(args):
     print(top_level_help_message)
