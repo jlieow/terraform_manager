@@ -28,7 +28,7 @@ class Terraform_commands_constants:
     else:
         ENV = os.environ
 
-    INIT_PROCESS = [TERRAFORM_PARSER, INIT, '-backend-config=%s' % BACKEND_CONFIG_FILE]
+    INIT_PROCESS = [TERRAFORM_PARSER, INIT]
     OUTPUT_PROCESS = [TERRAFORM_PARSER, 'output']
     APPLY_PROCESS = [TERRAFORM_PARSER, APPLY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
     APPLY_AUTO_APPROVE_PROCESS = [TERRAFORM_PARSER, APPLY, '-var-file=%s' % TERRAFORMX_VAR_FILE, AUTO_APPROVE]
@@ -79,6 +79,11 @@ def tfvars_settings(cwd):
 def terraform_init(cwd, CUSTOM_VAR_FILE="", set_stdin=None, set_stdout=None, set_stderr=None):
 
     init_process = Terraform_commands_constants.INIT_PROCESS
+
+    backend_tfvars = glob.glob(os.path.join(cwd, "backend.tfvars"))
+    if len(backend_tfvars) > 0:
+        init_process = [Terraform_commands_constants.TERRAFORM_PARSER, 'init', '-backend-config=%s' % Terraform_commands_constants.BACKEND_CONFIG_FILE]
+
     if len(CUSTOM_VAR_FILE) > 0:   
         init_process = [Terraform_commands_constants.TERRAFORM_PARSER, 'init', '-backend-config=%s' % CUSTOM_VAR_FILE]
 
