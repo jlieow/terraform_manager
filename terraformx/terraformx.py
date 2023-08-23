@@ -2,7 +2,6 @@
 import sys
 import argparse
 import os
-import nt
 from dotenv import load_dotenv
 
 from terraformx.parser_init import *
@@ -85,7 +84,11 @@ def load_nt_env(file_path):
             line = line.strip()
             if line and not line.startswith('#'):
                 key, value = line.split('=', 1)
-                nt.environ[key] = value
+                if sys.platform == "win32":
+                    import nt
+                    nt.environ[key] = value
+                else:
+                    os.environ[key] = value
 
 def default(args):
     print(top_level_help_message)
