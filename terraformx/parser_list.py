@@ -21,7 +21,7 @@ def list(args):
             return
 
     if history:
-        history_path = get_dir_of_terraform_manager() + History_constants.HISTORY_CSV_PATH
+        history_path = os.path.join(get_dir_of_terraform_manager(), History_constants.HISTORY_CSV_PATH)
 
         histories = get_rows_as_list(history_path)
 

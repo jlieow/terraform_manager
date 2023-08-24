@@ -1,5 +1,6 @@
 import unittest
 import csv
+import os
 
 from utils import history
 
@@ -9,7 +10,7 @@ class HistoryTestSuite(unittest.TestCase):
     cwd = "unit_testing"
     stage_name = "unit_testing_stage"
     unit_testing = True 
-    unit_testing_path = "./test_data/history/terraform_history.csv"
+    unit_testing_path = os.path.join(".", "test_data", "history", "terraform_history.csv")
 
     def erase_history(self):
         unit_testing_path = HistoryTestSuite.unit_testing_path

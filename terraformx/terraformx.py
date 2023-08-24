@@ -93,7 +93,7 @@ def default(args):
 def main():
     # export environmental variables from /config/.env if it exists
     # load_dotenv("config/.env") 
-    load_nt_env("config/.env") 
+    load_nt_env(os.path.join("config", ".env"))
 
     # top-level parser
     top_level_parser = argparse.ArgumentParser(description = "terraformx")

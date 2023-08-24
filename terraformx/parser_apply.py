@@ -64,7 +64,7 @@ def blueprints(blueprint_file, create):
 
     if not os.path.exists(blueprint_path):
         if input("\nBlueprint file not found. Enter \"Y\" to create a blueprint: ").upper() == "Y":
-            blueprint_path = getcwd() + "/" + blueprint_file + ".csv"
+            blueprint_path = os.path.join(getcwd(), blueprint_file + ".csv")
             create_blueprint(blueprint_path)
         return
     
