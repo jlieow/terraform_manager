@@ -5,13 +5,14 @@ import subprocess
 from utils.common import *
 from utils.history import *
 from utils.common import getcwd
+from terraformx.terraformx_common import get_cwd
 
 # ----- CONSTANTS ----- #
 
 class Terraform_commands_constants:
     TERRAFORM_PARSER = 'terraform'
     BACKEND_CONFIG_FILE = 'backend.tfvars'
-    TERRAFORMX_VAR_FILE = os.path.join('/config', 'settings.tfvars')
+    TERRAFORMX_VAR_FILE = os.path.join(get_cwd(), 'config', 'settings.tfvars')
 
     INIT = 'init'
     MIGRATE_STATE = '-migrate-state'
