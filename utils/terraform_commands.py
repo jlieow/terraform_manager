@@ -4,7 +4,7 @@ import subprocess
 
 from utils.common import *
 from utils.history import *
-from utils.common import getcwd
+# from utils.common import getcwd
 from terraformx.terraformx_common import get_cwd
 
 # ----- CONSTANTS ----- #
