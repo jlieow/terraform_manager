@@ -5,19 +5,26 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 # from terraformx.parser_apply import *
 from terraformx.terraformx import *
+from utils.print_options import print_error
 
 def github_action_apply_only(cwd, var_file, auto_approve, override_workflow, github_action_active_stages=""):
-    if does_workflow_file_exist(cwd):
+    try:
+        if does_workflow_file_exist(cwd):
 
-        print_warning("\n[WARNING] All stages will be auto approved regardless of the configuration present in workflow/config.yaml")
-        
-        github_action_stage_workflow_terraform_apply(cwd, override_workflow=True, active_stages_statements=github_action_active_stages)
-        return
+            print_warning("\n[WARNING] All stages will be auto approved regardless of the configuration present in workflow/config.yaml")
+            
+            github_action_stage_workflow_terraform_apply(cwd, override_workflow=True, active_stages_statements=github_action_active_stages)
+            return
 
-    else:
-        print("\ngithub_action no workflow")
-        terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=True, github_action=True)
-        return
+        else:
+            print("\ngithub_action no workflow")
+            returncode = terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=True, github_action=True)
+            if returncode == 1:
+                raise Exception("Error running terraform apply")
+            return
+    except Exception as e:
+        print_error(str(e))
+        sys.exit(1)
 
 def main():
 

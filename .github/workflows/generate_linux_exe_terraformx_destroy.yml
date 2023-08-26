@@ -25,10 +25,10 @@ jobs:
         working-directory: actions
         run: |
           pyinstaller --onefile github_action_terraformx_destroy.py -p $GITHUB_WORKSPACE -y
-          mv /dist/github_action_terraformx_destroy /dist/destroy
+          mv dist/github_action_terraformx_destroy dist/destroy
 
         shell: bash
       - uses: actions/upload-artifact@v3
         with:
           name: destroy
-          path: actions/dist/github_action_terraformx_destroy
+          path: actions/dist/destroy

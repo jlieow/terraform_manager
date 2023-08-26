@@ -103,7 +103,7 @@ def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=F
     apply_auto_approve_process = Terraform_commands_constants.APPLY_AUTO_APPROVE_PROCESS
     apply_process = Terraform_commands_constants.APPLY_PROCESS
     if len(CUSTOM_VAR_FILE) > 0:   
-        apply_auto_approve_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.APPLY, '-var-file=%s' % CUSTOM_VAR_FILE, AUTO_APPROVE]
+        apply_auto_approve_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.APPLY, '-var-file=%s' % CUSTOM_VAR_FILE, Terraform_commands_constants.AUTO_APPROVE]
         apply_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.APPLY, '-var-file=%s' % CUSTOM_VAR_FILE]
     
     if AUTO_APPROVE:
@@ -125,7 +125,7 @@ def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action
     destroy_auto_approve_process = Terraform_commands_constants.DESTROY_AUTO_APPROVE_PROCESS
     destroy_process = Terraform_commands_constants.DESTROY_PROCESS
     if len(CUSTOM_VAR_FILE) > 0:   
-        destroy_auto_approve_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.DESTROY, '-var-file=%s' % CUSTOM_VAR_FILE, AUTO_APPROVE]
+        destroy_auto_approve_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.DESTROY, '-var-file=%s' % CUSTOM_VAR_FILE, Terraform_commands_constants.AUTO_APPROVE]
         destroy_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.DESTROY, '-var-file=%s' % CUSTOM_VAR_FILE]
 
     if AUTO_APPROVE:
