@@ -81,13 +81,14 @@ Main commands:\n\
   rm            Remove a binding to an existing remote object without first destroying it"
 
 def load_nt_env(file_path):
-    with open(file_path, 'r') as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith('#'):
-                key, value = line.split('=', 1)
-                env = get_env_object()
-                env[key] = value
+    if os.path.isfile(file_path):
+        with open(file_path, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#'):
+                    key, value = line.split('=', 1)
+                    env = get_env_object()
+                    env[key] = value
 
 def default(args):
     print(top_level_help_message)
