@@ -31,7 +31,7 @@ def main():
 
     cwd = getcwd()
 
-    if is_dir_a_terraform_root(cwd):
+    if not is_dir_a_terraform_root(cwd):
         print_error("\n[ERROR] Unable to locate Terraform root in the specified directory: \n%s" % cwd)
         return
     

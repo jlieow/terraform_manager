@@ -14,7 +14,7 @@ def get_cwd(dir):
     else:
         cwd = dir
         if not os.path.exists(cwd):
-            cwd = os.getcwd + dir
+            cwd = os.path.join(os.getcwd(), dir)
         if not os.path.exists(cwd):
             print_error("[ERROR] Unable to locate directory.")
             return ""
@@ -29,13 +29,9 @@ def get_full_path_else_return_empty_str(path, optional_ext=""):
     
     working_path = path
     if not os.path.exists(working_path):
-        working_path = getcwd() + path
+        working_path = os.path.join(getcwd(), path)
     if not os.path.exists(working_path):
-        working_path = getcwd() + "/" + path
-    if not os.path.exists(working_path):
-        working_path = getcwd() + path + optional_ext
-    if not os.path.exists(working_path):
-        working_path = getcwd() + "/" + path + optional_ext
+        working_path = os.path.join(getcwd(), path + optional_ext)
     if not os.path.exists(working_path):
         return ""
 
