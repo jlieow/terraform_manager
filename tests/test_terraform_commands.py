@@ -11,11 +11,11 @@ class TerraformCommandsTestSuite(unittest.TestCase):
         # example_terraform_root_directories contains 3 directories
         # 2 are terraform root directories as they contain backend.tf files
 
-        root_directory = "./test_data/terraform_commands/example_terraform_root_directories"
+        root_directory = os.path.join(".", "test_data", "terraform_commands", "example_terraform_root_directories")
 
         EXPECTED_TERRAFORM_ROOT_DIR = [
-            "./test_data/terraform_commands/example_terraform_root_directories/example_terraform_root_directory",
-            "./test_data/terraform_commands/example_terraform_root_directories/example_second_terraform_root_directory"
+            os.path.join(".", "test_data", "terraform_commands", "example_terraform_root_directories", "example_terraform_root_directory"),
+            os.path.join(".", "test_data", "terraform_commands", "example_terraform_root_directories", "example_second_terraform_root_directory")
             ]
 
         list_terraform_root_dir = terraform_commands.locate_terraform_root_directories(root_directory)
@@ -32,7 +32,7 @@ class TerraformCommandsTestSuite(unittest.TestCase):
     def test_tfvars_settings(self):
         
         #Test if tfvars_settings work with both config dir and settings.tfvars file present
-        cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist = "./test_data/terraform_commands/tfvars_settings_config_dir_exist_settings_tfvars_exist"
+        cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist = os.path.join(".", "test_data", "terraform_commands", "tfvars_settings_config_dir_exist_settings_tfvars_exist")
         try:
             terraform_commands.tfvars_settings(cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist)
         except:
@@ -40,51 +40,51 @@ class TerraformCommandsTestSuite(unittest.TestCase):
 
 
         #Test if tfvars_settings work with only config dir present
-        cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist = "./test_data/terraform_commands/tfvars_settings_only_config_dir_exist"
+        cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist = os.path.join(".", "test_data", "terraform_commands", "tfvars_settings_only_config_dir_exist")
 
-        ext_config_settings_tfvars = "/config/settings.tfvars"
+        ext_config_settings_tfvars = os.path.join("config", "settings.tfvars")
         
         # Check for and remove settings.tfvars if present before beginning test
-        if os.path.exists(cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist + ext_config_settings_tfvars):
+        if os.path.exists(os.path.join(cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist, ext_config_settings_tfvars)):
             print("settings.tfvars is present")
-            os.remove(cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist + ext_config_settings_tfvars)
+            os.remove(os.path.join(cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist, ext_config_settings_tfvars))
         
         try:
             terraform_commands.tfvars_settings(cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist)
         except:
             assert False
 
-        if os.path.exists(cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist + ext_config_settings_tfvars):
+        if os.path.exists(os.path.join(cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist, ext_config_settings_tfvars)):
             print("settings.tfvars is present")
-            os.remove(cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist + ext_config_settings_tfvars)
+            os.remove(os.path.join(cwd_tfvars_settings_config_dir_exist_settings_tfvars_exist, ext_config_settings_tfvars))
         
         #Test if tfvars_settings work when both config dir and settings.tfvars are not presents
-        cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist = "./test_data/terraform_commands/tfvars_settings_config_dir_and_settings_tfvars_do_not_exist"
+        cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist = os.path.join(".", "test_data", "terraform_commands", "tfvars_settings_config_dir_and_settings_tfvars_do_not_exist")
 
-        ext_config_settings_tfvars = "/config/settings.tfvars"
-        ext_config_dir = "/config"
+        ext_config_settings_tfvars = os.path.join("config", "settings.tfvars")
+        ext_config_dir = "config"
 
         # Check for and remove settings.tfvars and config dir if present before beginning test
-        if os.path.exists(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist + ext_config_settings_tfvars):
+        if os.path.exists(os.path.join(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist, ext_config_settings_tfvars)):
             print("settings.tfvars is present")
-            os.remove(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist + ext_config_settings_tfvars)
+            os.remove(os.path.join(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist, ext_config_settings_tfvars))
         
-        if os.path.exists(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist + ext_config_dir):
+        if os.path.exists(os.path.join(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist, ext_config_dir)):
             print("settings.tfvars is present")
-            os.rmdir(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist + ext_config_dir)
+            os.rmdir(os.path.join(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist, ext_config_dir))
 
         try:
             terraform_commands.tfvars_settings(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist)
         except:
             assert False
 
-        if os.path.exists(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist + ext_config_settings_tfvars):
+        if os.path.exists(os.path.join(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist, ext_config_settings_tfvars)):
             print("settings.tfvars is present")
-            os.remove(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist + ext_config_settings_tfvars)
+            os.remove(os.path.join(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist, ext_config_settings_tfvars))
         
-        if os.path.exists(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist + ext_config_dir):
+        if os.path.exists(os.path.join(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist, ext_config_dir)):
             print("settings.tfvars is present")
-            os.rmdir(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist + ext_config_dir)
+            os.rmdir(os.path.join(cwd_tfvars_settings_config_dir_and_settings_tfvars_do_not_exist, ext_config_dir))
         
         assert True
 
