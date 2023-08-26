@@ -7,6 +7,7 @@ def init(args):
 
     chdir = args.chdir
     var_file = args.var_file
+    migrate_state = args.migrate_state
 
     cwd = get_cwd(chdir)
     if len(cwd) == 0:
@@ -16,4 +17,4 @@ def init(args):
 
     tfvars_settings(cwd) 
 
-    terraform_init(cwd, CUSTOM_VAR_FILE=var_file)
+    terraform_init(cwd, migrate_state, CUSTOM_VAR_FILE=var_file)

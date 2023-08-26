@@ -14,6 +14,7 @@ class Terraform_commands_constants:
     TERRAFORMX_VAR_FILE = os.path.join('config', 'settings.tfvars')
 
     INIT = 'init'
+    MIGRATE_STATE = '-migrate-state'
     APPLY = 'apply'
     DESTROY = 'destroy'
     PLAN = 'plan'
@@ -29,6 +30,7 @@ class Terraform_commands_constants:
         ENV = os.environ
 
     INIT_PROCESS = [TERRAFORM_PARSER, INIT, '-backend-config=%s' % BACKEND_CONFIG_FILE]
+    INIT_MIGRATE_STATE_PROCESS = [TERRAFORM_PARSER, INIT, MIGRATE_STATE, '-backend-config=%s' % BACKEND_CONFIG_FILE]
     OUTPUT_PROCESS = [TERRAFORM_PARSER, 'output']
     APPLY_PROCESS = [TERRAFORM_PARSER, APPLY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
     APPLY_AUTO_APPROVE_PROCESS = [TERRAFORM_PARSER, APPLY, '-var-file=%s' % TERRAFORMX_VAR_FILE, AUTO_APPROVE]
@@ -76,11 +78,15 @@ def tfvars_settings(cwd):
                 # Remove newline at the end of the file
                 infile.read().rstrip('\n')  
 
-def terraform_init(cwd, CUSTOM_VAR_FILE="", set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_init(cwd, migrate_state, CUSTOM_VAR_FILE="", set_stdin=None, set_stdout=None, set_stderr=None):
 
     init_process = Terraform_commands_constants.INIT_PROCESS
-    if len(CUSTOM_VAR_FILE) > 0:   
-        init_process = [Terraform_commands_constants.TERRAFORM_PARSER, 'init', '-backend-config=%s' % CUSTOM_VAR_FILE]
+    if migrate_state:
+        init_process = Terraform_commands_constants.INIT_MIGRATE_STATE_PROCESS
+    
+    if len(CUSTOM_VAR_FILE) > 0:    # Removes default backend config file and replaces with custom file
+        init_process.pop()
+        init_process.append('-backend-config=%s' % CUSTOM_VAR_FILE)
 
     subprocess.Popen(init_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr, env=Terraform_commands_constants.ENV).wait()
 
