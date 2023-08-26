@@ -28,6 +28,7 @@ class Parser_constants:
 class Args_constants:
     CHDIR = "-chdir"
     VAR_FILE = "-var-file"
+    MIGRATE_STATE = "-migrate-state"
     AUTO_APPROVE = "-auto-approve"
     OVERRIDE_WORKFLOW = "-override-workflow"
     REFRESH_ONLY = "-refresh-only"
@@ -53,6 +54,7 @@ class Help_constants:
     LOCATION_OF_TFVARS_FILE = "Location of variable definitions file."
     LOCATION_OF_BLUEPRINT_FILE = "Location of blueprint file. Full and relative paths are allowed."
     LOCATION_OF_BLUEPRINT_FILE_CREATE = "Location of blueprint file. Full and relative paths are allowed. If used without the parameter -create, the blueprint file is applied. If used with the parameter -create, a blueprint file is created."
+    MIGRATE_STATE_COMMAND = "Reconfigure a backend, and attempt to migrate any existing state."
     AUTO_APPROVE_COMMAND = "Auto approve command without requiring user input."
     OVERRIDE_WORKFLOW = "Overrides workflow stages auto_approve keys and auto approves every stage."
     TERRAFORM_STATE_FILE_REVIEW = "Review how terraform would update your state file."
@@ -93,7 +95,7 @@ def default(args):
 def main():
     # export environmental variables from /config/.env if it exists
     # load_dotenv("config/.env") 
-    load_nt_env("config/.env") 
+    load_nt_env(os.path.join("config", ".env"))
 
     # top-level parser
     top_level_parser = argparse.ArgumentParser(description = "terraformx")
@@ -105,6 +107,7 @@ def main():
     terraformx_init.set_defaults(function=init)
     terraformx_init.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
     terraformx_init.add_argument(Args_constants.VAR_FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TFVARS_FILE)
+    terraformx_init.add_argument(Args_constants.MIGRATE_STATE, action=Action_constants.STORE_TRUE, help = Help_constants.MIGRATE_STATE_COMMAND)
 
     terraformx_apply = subparsers.add_parser(Parser_constants.APPLY)
     terraformx_apply.set_defaults(function=apply)

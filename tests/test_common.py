@@ -1,3 +1,4 @@
+import os
 import unittest
 
 from utils import common
@@ -7,7 +8,7 @@ class CommonTestSuite(unittest.TestCase):
 
     def test_get_rows_as_list(self):
 
-        path = "./test_data/common/rows_as_list.csv"
+        path = os.path.join(".", "test_data", "common", "rows_as_list.csv")
         CHECK_ROWS_AS_LIST = [['1'], ['2'], ['3'], ['4']]
         
         rows_as_list = common.get_rows_as_list(path)

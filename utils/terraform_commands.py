@@ -14,6 +14,7 @@ class Terraform_commands_constants:
     TERRAFORMX_VAR_FILE = os.path.join('config', 'settings.tfvars')
 
     INIT = 'init'
+    MIGRATE_STATE = '-migrate-state'
     APPLY = 'apply'
     DESTROY = 'destroy'
     PLAN = 'plan'
@@ -24,7 +25,7 @@ class Terraform_commands_constants:
 
     ENV = get_env_object()
 
-    INIT_PROCESS = [TERRAFORM_PARSER, INIT, '-backend-config=%s' % BACKEND_CONFIG_FILE]
+    INIT_PROCESS = [TERRAFORM_PARSER, INIT]
     OUTPUT_PROCESS = [TERRAFORM_PARSER, 'output']
     APPLY_PROCESS = [TERRAFORM_PARSER, APPLY, '-var-file=%s' % TERRAFORMX_VAR_FILE]
     APPLY_AUTO_APPROVE_PROCESS = [TERRAFORM_PARSER, APPLY, '-var-file=%s' % TERRAFORMX_VAR_FILE, AUTO_APPROVE]
@@ -72,9 +73,17 @@ def tfvars_settings(cwd):
                 # Remove newline at the end of the file
                 infile.read().rstrip('\n')  
 
-def terraform_init(cwd, CUSTOM_VAR_FILE="", set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_init(cwd, migrate_state, CUSTOM_VAR_FILE="", set_stdin=None, set_stdout=None, set_stderr=None):
 
     init_process = Terraform_commands_constants.INIT_PROCESS
+    if migrate_state:
+        init_process = Terraform_commands_constants.INIT_MIGRATE_STATE_PROCESS
+
+    # Assign default backend file but use custom backend file if it exists
+    backend_tfvars = glob.glob(os.path.join(cwd, "backend.tfvars"))
+    if len(backend_tfvars) > 0:
+        init_process = [Terraform_commands_constants.TERRAFORM_PARSER, 'init', '-backend-config=%s' % Terraform_commands_constants.BACKEND_CONFIG_FILE]
+
     if len(CUSTOM_VAR_FILE) > 0:   
         init_process = [Terraform_commands_constants.TERRAFORM_PARSER, 'init', '-backend-config=%s' % CUSTOM_VAR_FILE]
 
@@ -90,7 +99,7 @@ def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=F
     apply_auto_approve_process = Terraform_commands_constants.APPLY_AUTO_APPROVE_PROCESS
     apply_process = Terraform_commands_constants.APPLY_PROCESS
     if len(CUSTOM_VAR_FILE) > 0:   
-        apply_auto_approve_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.APPLY, '-var-file=%s' % CUSTOM_VAR_FILE, AUTO_APPROVE]
+        apply_auto_approve_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.APPLY, '-var-file=%s' % CUSTOM_VAR_FILE, Terraform_commands_constants.AUTO_APPROVE]
         apply_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.APPLY, '-var-file=%s' % CUSTOM_VAR_FILE]
     
     if AUTO_APPROVE:
@@ -112,7 +121,7 @@ def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action
     destroy_auto_approve_process = Terraform_commands_constants.DESTROY_AUTO_APPROVE_PROCESS
     destroy_process = Terraform_commands_constants.DESTROY_PROCESS
     if len(CUSTOM_VAR_FILE) > 0:   
-        destroy_auto_approve_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.DESTROY, '-var-file=%s' % CUSTOM_VAR_FILE, AUTO_APPROVE]
+        destroy_auto_approve_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.DESTROY, '-var-file=%s' % CUSTOM_VAR_FILE, Terraform_commands_constants.AUTO_APPROVE]
         destroy_process = [Terraform_commands_constants.TERRAFORM_PARSER, Terraform_commands_constants.DESTROY, '-var-file=%s' % CUSTOM_VAR_FILE]
 
     if AUTO_APPROVE:

@@ -1,3 +1,4 @@
+import os
 import unittest
 
 from utils import workflow
@@ -7,7 +8,7 @@ class WorkflowTestSuite(unittest.TestCase):
 
     def test_workflow_is_ignored(self):
 
-        workflow_is_ignored_path = "./test_data/workflow/config_is_ignored/workflow/config.yaml"
+        workflow_is_ignored_path = os.path.join(".", "test_data", "workflow", "config_is_ignored", "workflow", "config.yaml")
     
         if workflow.is_workflow_file_ignored(workflow_is_ignored_path):
             assert True
@@ -16,7 +17,7 @@ class WorkflowTestSuite(unittest.TestCase):
 
     def test_workflow_is_not_ignored(self):
 
-        workflow_is_not_ignored_path = "./test_data/workflow/config_is_not_ignored/workflow/config.yaml"
+        workflow_is_not_ignored_path = os.path.join(".", "test_data", "workflow", "config_is_not_ignored", "workflow", "config.yaml")
 
         if workflow.is_workflow_file_ignored(workflow_is_not_ignored_path):
             assert False
@@ -40,7 +41,7 @@ class WorkflowTestSuite(unittest.TestCase):
     #         assert True
 
     def test_stage_name_exists(self):
-        stage_name_exists = "./test_data/workflow/config_stage_name_exists"
+        stage_name_exists = os.path.join(".", "test_data", "workflow", "config_stage_name_exists")
 
         if workflow.does_stage_name_exist(stage_name_exists, "stage"):
             assert True
@@ -49,7 +50,7 @@ class WorkflowTestSuite(unittest.TestCase):
 
     # TODO
     def test_stage_name_does_not_exist(self):
-        stage_name_does_not_exist = "./test_data/workflow/config_stage_name_does_not_exist"
+        stage_name_does_not_exist = os.path.join(".", "test_data", "workflow", "config_stage_name_does_not_exist")
 
         if workflow.does_stage_name_exist(stage_name_does_not_exist, "stage_does_not_exist"):
             assert False
@@ -57,7 +58,7 @@ class WorkflowTestSuite(unittest.TestCase):
             assert True
 
     def test_all_active_stages_from_workflow(self):
-        cwd = "./test_data/workflow/active_stage_1/"
+        cwd = os.path.join(".", "test_data", "workflow", "active_stage_1")
         ACTIVE_STAGES = [0]
         active_stages, err, err_message = workflow.get_active_stages_from_workflow(cwd)
 
@@ -67,7 +68,7 @@ class WorkflowTestSuite(unittest.TestCase):
             assert False
 
     def test_get_active_stages_0_from_workflow_and_detect_error(self):
-        cwd = "./test_data/workflow/active_stage_0/"
+        cwd = os.path.join(".", "test_data", "workflow", "active_stage_0")
 
         active_stages, err, err_message = workflow.get_active_stages_and_stage_names_from_workflow(cwd)
 
@@ -77,7 +78,7 @@ class WorkflowTestSuite(unittest.TestCase):
             assert False
 
     def test_get_active_stages_1_from_workflow(self):
-        cwd = "./test_data/workflow/active_stage_1/"
+        cwd = os.path.join(".", "test_data", "workflow", "active_stage_1")
         ACTIVE_STAGES = [0]
         active_stages, err, err_message = workflow.get_active_stages_and_stage_names_from_workflow(cwd)
         
@@ -87,7 +88,7 @@ class WorkflowTestSuite(unittest.TestCase):
             assert False
 
     def test_get_active_stages_2_from_workflow(self):
-        cwd = "./test_data/workflow/active_stage_2/"
+        cwd = os.path.join(".", "test_data", "workflow", "active_stage_2")
         ACTIVE_STAGES = [1]
         active_stages, err, err_message = workflow.get_active_stages_and_stage_names_from_workflow(cwd)
 
@@ -98,7 +99,7 @@ class WorkflowTestSuite(unittest.TestCase):
 
     # TODO
     def test_get_active_stages_names_from_workflow(self):
-        cwd = "./test_data/workflow/active_stage_named_stage/"
+        cwd = os.path.join(".", "test_data", "workflow", "active_stage_named_stage")
         ACTIVE = [1]
         
         active, err, err_message = workflow.get_active_stages_and_stage_names_from_workflow(cwd)
@@ -109,7 +110,7 @@ class WorkflowTestSuite(unittest.TestCase):
             assert False
 
     def test_get_active_stages_range_2to3_and_5_from_workflow(self):
-        cwd = "./test_data/workflow/active_stages_range_2to3_and_5/"
+        cwd = os.path.join(".", "test_data", "workflow", "active_stages_range_2to3_and_5")
         ACTIVE = [1,2,4]
         
         active, err, err_message = workflow.get_active_stages_and_stage_names_from_workflow(cwd)
@@ -120,7 +121,7 @@ class WorkflowTestSuite(unittest.TestCase):
             assert False
 
     def test_get_active_stages_mix_range_2to3_and_5_and_named_stage_from_workflow(self):
-        cwd = "./test_data/workflow/active_stages_range_2to3_and_5_and_named_stage/"
+        cwd = os.path.join(".", "test_data", "workflow", "active_stages_range_2to3_and_5_and_named_stage")
         ACTIVE = [1,2,4,7,9]
         
         active, err, err_message = workflow.get_active_stages_and_stage_names_from_workflow(cwd)
@@ -138,9 +139,9 @@ class WorkflowTestSuite(unittest.TestCase):
         # Test if workflow is ignored when ignore: False
         # If does_workflow_file_exist() returns False, that means workflow does not exist
         # Expected workflow to exist as workflow is not ignored
-        cwd_config_is_not_ignored = "./test_data/workflow/config_is_not_ignored"
-        cwd_config_is_ignored = "./test_data/workflow/config_is_ignored"
-        cwd_config_ignore_key_is_missing = "./test_data/workflow/config_ignore_key_is_missing"
+        cwd_config_is_not_ignored = os.path.join(".", "test_data", "workflow", "config_is_not_ignored")
+        cwd_config_is_ignored = os.path.join(".", "test_data", "workflow", "config_is_ignored")
+        cwd_config_ignore_key_is_missing = os.path.join(".", "test_data", "workflow", "config_ignore_key_is_missing")
 
         if workflow.does_workflow_file_exist(cwd_config_is_not_ignored) == False:
             assert False
@@ -163,7 +164,7 @@ class WorkflowTestSuite(unittest.TestCase):
             assert True
 
     def test_get_number_of_resources_from_workflow(self):
-        path = "./test_data/workflow/workflow/config.yaml"
+        path = os.path.join(".", "test_data", "workflow", "workflow", "config.yaml")
 
         number_of_workflow_resources = workflow.get_number_of_resources_from_workflow(path)
 
@@ -173,7 +174,7 @@ class WorkflowTestSuite(unittest.TestCase):
             assert False
 
     def test_get_number_of_resources_from_maintf(self):
-        path = "./test_data/workflow/main.tf"
+        path = os.path.join(".", "test_data", "workflow", "main.tf")
 
         number_of_maintf_resources = workflow.get_number_of_resources_from_maintf(path)
 
@@ -183,7 +184,7 @@ class WorkflowTestSuite(unittest.TestCase):
             assert False
 
     def test_get_list_of_resources_from_workflow(self):
-        path = "./test_data/workflow/workflow/config.yaml"
+        path = os.path.join(".", "test_data", "workflow", "workflow", "config.yaml")
 
         EXPECTED_LIST_OF_WORKFLOW_RESOURCES = [
             "module.mi-1",
@@ -205,7 +206,7 @@ class WorkflowTestSuite(unittest.TestCase):
             assert False
 
     def test_get_list_of_resources_from_maintf(self):
-        path = "./test_data/workflow/main.tf"
+        path = os.path.join(".", "test_data", "workflow", "main.tf")
 
         EXPECTED_LIST_OF_MAINTF_RESOURCES = [
             "module.mi-1",
@@ -227,7 +228,7 @@ class WorkflowTestSuite(unittest.TestCase):
             assert False
 
     def test_does_workflow_file_contain_duplicates(self):
-        path = "./test_data/workflow/workflow/config.yaml"
+        path = os.path.join(".", "test_data", "workflow", "workflow", "config.yaml")
 
         list_of_workflow_resources = workflow.get_list_of_resources_from_workflow(path)
 
@@ -242,12 +243,12 @@ class WorkflowTestSuite(unittest.TestCase):
 
         number_of_checks = 0
 
-        workflow_less_than_maintf_path = "./test_data/workflow/config_less_than_maintf/workflow/config.yaml"
-        workflow_more_than_maintf_path = "./test_data/workflow/config_more_than_maintf/workflow/config.yaml"
-        workflow_same_as_maintf_path = "./test_data/workflow/config_same_as_maintf/workflow/config.yaml"
-        workflow_same_as_maintf_path_but_wrong_resource = "./test_data/workflow/config_same_as_maintf_but_wrong_resource/workflow/config.yaml"
+        workflow_less_than_maintf_path = os.path.join(".", "test_data", "workflow", "config_less_than_maintf", "workflow", "config.yaml")
+        workflow_more_than_maintf_path = os.path.join(".", "test_data", "workflow", "config_more_than_maintf", "workflow", "config.yaml")
+        workflow_same_as_maintf_path = os.path.join(".", "test_data", "workflow", "config_same_as_maintf", "workflow", "config.yaml")
+        workflow_same_as_maintf_path_but_wrong_resource = os.path.join(".", "test_data", "workflow", "config_same_as_maintf_but_wrong_resource", "workflow", "config.yaml")
         
-        maintf_path = "./test_data/workflow/main.tf"
+        maintf_path = os.path.join(".", "test_data", "workflow", "main.tf")
         list_of_maintf_resources = workflow.get_list_of_resources_from_maintf(maintf_path)
 
         # List of workflow resources is less than maintf, so does_workflow_objects_exist_in_maintf should be True
@@ -285,7 +286,7 @@ class WorkflowTestSuite(unittest.TestCase):
     
     def test_check_stages_errors_with_no_workflow_errors(self):
 
-        cwd = "./test_data/workflow/stages_with_no_workflow_errors"
+        cwd = os.path.join(".", "test_data", "workflow", "stages_with_no_workflow_errors")
 
         stages, stages_errors = workflow.get_stages(cwd)
 
@@ -318,7 +319,7 @@ class WorkflowTestSuite(unittest.TestCase):
 
     def test_check_stages_return_module(self):
 
-        cwd = "./test_data/workflow/stages_with_no_workflow_errors"
+        cwd = os.path.join(".", "test_data", "workflow", "stages_with_no_workflow_errors")
 
         stages, stages_errors = workflow.get_stages(cwd)
 
@@ -331,7 +332,7 @@ class WorkflowTestSuite(unittest.TestCase):
     
     def test_check_stages_return_resources(self):
 
-        cwd = "./test_data/workflow/stages_with_no_workflow_errors_target_resource"
+        cwd = os.path.join(".", "test_data", "workflow", "stages_with_no_workflow_errors_target_resource")
 
         stages, stages_errors = workflow.get_stages(cwd)
 
@@ -344,10 +345,10 @@ class WorkflowTestSuite(unittest.TestCase):
 
     def test_check_stages_errors_with_workflow_errors(self):
 
-        workflow_less_than_maintf_cwd = "./test_data/workflow/config_less_than_maintf"
-        workflow_more_than_maintf_cwd = "./test_data/workflow/config_more_than_maintf"
-        workflow_same_as_maintf_path = "./test_data/workflow/config_same_as_maintf"
-        workflow_same_as_maintf_path_but_wrong_resource = "./test_data/workflow/config_same_as_maintf_but_wrong_resource/workflow/config.yaml"
+        workflow_less_than_maintf_cwd = os.path.join(".", "test_data", "workflow", "config_less_than_maintf")
+        workflow_more_than_maintf_cwd = os.path.join(".", "test_data", "workflow", "config_more_than_maintf")
+        workflow_same_as_maintf_path = os.path.join(".", "test_data", "workflow", "config_same_as_maintf")
+        workflow_same_as_maintf_path_but_wrong_resource = os.path.join(".", "test_data", "workflow", "config_same_as_maintf_but_wrong_resource", "workflow", "config.yaml")
 
         # List of workflow resources is less than maintf, so does_workflow_contain_error_and_warnings should be False
         if workflow.does_workflow_contain_error_and_warnings(workflow_less_than_maintf_cwd) != False:
