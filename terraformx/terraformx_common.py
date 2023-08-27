@@ -10,7 +10,7 @@ from utils import *
 def get_cwd(dir):
 
     if len(dir) == 0:
-        return getcwd()
+        return os.getcwd()
     else:
         cwd = dir
         if not os.path.exists(cwd):
