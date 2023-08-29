@@ -50,7 +50,7 @@ def apply_blueprint_via_github_action(blueprint):
 
         if len(stage_name) == 0:
             print("\nPerforming \"terraform apply --auto-approve\" on %s" % os.path.basename(cwd))
-            process = terraform_apply(cwd, AUTO_APPROVE=True, github_action=True)
+            process = terraform_apply(cwd, AUTO_APPROVE=True, modify_history=False)
         else:
             print("\nPerforming \"terraform apply --auto-approve\" on %s - Stage \"%s\"" % (os.path.basename(cwd), stage_name))
 
@@ -58,7 +58,7 @@ def apply_blueprint_via_github_action(blueprint):
             stage_targets = stage["stage_targets"]
             stage_name = stage["stage_name"]
 
-            process = workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=True, github_action=True)
+            process = workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=True, modify_history=False)
         
         if process == 1:
             # If the process experiences an error, break

@@ -26,10 +26,10 @@ def apply_rebuild_true(cwd, var_file):
         return
     else:
         print_warning(warning_message_initiating_destroy)
-        terraform_destroy(cwd, CUSTOM_VAR_FILE=var_file, github_action=True)
+        terraform_destroy(cwd, CUSTOM_VAR_FILE=var_file, modify_history=False)
 
         print_warning(warning_message_initiating_apply)
-        terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=True, github_action=True)
+        terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=True, modify_history=False)
         return
 
 def apply_only(cwd, var_file, auto_approve, override_workflow):
@@ -55,7 +55,7 @@ def apply_only(cwd, var_file, auto_approve, override_workflow):
             return
 
     else:
-        terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=auto_approve, github_action=True)
+        terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=auto_approve, modify_history=False)
         return
 
 def blueprints(blueprint_file, create):
@@ -103,5 +103,5 @@ def apply(args):
         apply_rebuild_true(cwd, var_file)
         return
     else:
-        apply_only(cwd, var_file, auto_approve, override_workflow)
+        apply_only(cwd, var_file, auto_approve, override_workflow, modify_history=False)
         return

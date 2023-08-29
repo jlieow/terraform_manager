@@ -757,7 +757,7 @@ def github_action_stage_workflow_terraform_destroy(cwd, override_workflow=False,
     stages.reverse()
 
     for stage in stages:
-        returncode = workflow_terraform_destroy_active_stages(cwd, stage, override_workflow, github_action=True)
+        returncode = workflow_terraform_destroy_active_stages(cwd, stage, override_workflow, modify_history=False)
         if returncode == 1:
             raise Exception(f"Error running workflow terraform destroy at Stage {stage['stage_name']}")
 
@@ -776,7 +776,7 @@ def stage_workflow_terraform_destroy(cwd, override_workflow=False):
     stages.reverse()
 
     for stage in stages:
-        workflow_terraform_destroy_active_stages(cwd, stage, override_workflow, github_action=True)
+        workflow_terraform_destroy_active_stages(cwd, stage, override_workflow, modify_history=False)
 
 def stage_workflow_terraform_refresh(cwd):
     stages, stages_errors = get_stages(cwd)

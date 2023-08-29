@@ -25,8 +25,8 @@ def main():
     
     tfvars_settings(cwd) 
     terraform_init(cwd)
-    # destroy_only(cwd, var_file="", auto_approve=False, override_workflow=False, github_action=True)
-    # apply_only(cwd, var_file="", auto_approve=False, override_workflow=False, github_action=True)
+    # destroy_only(cwd, var_file="", auto_approve=False, override_workflow=False, modify_history=False)
+    # apply_only(cwd, var_file="", auto_approve=False, override_workflow=False, modify_history=False)
 
     github_action_destroy_only(cwd, var_file="", auto_approve=False, override_workflow=False, github_action_active_stages=active_stages)
     github_action_apply_only(cwd, var_file="", auto_approve=False, override_workflow=False, github_action_active_stages=active_stages)

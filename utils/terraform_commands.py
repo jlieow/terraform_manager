@@ -90,11 +90,11 @@ def terraform_init(cwd, migrate_state, CUSTOM_VAR_FILE="", set_stdin=None, set_s
 
     subprocess.Popen(init_process, cwd=cwd, stdin=set_stdin, stdout=set_stdout, stderr=set_stderr, env=Terraform_commands_constants.ENV).wait()
 
-def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=False, set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, modify_history=True, set_stdin=None, set_stdout=None, set_stderr=None):
 
     tfvars_settings(cwd)
     
-    if not github_action:
+    if modify_history:
         add_history(cwd)
 
     apply_auto_approve_process = Terraform_commands_constants.APPLY_AUTO_APPROVE_PROCESS
@@ -115,7 +115,7 @@ def terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=F
     print("\nPerforming apply -refresh-only to sync statefile and match the current provisioned state")
     terraform_refresh(cwd, AUTO_APPROVE=True)
 
-def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action=False, set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, modify_history=True, set_stdin=None, set_stdout=None, set_stderr=None):
 
     tfvars_settings(cwd)
 
@@ -135,7 +135,7 @@ def terraform_destroy(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=False, github_action
         return 1
     # Do not delete history if command is invoked from github action
     # Github action does not store the terraform history directory or file
-    if not github_action:
+    if modify_history:
         delete_latest_row_from_history(cwd)
 
 def terraform_output(cwd, set_stdin=None, set_stdout=None, set_stderr=None):

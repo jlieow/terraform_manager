@@ -26,7 +26,7 @@ def destroy_only(cwd, var_file, auto_approve, override_workflow):
             return
             
     else:
-        terraform_destroy(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=auto_approve, github_action=True)
+        terraform_destroy(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=auto_approve, modify_history=False)
         return
 
 def destroy(args):
@@ -50,4 +50,4 @@ def destroy(args):
         terraform_destroy_from_history()
         return
 
-    destroy_only(cwd, var_file, auto_approve, override_workflow)
+    destroy_only(cwd, var_file, auto_approve, override_workflow, modify_history=False)

@@ -24,7 +24,7 @@ def main(blueprint_path):
     blueprint_path = os.path.abspath(blueprint_path)
 
     # WIP
-    # apply_blueprint(blueprint_path, github_action=True)
+    # apply_blueprint(blueprint_path, modify_history=False)
 
 if __name__ == "__main__":
     main()

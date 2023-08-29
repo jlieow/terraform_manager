@@ -18,7 +18,7 @@ def github_action_apply_only(cwd, var_file, auto_approve, override_workflow, git
 
         else:
             print("\ngithub_action no workflow")
-            returncode = terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=True, github_action=True)
+            returncode = terraform_apply(cwd, CUSTOM_VAR_FILE="", AUTO_APPROVE=True, modify_history=False)
             if returncode == 1:
                 raise Exception("Error running terraform apply")
             return
