@@ -146,10 +146,10 @@ def main():
     # terraformx_history.add_argument(Args_constants.DESTROY, action=Action_constants.STORE_TRUE, help = Help_constants.DESTORY_ALL_IN_HISTORY)
     # terraformx_history.add_argument(Args_constants.LIST, action=Action_constants.STORE_TRUE, help = Help_constants.LIST_HISTORY)
 
-    terraformx_list = subparsers.add_parser(Parser_constants.LIST)
-    terraformx_list.set_defaults(function=list)
-    terraformx_list.add_argument(Args_constants.BLUEPRINT, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_BLUEPRINT_FILE)
-    terraformx_list.add_argument(Args_constants.HISTORY, action=Action_constants.STORE_TRUE, help = Help_constants.LIST_HISTORY)
+    # terraformx_list = subparsers.add_parser(Parser_constants.LIST)
+    # terraformx_list.set_defaults(function=list)
+    # terraformx_list.add_argument(Args_constants.BLUEPRINT, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_BLUEPRINT_FILE)
+    # terraformx_list.add_argument(Args_constants.HISTORY, action=Action_constants.STORE_TRUE, help = Help_constants.LIST_HISTORY)
     
     terraformx_import = subparsers.add_parser(Parser_constants.IMPORT)
     terraformx_import.set_defaults(function=t_import)
