@@ -3,7 +3,7 @@ import os
 from terraformx.terraformx_common import *
 from utils import *
 
-def destroy_only(cwd, var_file, auto_approve, override_workflow):
+def destroy_only(cwd, var_file, auto_approve, override_workflow, modify_history):
 
     if does_workflow_file_exist(cwd):
 
@@ -26,7 +26,7 @@ def destroy_only(cwd, var_file, auto_approve, override_workflow):
             return
             
     else:
-        terraform_destroy(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=auto_approve, modify_history=False)
+        terraform_destroy(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=auto_approve, modify_history=modify_history)
         return
 
 def destroy(args):

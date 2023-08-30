@@ -716,7 +716,7 @@ def stage_workflow_terraform_apply(cwd, override_workflow=False):
     stages = get_stages_to_apply_from_active_stages(active_stages, stages)
 
     for stage in stages:
-        workflow_terraform_apply_active_stages(cwd, stage, override_workflow, True)
+        workflow_terraform_apply_active_stages(cwd, stage, override_workflow, modify_history=False)
 
 def workflow_terraform_destroy_active_stages(cwd, stage, override_workflow, modify_history=True):
     stage_name = stage["stage_name"]

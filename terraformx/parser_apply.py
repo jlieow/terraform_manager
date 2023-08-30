@@ -32,7 +32,7 @@ def apply_rebuild_true(cwd, var_file):
         terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=True, modify_history=False)
         return
 
-def apply_only(cwd, var_file, auto_approve, override_workflow):
+def apply_only(cwd, var_file, auto_approve, override_workflow, modify_history):
 
     if does_workflow_file_exist(cwd):
 
@@ -55,7 +55,7 @@ def apply_only(cwd, var_file, auto_approve, override_workflow):
             return
 
     else:
-        terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=auto_approve, modify_history=False)
+        terraform_apply(cwd, CUSTOM_VAR_FILE=var_file, AUTO_APPROVE=auto_approve, modify_history=modify_history)
         return
 
 def blueprints(blueprint_file, create):
