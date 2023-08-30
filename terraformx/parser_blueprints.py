@@ -1,137 +1,137 @@
-import os
+# import os
 
-from terraformx.terraformx_common import *
-from utils import *
+# from terraformx.terraformx_common import *
+# from utils import *
 
-def create_blueprint(blueprint_path):
+# def create_blueprint(blueprint_path):
 
-    TERRAFORM_BLUEPRINT_STAGES_PREFACE = "The following stages are found:\n"
-    TERRAFORM_BLUEPRINT_STAGES_OPTIONS = "\nWhich stage would you like to save to blueprint: "
+#     TERRAFORM_BLUEPRINT_STAGES_PREFACE = "The following stages are found:\n"
+#     TERRAFORM_BLUEPRINT_STAGES_OPTIONS = "\nWhich stage would you like to save to blueprint: "
 
-    blueprint = []
-    file_name = os.path.basename(blueprint_path)
+#     blueprint = []
+#     file_name = os.path.basename(blueprint_path)
 
-    if os.path.exists(blueprint_path):
-        if input("\n %s.csv currently exists. Please enter \"Y\" to confirm you would like to continue and overwrite this file." % file_name).upper() != "Y":
-            return
+#     if os.path.exists(blueprint_path):
+#         if input("\n %s.csv currently exists. Please enter \"Y\" to confirm you would like to continue and overwrite this file." % file_name).upper() != "Y":
+#             return
 
-    while True:
+#     while True:
 
-        terraform_root = input("\nPlease provide the path to the Terraform root: ")
-        terraform_root_dir = get_full_path_else_return_empty_str(terraform_root)
+#         terraform_root = input("\nPlease provide the path to the Terraform root: ")
+#         terraform_root_dir = get_full_path_else_return_empty_str(terraform_root)
 
-        if not os.path.exists(terraform_root_dir):
-            print_error("\n[ERROR] Unable to locate Terraform root.")
+#         if not os.path.exists(terraform_root_dir):
+#             print_error("\n[ERROR] Unable to locate Terraform root.")
         
-        blueprint += add_blueprint_row(terraform_root_dir)
+#         blueprint += add_blueprint_row(terraform_root_dir)
 
-        if input("\nPlease enter \"Y\" to continue or any key to save the blueprint: ").upper() != "Y":
-            if os.path.exists(blueprint_path):
-                os.remove(blueprint_path)
+#         if input("\nPlease enter \"Y\" to continue or any key to save the blueprint: ").upper() != "Y":
+#             if os.path.exists(blueprint_path):
+#                 os.remove(blueprint_path)
 
-            if len(blueprint) > 0:
-                add_blueprint_rows(blueprint_path, blueprint)
+#             if len(blueprint) > 0:
+#                 add_blueprint_rows(blueprint_path, blueprint)
 
-                # for dir_and_stage in blueprint:
-                #     cwd = dir_and_stage[0] 
-                #     stage_name = dir_and_stage[1] 
+#                 # for dir_and_stage in blueprint:
+#                 #     cwd = dir_and_stage[0] 
+#                 #     stage_name = dir_and_stage[1] 
                     
-                #     add_blueprint(blueprint_path, cwd, stage_name)
+#                 #     add_blueprint(blueprint_path, cwd, stage_name)
      
-            print("Blueprint \"%s.csv\" has been saved!" % file_name)
-            return
+#             print("Blueprint \"%s.csv\" has been saved!" % file_name)
+#             return
 
-def apply_blueprint_via_github_action(blueprint):
-    for dir_and_stage in blueprint:
-        cwd = dir_and_stage[0] 
-        stage_name = dir_and_stage[1] 
+# def apply_blueprint_via_github_action(blueprint):
+#     for dir_and_stage in blueprint:
+#         cwd = dir_and_stage[0] 
+#         stage_name = dir_and_stage[1] 
 
-        terraform_init(cwd)
+#         terraform_init(cwd)
 
-        if len(stage_name) == 0:
-            print("\nPerforming \"terraform apply --auto-approve\" on %s" % os.path.basename(cwd))
-            process = terraform_apply(cwd, AUTO_APPROVE=True, modify_history=False)
-        else:
-            print("\nPerforming \"terraform apply --auto-approve\" on %s - Stage \"%s\"" % (os.path.basename(cwd), stage_name))
+#         if len(stage_name) == 0:
+#             print("\nPerforming \"terraform apply --auto-approve\" on %s" % os.path.basename(cwd))
+#             process = terraform_apply(cwd, AUTO_APPROVE=True, modify_history=False)
+#         else:
+#             print("\nPerforming \"terraform apply --auto-approve\" on %s - Stage \"%s\"" % (os.path.basename(cwd), stage_name))
 
-            stage = get_stage(cwd, stage_name)
-            stage_targets = stage["stage_targets"]
-            stage_name = stage["stage_name"]
+#             stage = get_stage(cwd, stage_name)
+#             stage_targets = stage["stage_targets"]
+#             stage_name = stage["stage_name"]
 
-            process = workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=True, modify_history=False)
+#             process = workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=True, modify_history=False)
         
-        if process == 1:
-            # If the process experiences an error, break
-            break
+#         if process == 1:
+#             # If the process experiences an error, break
+#             break
 
-def apply_blueprint_via_terraformx(blueprint):
-    for dir_and_stage in blueprint:
-        cwd = dir_and_stage[0] 
-        stage_name = dir_and_stage[1] 
+# def apply_blueprint_via_terraformx(blueprint):
+#     for dir_and_stage in blueprint:
+#         cwd = dir_and_stage[0] 
+#         stage_name = dir_and_stage[1] 
 
-        terraform_init(cwd)
+#         terraform_init(cwd)
 
-        if len(stage_name) == 0:
-            print("\nPerforming \"terraform apply --auto-approve\" on %s" % os.path.basename(cwd))
-            process = terraform_apply(cwd, AUTO_APPROVE=True, github_action=False)
-        else:
-            print("\nPerforming \"terraform apply --auto-approve\" on %s - Stage \"%s\"" % (os.path.basename(cwd), stage_name))
+#         if len(stage_name) == 0:
+#             print("\nPerforming \"terraform apply --auto-approve\" on %s" % os.path.basename(cwd))
+#             process = terraform_apply(cwd, AUTO_APPROVE=True, github_action=False)
+#         else:
+#             print("\nPerforming \"terraform apply --auto-approve\" on %s - Stage \"%s\"" % (os.path.basename(cwd), stage_name))
 
-            stage = get_stage(cwd, stage_name)
-            stage_targets = stage["stage_targets"]
-            stage_name = stage["stage_name"]
+#             stage = get_stage(cwd, stage_name)
+#             stage_targets = stage["stage_targets"]
+#             stage_name = stage["stage_name"]
 
-            process = workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=True, github_action=False)
+#             process = workflow_terraform_apply(cwd, stage_targets, stage_name, AUTO_APPROVE=True, github_action=False)
         
-        if process == 1:
-            # If the process experiences an error, break
-            break
+#         if process == 1:
+#             # If the process experiences an error, break
+#             break
 
-def apply_blueprint(blueprint_path, github_action=False):
-    print("\nVerifying blueprint...")
-    if not is_this_a_verified_blueprint(blueprint_path):
-        return
-    print("Blueprint verified!")
+# def apply_blueprint(blueprint_path, github_action=False):
+#     print("\nVerifying blueprint...")
+#     if not is_this_a_verified_blueprint(blueprint_path):
+#         return
+#     print("Blueprint verified!")
 
-    blueprint = get_rows_as_list(blueprint_path)
+#     blueprint = get_rows_as_list(blueprint_path)
                     
-    print("\nContinuing will invoke \"terraform apply --auto-approve\" on the folders in the following order:\n"
-    )
+#     print("\nContinuing will invoke \"terraform apply --auto-approve\" on the folders in the following order:\n"
+#     )
     
-    for i in range(len(blueprint)):
-        cwd = blueprint[i][0]
-        stage_name = blueprint[i][1]
-        if len(stage_name) == 0:
-            print("%d. %s" % (i+1, os.path.basename(cwd)))
-        else:
-            print("%d. %s - Stage \"%s\"" % (i+1, os.path.basename(blueprint[i][0]), stage_name))
+#     for i in range(len(blueprint)):
+#         cwd = blueprint[i][0]
+#         stage_name = blueprint[i][1]
+#         if len(stage_name) == 0:
+#             print("%d. %s" % (i+1, os.path.basename(cwd)))
+#         else:
+#             print("%d. %s - Stage \"%s\"" % (i+1, os.path.basename(blueprint[i][0]), stage_name))
     
-    if github_action:
-        apply_blueprint_via_github_action(blueprint)
-        return
+#     if github_action:
+#         apply_blueprint_via_github_action(blueprint)
+#         return
 
-    if input("\nPlease enter \"Y\" to continue: ").upper() == "Y":
-        apply_blueprint_via_terraformx(blueprint)
+#     if input("\nPlease enter \"Y\" to continue: ").upper() == "Y":
+#         apply_blueprint_via_terraformx(blueprint)
 
-def blueprints(args):
+# def blueprints(args):
 
-    file = args.file.replace("/", "" )
-    list = args.list
-    create = args.create
+#     file = args.file.replace("/", "" )
+#     list = args.list
+#     create = args.create
 
-    blueprint_path = get_full_path_else_return_empty_str(file, ".csv")
-    if not os.path.exists(blueprint_path):
-        print_error("\n[ERROR] Unable to locate blueprint file.")
-        return 
+#     blueprint_path = get_full_path_else_return_empty_str(file, ".csv")
+#     if not os.path.exists(blueprint_path):
+#         print_error("\n[ERROR] Unable to locate blueprint file.")
+#         return 
     
-    if list:
-        rows = get_rows_as_list(blueprint_path)
-        list_blueprint(rows)
-        return
+#     if list:
+#         rows = get_rows_as_list(blueprint_path)
+#         list_blueprint(rows)
+#         return
 
-    if create:
-        create_blueprint(blueprint_path)
-        return
-    else:
-        apply_blueprint(blueprint_path)
-        return
+#     if create:
+#         create_blueprint(blueprint_path)
+#         return
+#     else:
+#         apply_blueprint(blueprint_path)
+#         return
