@@ -5,7 +5,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from actions.github_action_terraformx_apply import *
 from actions.github_action_terraformx_destroy import *
-from utils.common import getcwd
 
 def main():
 
