@@ -74,7 +74,7 @@ def tfvars_settings(cwd):
                 # Remove newline at the end of the file
                 infile.read().rstrip('\n')  
 
-def terraform_init(cwd, migrate_state, CUSTOM_VAR_FILE="", set_stdin=None, set_stdout=None, set_stderr=None):
+def terraform_init(cwd, migrate_state=False, CUSTOM_VAR_FILE="", set_stdin=None, set_stdout=None, set_stderr=None):
 
     init_process = Terraform_commands_constants.INIT_PROCESS
     if migrate_state:
