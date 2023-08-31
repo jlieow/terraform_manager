@@ -81,7 +81,7 @@ def terraform_init(cwd, migrate_state, CUSTOM_VAR_FILE="", set_stdin=None, set_s
         init_process = Terraform_commands_constants.INIT_MIGRATE_STATE_PROCESS
 
     # Assign default backend file but use custom backend file if it exists
-    backend_tfvars = glob.glob(os.path.join(cwd, "backend.tfvars"))
+    backend_tfvars = glob.glob(os.path.join(cwd, Terraform_commands_constants.BACKEND_CONFIG_FILE))
     if len(backend_tfvars) > 0:
         init_process = [Terraform_commands_constants.TERRAFORM_PARSER, 'init', '-backend-config=%s' % Terraform_commands_constants.BACKEND_CONFIG_FILE]
 
