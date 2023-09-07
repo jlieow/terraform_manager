@@ -27,8 +27,32 @@ jobs:
           pyinstaller --onefile github_action_terraformx_rebuild_with_destroy_apply.py -p $GITHUB_WORKSPACE -y
           mv dist/github_action_terraformx_rebuild_with_destroy_apply dist/rebuild
 
-        shell: bash
-      - uses: actions/upload-artifact@v3
-        with:
-          name: rebuild
-          path: actions/dist/rebuild
+      - name: Clone action repo
+        run: git clone https://${{ github.repository_owner }}:${{ secrets.ACCESS_TOKEN }}@github.com/${{ github.repository_owner }}/action_terraformx_rebuild.git action_repo
+
+      - name: Create branch
+        working-directory: action_repo
+        run: git checkout -b update_exe
+
+      - name: Update exe
+        working-directory: actions
+        run: |
+          cp dist/rebuild ../action_repo/exe/rebuild
+
+      - name: Commit and push
+        working-directory: action_repo
+        run: |
+          git config user.email "test@example.com"
+          git config user.name "test"
+
+          git add .
+          git commit -m "Update action exe"
+          git push -f --set-upstream origin update_exe
+
+      - name: Create PR
+        working-directory: action_repo
+        run: |
+          echo "${{ secrets.ACCESS_TOKEN }}" > token.txt
+          gh auth login --with-token < token.txt
+          
+          gh pr create --body "" --title "Update exe version" --head "update_exe" --base "main"
