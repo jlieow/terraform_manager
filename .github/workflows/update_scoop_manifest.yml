@@ -1,0 +1,45 @@
+name: Update Scoop Manifest For New Windows Release
+on:
+  release: 
+    types: [released]
+
+jobs:
+  update_scoop_manifest:
+    if: contains(github.event.release.name, 'windows')
+    runs-on: ubuntu-latest
+    name: Update Scoop Manifest
+    steps:
+      - name: Clone Bucket Repo
+        run: git clone https://${{ github.repository_owner }}:${{ secrets.ACCESS_TOKEN }}@github.com/${{ github.repository_owner }}/my-bucket.git bucket_repo
+
+      - name: Create Branch
+        working-directory: bucket_repo
+        run: git checkout -b update_manifest
+
+      - name: Update Manifest
+        working-directory: bucket_repo
+        run: |
+          sed -i "s~\"url\".*~\"url\": \"${{ github.event.release.assets[0].browser_download_url }}\",~" bucket/terraformx.json
+          sha256=$(curl -Ls ${{ github.event.release.assets[0].browser_download_url }} | shasum -a 256 | head -c 64)
+          sed -i "s~\"hash\".*~\"hash\": \"$sha256\",~" bucket/terraformx.json
+          readarray -d / strarray <<< "${{ github.event.release.tag_name }}"
+          version=$(echo "${strarray[-1]}")
+          sed -i "s~\"version\".*~\"version\": \"$version\",~" bucket/terraformx.json  
+
+      - name: Commit and push
+        working-directory: bucket_repo
+        run: |
+          git config user.email "test@example.com"
+          git config user.name "test"
+
+          git add .
+          git commit -m "Update Manifest"
+          git push -f --set-upstream origin update_manifest
+
+      - name: Create PR
+        working-directory: bucket_repo
+        run: |
+          echo "${{ secrets.ACCESS_TOKEN }}" > token.txt
+          gh auth login --with-token < token.txt
+          
+          gh pr create --body "" --title "Update Manifest" --head "update_manifest" --base "main"
