@@ -1,0 +1,42 @@
+name: Update Homebrew Formula For New Mac Release
+on:
+  release: 
+    types: [released]
+
+jobs:
+  update_homebrew_formula:
+    if: contains(github.event.release.name, 'mac')
+    runs-on: ubuntu-latest
+    name: Update Homebrew Formula
+    steps:
+      - name: Clone Homebrew Repo
+        run: git clone https://${{ github.repository_owner }}:${{ secrets.ACCESS_TOKEN }}@github.com/${{ github.repository_owner }}/homebrew-terraform-manager.git homebrew_repo
+
+      - name: Create Branch
+        working-directory: homebrew_repo
+        run: git checkout -b update_formula
+
+      - name: Update Formula
+        working-directory: homebrew_repo
+        run: |
+          sed -i "s~url.*~url \"${{ github.event.release.assets[0].browser_download_url }}\"~" terraformx.rb
+          sha256=$(curl -Ls ${{ github.event.release.assets[0].browser_download_url }} | shasum -a 256 | head -c 64)
+          sed -i "s~sha256.*~sha256 \"$sha256\"~" terraformx.rb        
+
+      - name: Commit and push
+        working-directory: homebrew_repo
+        run: |
+          git config user.email "test@example.com"
+          git config user.name "test"
+
+          git add .
+          git commit -m "Update Formula"
+          git push -f --set-upstream origin update_formula
+
+      - name: Create PR
+        working-directory: homebrew_repo
+        run: |
+          echo "${{ secrets.ACCESS_TOKEN }}" > token.txt
+          gh auth login --with-token < token.txt
+          
+          gh pr create --body "" --title "Update Formula" --head "update_formula" --base "main"
