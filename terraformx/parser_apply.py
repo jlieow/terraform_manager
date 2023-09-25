@@ -104,4 +104,16 @@ def apply(args):
         return
     else:
         apply_only(cwd, var_file, auto_approve, override_workflow, modify_history=False)
+        replicate_env(cwd)
         return
+    
+def replicate_env(cwd):
+    src_path = os.path.join(cwd, "config", ".env")
+    dest_path = os.path.join(cwd, "config", ".env-sample")
+    if os.path.isfile(src_path):
+        with open(src_path, "r") as src:
+            lines = src.readlines()
+
+        with open(dest_path, "w") as dest:
+            for line in lines:
+                dest.write(line.split("\"")[0] + "\"\"\n")
