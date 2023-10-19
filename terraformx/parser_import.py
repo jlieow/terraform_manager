@@ -8,7 +8,8 @@ def t_import(args):
 
     chdir = args.chdir
     var_file = args.var_file
-    stringvars = args.stringvars
+    address = args.address
+    id = args.id
     
     cwd = get_cwd(chdir)
     if len(cwd) == 0:
@@ -22,6 +23,6 @@ def t_import(args):
     if len(var_file) > 0:
         print_warning("\n[WARNING] -var-file flag will be ignored as a workflow file is detected. The -var-file referenced is located in config/settings.tfvars.")
 
-    terraform_import(cwd, stringvars)
+    terraform_import(cwd, address, id)
     
     return

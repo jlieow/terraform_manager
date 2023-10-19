@@ -42,6 +42,8 @@ class Args_constants:
     HISTORY = "-history"
     ACTIVE_STAGES = "-active-stages"
     STRINGVARS = "stringvars"
+    ADDRESS = "address"
+    ID = "id"
 
 class Action_constants:
     STORE_TRUE = "store_true"
@@ -65,6 +67,8 @@ class Help_constants:
     LIST_HISTORY = "List terraform roots in History."
     ACTIVE_STAGES = "Specify the active stages overriding the active stages in the workflow."
     STRING_ARGUMENTS = "Specify the string arguments."
+    ADDRESS = "Valid resource address, can import resources into modules as well as directly into the root of the state."
+    ID = "ID of the resource to import."
 
 top_level_help_message = "Usage: terraformx [global options] <subcommand> [args]\n\
 \n\
@@ -158,7 +162,8 @@ def main():
     terraformx_import.set_defaults(function=t_import)
     terraformx_import.add_argument(Args_constants.CHDIR, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TERRAFORM_ROOT)
     terraformx_import.add_argument(Args_constants.VAR_FILE, type = str, default=Default_constants.EMPTY_STRING, help = Help_constants.LOCATION_OF_TFVARS_FILE)
-    terraformx_import.add_argument(Args_constants.STRINGVARS, metavar = "N", type = str, nargs = "+", default=Default_constants.EMPTY_STRING, help = Help_constants.STRING_ARGUMENTS)
+    terraformx_import.add_argument(Args_constants.ADDRESS, metavar="ADDRESS", type = str, help = Help_constants.ADDRESS)
+    terraformx_import.add_argument(Args_constants.ID, metavar="ID", type = str, help = Help_constants.ID)
 
     terraformx_state_rm = subparsers.add_parser(Parser_constants.STATE)
     terraformx_state_rm.set_defaults(function=state_rm)

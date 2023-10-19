@@ -184,9 +184,9 @@ def locate_terraform_root_directories(root_directory):
 
     return list_terraform_root_dir
 
-def terraform_import(cwd, stringvars):
+def terraform_import(cwd, address, id):
 
-    import_process = Terraform_commands_constants.IMPORT_PROCESS + stringvars
+    import_process = Terraform_commands_constants.IMPORT_PROCESS + [address, id]
 
     subprocess.Popen(import_process, cwd=cwd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=Terraform_commands_constants.ENV).wait()
 
